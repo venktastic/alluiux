@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SafetyOS — Enterprise Construction Safety Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#f7f9fc;
+  --surface:#ffffff;
+  --surface-raised:#ffffff;
+  --surface-secondary:#f0f5ff;
+  --border:#e5e9f0;
+  --border-light:#eef2f7;
+  --text-primary:#111827;
+  --text-secondary:#6b7280;
+  --text-tertiary:#9ca3af;
+  --action-blue:#1a56db;
+  --action-blue-light:#ebf2ff;
+  --action-blue-hover:#1648c0;
+  --action-blue-10:rgba(26,86,219,0.1);
+  --success:#059669;--success-bg:#ecfdf5;
+  --warning:#d97706;--warning-bg:#fffbeb;
+  --critical:#dc2626;--critical-bg:#fef2f2;
+  --neutral:#6b7280;--neutral-bg:#f3f4f6;
+  --radius:12px;--radius-sm:8px;--radius-xs:6px;
+  --sidebar-w:240px;--topbar-h:56px;
+}
+[data-theme="dark"]{
+  --bg:#0d0f14;
+  --surface:#151820;
+  --surface-raised:#1a1e28;
+  --surface-secondary:#1e2230;
+  --border:#262b38;
+  --border-light:#1f2430;
+  --text-primary:#f1f3f5;
+  --text-secondary:#9ca3af;
+  --text-tertiary:#5c6370;
+  --action-blue:#3b82f6;
+  --action-blue-light:#172554;
+  --action-blue-hover:#60a5fa;
+  --action-blue-10:rgba(59,130,246,0.15);
+  --success-bg:#052e1c;--warning-bg:#2d1b00;--critical-bg:#2d0a0a;--neutral-bg:#1e2230;
+}
+html,body{height:100%;font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text-primary);-webkit-font-smoothing:antialiased;}
+body{overflow:hidden;}
+a{color:var(--action-blue);text-decoration:none;}
+a:hover{text-decoration:underline;}
+input{font-family:inherit;}
+button{font-family:inherit;cursor:pointer;border:none;background:none;}
+
+/* ── SCREEN SYSTEM ── */
+.screen{display:none;height:100%;width:100%;}
+.screen.active{display:flex;}
+
+/* ── AUTH LAYOUT ── */
+.auth-layout{flex-direction:column;align-items:center;justify-content:center;background:var(--bg);padding:24px;min-height:100%;}
+.auth-card{width:100%;max-width:420px;display:flex;flex-direction:column;align-items:center;}
+.auth-logo{width:44px;height:44px;background:var(--action-blue);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;font-weight:800;margin-bottom:28px;box-shadow:0 2px 8px rgba(26,86,219,0.25);}
+.auth-title{font-size:24px;font-weight:700;margin-bottom:8px;text-align:center;}
+.auth-subtitle{font-size:14px;color:var(--text-secondary);text-align:center;line-height:1.55;margin-bottom:28px;max-width:360px;}
+.auth-form{width:100%;display:flex;flex-direction:column;gap:6px;}
+.form-label{font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:2px;}
+.form-input{width:100%;height:46px;padding:0 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:15px;color:var(--text-primary);background:var(--surface);outline:none;transition:border .15s,box-shadow .15s;}
+.form-input:focus{border-color:var(--action-blue);box-shadow:0 0 0 3px var(--action-blue-10);}
+.form-input.error{border-color:var(--critical);}
+.form-hint{font-size:12px;color:var(--text-tertiary);margin-top:2px;margin-bottom:16px;}
+.btn-primary{width:100%;height:48px;background:var(--action-blue);color:#fff;font-size:15px;font-weight:600;border-radius:var(--radius-sm);border:none;cursor:pointer;transition:background .15s,opacity .15s;}
+.btn-primary:hover:not(:disabled){background:var(--action-blue-hover);}
+.btn-primary:disabled{opacity:.6;cursor:not-allowed;}
+.auth-footer{margin-top:32px;font-size:12px;color:var(--text-tertiary);text-align:center;}
+.auth-link{margin-top:20px;font-size:13px;color:var(--action-blue);cursor:pointer;background:none;border:none;font-family:inherit;}
+.auth-link:hover{text-decoration:underline;}
+
+/* ── NOTICE ── */
+.notice{width:100%;padding:12px 14px;border-radius:var(--radius-sm);font-size:13px;font-weight:500;margin-bottom:14px;display:none;align-items:center;gap:8px;}
+.notice.error{background:var(--critical-bg);color:var(--critical);display:flex;}
+.notice.success{background:var(--success-bg);color:var(--success);display:flex;}
+
+/* ── OTP INPUTS ── */
+.otp-email-badge{display:inline-flex;align-items:center;padding:6px 16px;background:var(--action-blue-light);color:var(--action-blue);border-radius:20px;font-size:13px;font-weight:600;margin-bottom:28px;}
+.otp-inputs{display:flex;gap:10px;justify-content:center;margin-bottom:24px;}
+.otp-input{width:48px;height:56px;text-align:center;font-size:22px;font-weight:700;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);color:var(--text-primary);outline:none;transition:border .15s,box-shadow .15s;}
+.otp-input:focus{border-color:var(--action-blue);box-shadow:0 0 0 3px var(--action-blue-10);}
+.otp-footer{display:flex;justify-content:space-between;align-items:center;width:100%;margin-top:16px;}
+.otp-timer{font-size:13px;color:var(--text-tertiary);}
+.otp-resend{font-size:13px;font-weight:600;color:var(--action-blue);background:none;border:none;cursor:pointer;font-family:inherit;}
+.otp-resend:disabled{color:var(--text-tertiary);cursor:not-allowed;}
+
+/* ── APP SHELL ── */
+.app-shell{display:flex;flex-direction:row;height:100%;width:100%;}
+.sidebar{width:var(--sidebar-w);min-width:var(--sidebar-w);background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;}
+.sidebar-header{height:var(--topbar-h);min-height:var(--topbar-h);display:flex;align-items:center;gap:10px;padding:0 16px;border-bottom:1px solid var(--border);}
+.sidebar-logo{width:32px;height:32px;background:var(--action-blue);border-radius:var(--radius-xs);display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;font-weight:800;}
+.sidebar-brand{font-size:16px;font-weight:700;color:var(--text-primary);}
+.sidebar-nav{flex:1;padding:12px 8px;display:flex;flex-direction:column;gap:2px;}
+.nav-section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-tertiary);padding:16px 12px 6px;margin-top:4px;}
+.nav-section-label:first-child{padding-top:4px;margin-top:0;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--radius-sm);font-size:14px;font-weight:500;color:var(--text-secondary);cursor:pointer;transition:background .12s,color .12s;user-select:none;}
+.nav-item:hover{background:var(--surface-secondary);color:var(--text-primary);}
+.nav-item.active{background:var(--action-blue-light);color:var(--action-blue);font-weight:600;}
+.nav-icon{width:20px;font-size:16px;text-align:center;flex-shrink:0;line-height:1;}
+.nav-badge{margin-left:auto;font-size:11px;font-weight:600;background:var(--surface-secondary);color:var(--text-secondary);padding:2px 8px;border-radius:10px;line-height:1.4;}
+.nav-item.active .nav-badge{background:var(--action-blue-10);color:var(--action-blue);}
+
+.main-content{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg);}
+
+/* ── TOPBAR ── */
+.topbar{height:var(--topbar-h);min-height:var(--topbar-h);display:flex;align-items:center;padding:0 24px;background:var(--surface);border-bottom:1px solid var(--border);gap:12px;}
+.breadcrumb{display:flex;align-items:center;gap:6px;font-size:14px;flex:1;min-width:0;}
+.breadcrumb-org{color:var(--text-tertiary);white-space:nowrap;}
+.breadcrumb-sep{color:var(--text-tertiary);font-size:12px;}
+.breadcrumb-sub{color:var(--text-primary);font-weight:600;white-space:nowrap;}
+.btn-outline{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-weight:500;color:var(--text-secondary);background:var(--surface);cursor:pointer;transition:border-color .12s,color .12s;}
+.btn-outline:hover{border-color:var(--action-blue);color:var(--action-blue);}
+.topbar-actions{display:flex;align-items:center;gap:8px;}
+.icon-btn{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface);cursor:pointer;font-size:16px;color:var(--text-secondary);transition:border-color .12s;}
+.icon-btn:hover{border-color:var(--action-blue);color:var(--action-blue);}
+.avatar-btn{width:32px;height:32px;background:var(--action-blue);border-radius:var(--radius-xs);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;cursor:pointer;border:none;flex-shrink:0;}
+
+/* ── PAGE CONTENT ── */
+.page-content{flex:1;overflow-y:auto;padding:24px;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+.page-content::-webkit-scrollbar{width:6px;}
+.page-content::-webkit-scrollbar-track{background:transparent;}
+.page-content::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+.page{display:none;}
+.page.active{display:block;}
+
+/* ── PAGE HEADER ── */
+.page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:16px;flex-wrap:wrap;}
+.page-title{font-size:22px;font-weight:700;line-height:1.3;}
+.page-subtitle{font-size:14px;color:var(--text-secondary);margin-top:4px;}
+.page-actions{display:flex;gap:8px;align-items:center;}
+.btn-primary-sm{padding:9px 18px;font-size:13px;font-weight:600;background:var(--action-blue);color:#fff;border-radius:var(--radius-sm);border:none;cursor:pointer;transition:background .15s;}
+.btn-primary-sm:hover{background:var(--action-blue-hover);}
+.btn-outline-sm{padding:9px 18px;font-size:13px;font-weight:500;background:var(--surface);color:var(--text-secondary);border:1.5px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;transition:all .12s;}
+.btn-outline-sm:hover{border-color:var(--action-blue);color:var(--action-blue);}
+
+/* ── SUMMARY CARDS ── */
+.summary-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:24px;}
+.summary-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;display:flex;flex-direction:column;gap:6px;}
+.summary-card-label{font-size:12px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.04em;}
+.summary-card-value{font-size:26px;font-weight:700;line-height:1.2;}
+.summary-card-value.critical{color:var(--critical);}
+.summary-card-value.warning{color:var(--warning);}
+.summary-card-trend{font-size:12px;font-weight:500;display:flex;align-items:center;gap:4px;}
+.summary-card-trend.up{color:var(--critical);}
+.summary-card-trend.down{color:var(--success);}
+.summary-card-trend.stable{color:var(--neutral);}
+
+/* ── MODULE GRID ── */
+.module-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px;}
+.module-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;cursor:pointer;transition:border-color .12s,box-shadow .12s;}
+.module-card:hover{border-color:var(--action-blue);box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.module-card-icon{width:40px;height:40px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:12px;}
+.module-card-icon.blue{background:var(--action-blue-10);color:var(--action-blue);}
+.module-card-icon.critical{background:var(--critical-bg);color:var(--critical);}
+.module-card-icon.success{background:var(--success-bg);color:var(--success);}
+.module-card-icon.warning{background:var(--warning-bg);color:var(--warning);}
+.module-card-icon.neutral{background:var(--neutral-bg);color:var(--neutral);}
+.module-card-title{font-size:14px;font-weight:600;margin-bottom:4px;}
+.module-card-desc{font-size:12px;color:var(--text-secondary);}
+
+/* ── CHIP ── */
+.chip{display:inline-flex;align-items:center;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600;white-space:nowrap;}
+.chip.critical{background:var(--critical-bg);color:var(--critical);}
+.chip.warning{background:var(--warning-bg);color:var(--warning);}
+.chip.success{background:var(--success-bg);color:var(--success);}
+.chip.neutral{background:var(--neutral-bg);color:var(--neutral);}
+.chip.blue{background:var(--action-blue-light);color:var(--action-blue);}
+
+/* ── TABLE ── */
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.section-title{font-size:16px;font-weight:700;}
+.section-link{font-size:13px;font-weight:500;color:var(--action-blue);cursor:pointer;}
+.data-table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+.data-table{width:100%;border-collapse:collapse;}
+.data-table th{text-align:left;padding:12px 16px;font-size:12px;font-weight:600;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.04em;background:var(--surface);border-bottom:1px solid var(--border);}
+.data-table td{padding:14px 16px;font-size:14px;border-bottom:1px solid var(--border-light);}
+.data-table tr:last-child td{border-bottom:none;}
+.data-table tbody tr{transition:background .1s;}
+.data-table tbody tr:hover{background:var(--surface-secondary);}
+.project-name{font-weight:600;color:var(--text-primary);}
+.project-code{font-size:12px;color:var(--text-tertiary);}
+.td-count{font-weight:600;}
+.td-count.critical{color:var(--critical);}
+.td-count.warning{color:var(--warning);}
+.btn-table{font-size:13px;font-weight:600;color:var(--action-blue);background:none;border:none;cursor:pointer;padding:4px 0;}
+.btn-table:hover{text-decoration:underline;}
+
+/* ── WORKSPACE PANEL ── */
+.workspace-overlay{position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:100;display:none;opacity:0;transition:opacity .2s;}
+.workspace-overlay.open{display:block;opacity:1;}
+.workspace-panel{position:fixed;top:0;right:0;width:400px;height:100%;background:var(--surface);border-left:1px solid var(--border);box-shadow:-4px 0 24px rgba(0,0,0,.1);z-index:101;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .25s ease;}
+.workspace-panel.open{transform:translateX(0);}
+.ws-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);}
+.ws-header-title{font-size:16px;font-weight:700;}
+.ws-close{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-xs);border:1px solid var(--border);background:var(--surface);cursor:pointer;font-size:18px;color:var(--text-secondary);}
+.ws-close:hover{color:var(--text-primary);}
+.ws-body{flex:1;overflow-y:auto;padding:16px 20px;}
+.ws-current{background:var(--action-blue-light);border-radius:var(--radius);padding:14px 16px;margin-bottom:16px;}
+.ws-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-tertiary);margin-bottom:6px;}
+.ws-current-org{font-size:13px;color:var(--text-secondary);margin-bottom:2px;}
+.ws-current-sub{font-size:15px;font-weight:700;color:var(--text-primary);}
+.ws-recent{background:var(--surface-secondary);border:1px solid var(--border-light);border-radius:var(--radius);padding:14px 16px;margin-bottom:16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:border-color .12s;}
+.ws-recent:hover{border-color:var(--action-blue);}
+.ws-recent-info{display:flex;flex-direction:column;gap:2px;}
+.ws-recent-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-tertiary);}
+.ws-recent-name{font-size:14px;font-weight:600;color:var(--text-primary);}
+.ws-recent-time{font-size:12px;color:var(--text-tertiary);}
+.ws-recent-arrow{font-size:18px;color:var(--text-tertiary);}
+.ws-search{width:100%;height:40px;padding:0 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:13px;color:var(--text-primary);background:var(--surface);outline:none;margin-bottom:16px;transition:border-color .15s;}
+.ws-search:focus{border-color:var(--action-blue);}
+.ws-section{margin-bottom:16px;}
+.ws-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-tertiary);margin-bottom:8px;}
+.ws-item{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:var(--radius-sm);cursor:pointer;transition:background .1s;margin-bottom:2px;font-size:14px;color:var(--text-primary);}
+.ws-item:hover{background:var(--surface-secondary);}
+.ws-item.active{background:var(--action-blue-light);color:var(--action-blue);font-weight:600;}
+.ws-item-right{font-size:12px;color:var(--text-tertiary);display:flex;align-items:center;gap:4px;}
+.ws-item.active .ws-item-right{color:var(--action-blue);}
+.ws-project{display:flex;flex-direction:column;padding:10px 12px;border-radius:var(--radius-sm);cursor:pointer;transition:background .1s;margin-bottom:2px;}
+.ws-project:hover{background:var(--surface-secondary);}
+.ws-project-name{font-size:14px;font-weight:500;color:var(--text-primary);}
+.ws-project-meta{font-size:12px;color:var(--text-tertiary);margin-top:2px;}
+
+/* ── PROFILE ── */
+.profile-wrap{max-width:680px;width:100%;}
+.profile-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:14px;overflow:hidden;}
+.profile-card-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border-light);}
+.profile-card-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-tertiary);}
+.profile-card-action{font-size:13px;font-weight:600;color:var(--action-blue);background:none;border:none;cursor:pointer;font-family:inherit;}
+.profile-card-action:hover{text-decoration:underline;}
+.profile-user{display:flex;align-items:center;gap:14px;padding:18px;}
+.profile-avatar{width:56px;height:56px;background:var(--action-blue);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;font-weight:700;flex-shrink:0;}
+.profile-user-info{display:flex;flex-direction:column;gap:2px;}
+.profile-name{font-size:16px;font-weight:700;}
+.profile-role{font-size:13px;color:var(--text-secondary);}
+.profile-email{font-size:13px;color:var(--text-tertiary);}
+.profile-row{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border-light);font-size:14px;cursor:default;}
+.profile-row:last-child{border-bottom:none;}
+.profile-row-label{color:var(--text-secondary);font-weight:500;}
+.profile-row-value{color:var(--text-primary);font-weight:500;display:flex;align-items:center;gap:6px;}
+.profile-row-chevron{color:var(--text-tertiary);font-size:16px;}
+.profile-row.clickable{cursor:pointer;transition:background .1s;}
+.profile-row.clickable:hover{background:var(--surface-secondary);}
+.btn-signout{width:100%;height:48px;background:var(--critical);color:#fff;font-size:15px;font-weight:600;border-radius:var(--radius);border:none;cursor:pointer;transition:opacity .15s;margin-top:6px;}
+.btn-signout:hover{opacity:.9;}
+
+/* ── STATES ── */
+.state-center{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px;text-align:center;}
+.state-icon{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:16px;}
+.state-icon.empty{background:var(--action-blue-10);color:var(--action-blue);}
+.state-icon.error{background:var(--warning-bg);color:var(--warning);}
+.state-title{font-size:18px;font-weight:700;margin-bottom:6px;}
+.state-desc{font-size:14px;color:var(--text-secondary);margin-bottom:20px;max-width:320px;}
+.state-note{font-size:12px;color:var(--text-tertiary);margin-top:12px;}
+
+/* ── SKELETON ── */
+.skeleton{background:var(--border-light);border-radius:var(--radius-sm);position:relative;overflow:hidden;}
+.skeleton::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);animation:shimmer 1.5s infinite;}
+[data-theme="dark"] .skeleton::after{background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent);}
+@keyframes shimmer{0%{transform:translateX(-100%);}100%{transform:translateX(100%);}}
+.skel-card{height:100px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;}
+.skel-bar{height:14px;margin-bottom:10px;border-radius:6px;}
+.skel-bar.w60{width:60%;}
+.skel-bar.w40{width:40%;}
+.skel-bar.w80{width:80%;}
+.skel-bar.w30{width:30%;}
+.skel-bar.tall{height:28px;margin-bottom:8px;}
+.skel-row{display:flex;gap:14px;margin-bottom:14px;}
+.skel-module{height:90px;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface);}
+.skel-table{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+.skel-table-row{display:flex;gap:16px;padding:14px 16px;border-bottom:1px solid var(--border-light);}
+.skel-table-row:last-child{border-bottom:none;}
+
+/* ── FLOATING CONTROLS ── */
+.proto-controls{position:fixed;bottom:16px;right:16px;display:flex;flex-wrap:wrap;gap:4px;max-width:380px;z-index:200;background:var(--surface-raised);border:1px solid var(--border);border-radius:var(--radius);padding:8px;box-shadow:0 4px 16px rgba(0,0,0,.12);}
+.proto-btn{padding:5px 10px;font-size:11px;font-weight:600;border-radius:var(--radius-xs);border:1px solid var(--border);background:var(--surface);color:var(--text-secondary);cursor:pointer;transition:all .12s;white-space:nowrap;}
+.proto-btn:hover{border-color:var(--action-blue);color:var(--action-blue);}
+.proto-btn.active{background:var(--action-blue);color:#fff;border-color:var(--action-blue);}
+</style>
+</head>
+<body>
+
+<!-- ═══════ LOGIN SCREEN ═══════ -->
+<div class="screen auth-layout active" id="screen-login">
+  <div class="auth-card">
+    <div class="auth-logo">S</div>
+    <div class="auth-title">Sign in to SafetyOS</div>
+    <div class="auth-subtitle">Enter your email address. We'll send you a one-time verification code to sign in securely.</div>
+    <div id="login-notice" class="notice"></div>
+    <form class="auth-form" onsubmit="handleLogin(event)">
+      <label class="form-label" for="login-email">Email address</label>
+      <input class="form-input" type="email" id="login-email" placeholder="name@company.com" autocomplete="email">
+      <div class="form-hint">We'll send a 6-digit verification code to this address.</div>
+      <button class="btn-primary" type="submit" id="login-btn">Send Verification Code</button>
+    </form>
+    <div class="auth-footer">Enterprise construction safety platform</div>
+  </div>
+</div>
+
+<!-- ═══════ OTP SCREEN ═══════ -->
+<div class="screen auth-layout" id="screen-otp">
+  <div class="auth-card">
+    <div class="auth-logo">S</div>
+    <div class="auth-title">Verify your identity</div>
+    <div class="auth-subtitle">Enter the 6-digit code sent to</div>
+    <div class="otp-email-badge">r****@navatech.com</div>
+    <div id="otp-notice" class="notice"></div>
+    <form class="auth-form" onsubmit="handleVerify(event)" style="align-items:center;">
+      <div class="otp-inputs" id="otp-inputs">
+        <input class="otp-input" type="text" maxlength="1" inputmode="numeric" data-idx="0">
+        <input class="otp-input" type="text" maxlength="1" inputmode="numeric" data-idx="1">
+        <input class="otp-input" type="text" maxlength="1" inputmode="numeric" data-idx="2">
+        <input class="otp-input" type="text" maxlength="1" inputmode="numeric" data-idx="3">
+        <input class="otp-input" type="text" maxlength="1" inputmode="numeric" data-idx="4">
+        <input class="otp-input" type="text" maxlength="1" inputmode="numeric" data-idx="5">
+      </div>
+      <button class="btn-primary" type="submit" id="otp-btn" style="width:100%;">Verify &amp; Sign In</button>
+      <div class="otp-footer">
+        <span class="otp-timer" id="otp-timer">Resend in 0:28</span>
+        <button type="button" class="otp-resend" id="otp-resend" disabled onclick="startResendTimer()">Resend Code</button>
+      </div>
+    </form>
+    <button class="auth-link" onclick="nav('login')">Use a different email</button>
+  </div>
+</div>
+
+<!-- ═══════ APP SCREEN ═══════ -->
+<div class="screen" id="screen-app">
+  <div class="app-shell">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">S</div>
+        <div class="sidebar-brand">SafetyOS</div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Main</div>
+        <div class="nav-item active" data-page="home" onclick="navApp('home')">
+          <span class="nav-icon">&#9632;</span>
+          <span>Dashboard</span>
+        </div>
+
+        <div class="nav-section-label">Modules</div>
+        <div class="nav-item" onclick="void(0)">
+          <span class="nav-icon">&#9673;</span>
+          <span>Observations</span>
+          <span class="nav-badge">14</span>
+        </div>
+        <div class="nav-item" onclick="void(0)">
+          <span class="nav-icon">&#9888;</span>
+          <span>Incidents</span>
+          <span class="nav-badge">3</span>
+        </div>
+        <div class="nav-item" onclick="void(0)">
+          <span class="nav-icon">&#9745;</span>
+          <span>Inspections</span>
+          <span class="nav-badge">7</span>
+        </div>
+        <div class="nav-item" onclick="void(0)">
+          <span class="nav-icon">&#9733;</span>
+          <span>Training</span>
+        </div>
+        <div class="nav-item" onclick="void(0)">
+          <span class="nav-icon">&#9998;</span>
+          <span>Permits</span>
+          <span class="nav-badge">4</span>
+        </div>
+        <div class="nav-item" onclick="void(0)">
+          <span class="nav-icon">&#8689;</span>
+          <span>Site Walks</span>
+        </div>
+        <div class="nav-item" onclick="void(0)">
+          <span class="nav-icon">&#9776;</span>
+          <span>Statistics</span>
+        </div>
+
+        <div class="nav-section-label">Admin</div>
+        <div class="nav-item" onclick="void(0)">
+          <span class="nav-icon">&#9881;</span>
+          <span>Settings</span>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- MAIN AREA -->
+    <div class="main-content">
+      <!-- TOPBAR -->
+      <header class="topbar">
+        <div class="breadcrumb">
+          <span class="breadcrumb-org">Navatech Group</span>
+          <span class="breadcrumb-sep">&#8250;</span>
+          <span class="breadcrumb-sub">Navatech Construction &mdash; UAE</span>
+        </div>
+        <button class="btn-outline" onclick="toggleWorkspace()">Switch Workspace <span style="font-size:11px;">&#9662;</span></button>
+        <div class="topbar-actions">
+          <button class="icon-btn" title="Notifications">&#9954;</button>
+          <button class="avatar-btn" onclick="navApp('profile')" title="Profile">RK</button>
+        </div>
+      </header>
+
+      <!-- PAGES -->
+      <div class="page-content">
+
+        <!-- HOME PAGE -->
+        <div class="page active" id="page-home">
+          <div id="home-default">
+            <div class="page-header">
+              <div>
+                <div class="page-title">Subsidiary Dashboard</div>
+                <div class="page-subtitle">Navatech Construction &mdash; UAE &middot; 5 active projects</div>
+              </div>
+              <div class="page-actions">
+                <button class="btn-outline-sm">Export Report</button>
+                <button class="btn-primary-sm">+ New Record</button>
+              </div>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="summary-grid">
+              <div class="summary-card">
+                <div class="summary-card-label">Observations</div>
+                <div class="summary-card-value">142</div>
+                <div class="summary-card-trend up">&#8593; 12% vs last month</div>
+              </div>
+              <div class="summary-card">
+                <div class="summary-card-label">Incidents</div>
+                <div class="summary-card-value critical">8</div>
+                <div class="summary-card-trend down">&#8595; 3 from last month</div>
+              </div>
+              <div class="summary-card">
+                <div class="summary-card-label">Inspections</div>
+                <div class="summary-card-value">37</div>
+                <div class="summary-card-trend stable">&#9679; 7 pending</div>
+              </div>
+              <div class="summary-card">
+                <div class="summary-card-label">Training</div>
+                <div class="summary-card-value">89%</div>
+                <div class="summary-card-trend down">&#8595; Compliance rate</div>
+              </div>
+              <div class="summary-card">
+                <div class="summary-card-label">Active Permits</div>
+                <div class="summary-card-value warning">12</div>
+                <div class="summary-card-trend stable">&#9679; 4 expiring soon</div>
+              </div>
+            </div>
+
+            <!-- Module Cards -->
+            <div class="module-grid">
+              <div class="module-card">
+                <div class="module-card-icon blue">&#9673;</div>
+                <div class="module-card-title">Observations</div>
+                <div class="module-card-desc">14 open</div>
+              </div>
+              <div class="module-card">
+                <div class="module-card-icon critical">&#9888;</div>
+                <div class="module-card-title">Incidents</div>
+                <div class="module-card-desc">3 open</div>
+              </div>
+              <div class="module-card">
+                <div class="module-card-icon success">&#9745;</div>
+                <div class="module-card-title">Inspections</div>
+                <div class="module-card-desc">7 pending</div>
+              </div>
+              <div class="module-card">
+                <div class="module-card-icon warning">&#9733;</div>
+                <div class="module-card-title">Training</div>
+                <div class="module-card-desc">89% compliant</div>
+              </div>
+              <div class="module-card">
+                <div class="module-card-icon warning">&#9998;</div>
+                <div class="module-card-title">Permits</div>
+                <div class="module-card-desc">4 expiring</div>
+              </div>
+              <div class="module-card">
+                <div class="module-card-icon success">&#8689;</div>
+                <div class="module-card-title">Site Walks</div>
+                <div class="module-card-desc">2 scheduled</div>
+              </div>
+              <div class="module-card">
+                <div class="module-card-icon neutral">&#9776;</div>
+                <div class="module-card-title">Statistics</div>
+                <div class="module-card-desc">View reports</div>
+              </div>
+            </div>
+
+            <!-- Projects Table -->
+            <div class="section-header">
+              <div class="section-title">Projects</div>
+              <span class="section-link">View all projects</span>
+            </div>
+            <div class="data-table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Project</th>
+                    <th>Observations</th>
+                    <th>Incidents</th>
+                    <th>Inspections</th>
+                    <th>Status</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><div class="project-name">Marina Bay Tower &mdash; Phase 2</div><div class="project-code">DXB-042</div></td>
+                    <td class="td-count">14</td>
+                    <td class="td-count critical">3</td>
+                    <td>7 pending</td>
+                    <td><span class="chip success">Active</span></td>
+                    <td><button class="btn-table">Open &rarr;</button></td>
+                  </tr>
+                  <tr>
+                    <td><div class="project-name">Expo City Infrastructure</div><div class="project-code">DXB-038</div></td>
+                    <td class="td-count">8</td>
+                    <td class="td-count warning">1</td>
+                    <td>2 pending</td>
+                    <td><span class="chip success">Active</span></td>
+                    <td><button class="btn-table">Open &rarr;</button></td>
+                  </tr>
+                  <tr>
+                    <td><div class="project-name">Al Maryah Central &mdash; Towers A&amp;B</div><div class="project-code">ABD-015</div></td>
+                    <td class="td-count">22</td>
+                    <td class="td-count critical">5</td>
+                    <td>4 pending</td>
+                    <td><span class="chip warning">At Risk</span></td>
+                    <td><button class="btn-table">Open &rarr;</button></td>
+                  </tr>
+                  <tr>
+                    <td><div class="project-name">Palm Residences Fit-Out</div><div class="project-code">DXB-039</div></td>
+                    <td class="td-count">3</td>
+                    <td class="td-count">0</td>
+                    <td>1 pending</td>
+                    <td><span class="chip success">Active</span></td>
+                    <td><button class="btn-table">Open &rarr;</button></td>
+                  </tr>
+                  <tr>
+                    <td><div class="project-name">Saadiyat Cultural Hub</div><div class="project-code">ABD-022</div></td>
+                    <td class="td-count">11</td>
+                    <td class="td-count warning">2</td>
+                    <td>3 pending</td>
+                    <td><span class="chip success">Active</span></td>
+                    <td><button class="btn-table">Open &rarr;</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- LOADING STATE -->
+          <div id="home-loading" style="display:none;">
+            <div class="page-header">
+              <div>
+                <div class="skeleton skel-bar tall w60"></div>
+                <div class="skeleton skel-bar w40"></div>
+              </div>
+            </div>
+            <div class="summary-grid">
+              <div class="skel-card"><div class="skeleton skel-bar w60"></div><div class="skeleton skel-bar tall w30"></div><div class="skeleton skel-bar w40"></div></div>
+              <div class="skel-card"><div class="skeleton skel-bar w60"></div><div class="skeleton skel-bar tall w30"></div><div class="skeleton skel-bar w40"></div></div>
+              <div class="skel-card"><div class="skeleton skel-bar w60"></div><div class="skeleton skel-bar tall w30"></div><div class="skeleton skel-bar w40"></div></div>
+              <div class="skel-card"><div class="skeleton skel-bar w60"></div><div class="skeleton skel-bar tall w30"></div><div class="skeleton skel-bar w40"></div></div>
+              <div class="skel-card"><div class="skeleton skel-bar w60"></div><div class="skeleton skel-bar tall w30"></div><div class="skeleton skel-bar w40"></div></div>
+            </div>
+            <div class="module-grid">
+              <div class="skeleton skel-module"></div>
+              <div class="skeleton skel-module"></div>
+              <div class="skeleton skel-module"></div>
+              <div class="skeleton skel-module"></div>
+            </div>
+            <div class="skeleton skel-bar w30" style="margin-bottom:14px;"></div>
+            <div class="skel-table">
+              <div class="skel-table-row"><div class="skeleton skel-bar w80" style="flex:2;"></div><div class="skeleton skel-bar w40" style="flex:1;"></div><div class="skeleton skel-bar w40" style="flex:1;"></div><div class="skeleton skel-bar w40" style="flex:1;"></div></div>
+              <div class="skel-table-row"><div class="skeleton skel-bar w80" style="flex:2;"></div><div class="skeleton skel-bar w40" style="flex:1;"></div><div class="skeleton skel-bar w40" style="flex:1;"></div><div class="skeleton skel-bar w40" style="flex:1;"></div></div>
+              <div class="skel-table-row"><div class="skeleton skel-bar w80" style="flex:2;"></div><div class="skeleton skel-bar w40" style="flex:1;"></div><div class="skeleton skel-bar w40" style="flex:1;"></div><div class="skeleton skel-bar w40" style="flex:1;"></div></div>
+            </div>
+          </div>
+
+          <!-- EMPTY STATE -->
+          <div id="home-empty" style="display:none;">
+            <div class="page-header">
+              <div>
+                <div class="page-title">Subsidiary Dashboard</div>
+                <div class="page-subtitle">Navatech Construction &mdash; UAE &middot; 0 active projects</div>
+              </div>
+            </div>
+            <div class="state-center">
+              <div class="state-icon empty">&#9744;</div>
+              <div class="state-title">No Projects Yet</div>
+              <div class="state-desc">This subsidiary doesn't have any active projects.</div>
+              <button class="btn-primary-sm">+ Create First Project</button>
+            </div>
+          </div>
+
+          <!-- ERROR STATE -->
+          <div id="home-error" style="display:none;">
+            <div class="page-header">
+              <div>
+                <div class="page-title">Subsidiary Dashboard</div>
+                <div class="page-subtitle">Navatech Construction &mdash; UAE</div>
+              </div>
+            </div>
+            <div class="state-center">
+              <div class="state-icon error">&#9888;</div>
+              <div class="state-title">Unable to Load Data</div>
+              <div class="state-desc">Something went wrong.</div>
+              <button class="btn-primary-sm" onclick="setHomeState('default')">Retry</button>
+              <div class="state-note">Your workspace context is preserved.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PROFILE PAGE -->
+        <div class="page" id="page-profile">
+          <div class="profile-wrap">
+            <div class="page-header">
+              <div class="page-title">Profile &amp; Settings</div>
+            </div>
+
+            <div class="profile-card">
+              <div class="profile-card-header">
+                <span class="profile-card-label">User</span>
+                <button class="profile-card-action">Edit Profile</button>
+              </div>
+              <div class="profile-user">
+                <div class="profile-avatar">RK</div>
+                <div class="profile-user-info">
+                  <div class="profile-name">Rajesh Kumar</div>
+                  <div class="profile-role">HSE Manager</div>
+                  <div class="profile-email">rajesh.k@navatech.com</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="profile-card">
+              <div class="profile-card-header">
+                <span class="profile-card-label">Current Workspace</span>
+                <button class="profile-card-action" onclick="toggleWorkspace()">Switch Workspace</button>
+              </div>
+              <div class="profile-row">
+                <span class="profile-row-label">Organization</span>
+                <span class="profile-row-value">Navatech Group</span>
+              </div>
+              <div class="profile-row">
+                <span class="profile-row-label">Subsidiary</span>
+                <span class="profile-row-value">Navatech Construction &mdash; UAE</span>
+              </div>
+              <div class="profile-row">
+                <span class="profile-row-label">Role</span>
+                <span class="profile-row-value">HSE Manager</span>
+              </div>
+              <div class="profile-row">
+                <span class="profile-row-label">Projects</span>
+                <span class="profile-row-value">5 assigned</span>
+              </div>
+            </div>
+
+            <div class="profile-card">
+              <div class="profile-row clickable">
+                <span class="profile-row-label">Change Language</span>
+                <span class="profile-row-value">English <span class="profile-row-chevron">&#8250;</span></span>
+              </div>
+              <div class="profile-row clickable" onclick="toggleDarkMode()">
+                <span class="profile-row-label">Theme</span>
+                <span class="profile-row-value"><span id="theme-label">Light</span> <span class="profile-row-chevron">&#8250;</span></span>
+              </div>
+            </div>
+
+            <div class="profile-card">
+              <div class="profile-row clickable">
+                <span class="profile-row-label">Guided Tour</span>
+                <span class="profile-row-value"><span class="profile-row-chevron">&#8250;</span></span>
+              </div>
+              <div class="profile-row clickable">
+                <span class="profile-row-label">Contact Us</span>
+                <span class="profile-row-value"><span class="profile-row-chevron">&#8250;</span></span>
+              </div>
+            </div>
+
+            <div class="profile-card">
+              <div class="profile-row">
+                <span class="profile-row-label">About</span>
+                <span class="profile-row-value">v2.4.1</span>
+              </div>
+            </div>
+
+            <button class="btn-signout" onclick="nav('login')">Sign Out</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ WORKSPACE PANEL ═══════ -->
+<div class="workspace-overlay" id="ws-overlay" onclick="toggleWorkspace()"></div>
+<div class="workspace-panel" id="ws-panel">
+  <div class="ws-header">
+    <div class="ws-header-title">Switch Workspace</div>
+    <button class="ws-close" onclick="toggleWorkspace()">&times;</button>
+  </div>
+  <div class="ws-body">
+    <div class="ws-current">
+      <div class="ws-label">Current Workspace</div>
+      <div class="ws-current-org">Navatech Group</div>
+      <div class="ws-current-sub">Navatech Construction &mdash; UAE</div>
+    </div>
+
+    <div class="ws-recent" tabindex="0">
+      <div class="ws-recent-info">
+        <div class="ws-recent-label">Recent Project</div>
+        <div class="ws-recent-name">Marina Bay Tower &mdash; Phase 2</div>
+        <div class="ws-recent-time">Opened 2 hours ago</div>
+      </div>
+      <span class="ws-recent-arrow">&rarr;</span>
+    </div>
+
+    <input class="ws-search" type="text" placeholder="Search subsidiaries and projects...">
+
+    <div class="ws-section">
+      <div class="ws-section-title">Subsidiaries</div>
+      <div class="ws-item active">
+        <span>Navatech Construction &mdash; UAE</span>
+        <span class="ws-item-right">&#10003;</span>
+      </div>
+      <div class="ws-item">
+        <span>Navatech Construction &mdash; KSA</span>
+        <span class="ws-item-right">4 projects</span>
+      </div>
+      <div class="ws-item">
+        <span>Navatech Facilities &mdash; India</span>
+        <span class="ws-item-right">3 projects</span>
+      </div>
+    </div>
+
+    <div class="ws-section">
+      <div class="ws-section-title">Projects</div>
+      <div class="ws-project">
+        <span class="ws-project-name">Marina Bay Tower &mdash; Phase 2</span>
+        <span class="ws-project-meta">DXB-042 &middot; 3 incidents</span>
+      </div>
+      <div class="ws-project">
+        <span class="ws-project-name">Expo City Infrastructure</span>
+        <span class="ws-project-meta">DXB-038 &middot; 1 incident</span>
+      </div>
+      <div class="ws-project">
+        <span class="ws-project-name">Al Maryah Central &mdash; Towers A&amp;B</span>
+        <span class="ws-project-meta">ABD-015 &middot; 5 incidents</span>
+      </div>
+      <div class="ws-project">
+        <span class="ws-project-name">Palm Residences Fit-Out</span>
+        <span class="ws-project-meta">DXB-039 &middot; No incidents</span>
+      </div>
+      <div class="ws-project">
+        <span class="ws-project-name">Saadiyat Cultural Hub</span>
+        <span class="ws-project-meta">ABD-022 &middot; 2 incidents</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ PROTOTYPE CONTROLS ═══════ -->
+<div class="proto-controls">
+  <button class="proto-btn active" id="pb-login" onclick="nav('login')">Login</button>
+  <button class="proto-btn" id="pb-otp" onclick="nav('otp')">OTP</button>
+  <button class="proto-btn" id="pb-home" onclick="nav('app');navApp('home')">Home</button>
+  <button class="proto-btn" id="pb-profile" onclick="nav('app');navApp('profile')">Profile</button>
+  <button class="proto-btn" id="pb-theme" onclick="toggleDarkMode()">Theme</button>
+  <button class="proto-btn" id="pb-loading" onclick="nav('app');navApp('home');setHomeState('loading')">Loading</button>
+  <button class="proto-btn" id="pb-empty" onclick="nav('app');navApp('home');setHomeState('empty')">Empty</button>
+  <button class="proto-btn" id="pb-error" onclick="nav('app');navApp('home');setHomeState('error')">Error</button>
+  <button class="proto-btn" id="pb-default" onclick="nav('app');navApp('home');setHomeState('default')">Default</button>
+</div>
+
+<script>
+(function(){
+
+/* ── SCREEN NAVIGATION ── */
+let currentScreen = 'login';
+let currentPage = 'home';
+
+window.nav = function(screen) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById('screen-' + screen);
+  if (el) el.classList.add('active');
+  currentScreen = screen;
+  updateProtoButtons();
+  if (screen === 'otp') {
+    startResendTimer();
+    setTimeout(() => {
+      const first = document.querySelector('.otp-input');
+      if (first) first.focus();
+    }, 100);
+  }
+};
+
+window.navApp = function(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const el = document.getElementById('page-' + page);
+  if (el) el.classList.add('active');
+  currentPage = page;
+
+  document.querySelectorAll('.nav-item[data-page]').forEach(n => n.classList.remove('active'));
+  const navItem = document.querySelector('.nav-item[data-page="' + page + '"]');
+  if (navItem) navItem.classList.add('active');
+  updateProtoButtons();
+};
+
+function updateProtoButtons() {
+  document.querySelectorAll('.proto-btn').forEach(b => b.classList.remove('active'));
+  if (currentScreen === 'login') document.getElementById('pb-login').classList.add('active');
+  else if (currentScreen === 'otp') document.getElementById('pb-otp').classList.add('active');
+  else if (currentScreen === 'app' && currentPage === 'home') document.getElementById('pb-home').classList.add('active');
+  else if (currentScreen === 'app' && currentPage === 'profile') document.getElementById('pb-profile').classList.add('active');
+}
+
+/* ── LOGIN ── */
+window.handleLogin = function(e) {
+  e.preventDefault();
+  const email = document.getElementById('login-email');
+  const notice = document.getElementById('login-notice');
+  const btn = document.getElementById('login-btn');
+  notice.className = 'notice';
+  notice.style.display = 'none';
+
+  const val = email.value.trim();
+  if (!val || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
+    email.classList.add('error');
+    notice.textContent = 'Please enter a valid email address.';
+    notice.className = 'notice error';
+    notice.style.display = 'flex';
+    return;
+  }
+
+  email.classList.remove('error');
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+
+  setTimeout(function() {
+    btn.disabled = false;
+    btn.textContent = 'Send Verification Code';
+    notice.textContent = 'Verification code sent successfully.';
+    notice.className = 'notice success';
+    notice.style.display = 'flex';
+    setTimeout(function() { nav('otp'); }, 800);
+  }, 1200);
+};
+
+/* ── OTP ── */
+const otpInputs = document.querySelectorAll('.otp-input');
+otpInputs.forEach(function(inp, idx) {
+  inp.addEventListener('input', function() {
+    this.value = this.value.replace(/\D/g, '');
+    if (this.value.length === 1 && idx < 5) {
+      otpInputs[idx + 1].focus();
+    }
+  });
+  inp.addEventListener('keydown', function(e) {
+    if (e.key === 'Backspace' && !this.value && idx > 0) {
+      otpInputs[idx - 1].focus();
+    }
+  });
+  inp.addEventListener('paste', function(e) {
+    e.preventDefault();
+    const paste = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '');
+    for (let i = 0; i < 6 && i < paste.length; i++) {
+      otpInputs[i].value = paste[i];
+    }
+    const focusIdx = Math.min(paste.length, 5);
+    otpInputs[focusIdx].focus();
+  });
+});
+
+window.handleVerify = function(e) {
+  e.preventDefault();
+  const notice = document.getElementById('otp-notice');
+  const btn = document.getElementById('otp-btn');
+  let code = '';
+  otpInputs.forEach(function(inp) { code += inp.value; });
+  if (code.length < 6) {
+    notice.textContent = 'Please enter all 6 digits.';
+    notice.className = 'notice error';
+    notice.style.display = 'flex';
+    return;
+  }
+  notice.style.display = 'none';
+  btn.disabled = true;
+  btn.textContent = 'Verifying...';
+  setTimeout(function() {
+    btn.disabled = false;
+    btn.textContent = 'Verify & Sign In';
+    otpInputs.forEach(function(inp) { inp.value = ''; });
+    nav('app');
+    navApp('home');
+    setHomeState('default');
+  }, 1200);
+};
+
+/* ── RESEND TIMER ── */
+let resendInterval;
+window.startResendTimer = function() {
+  clearInterval(resendInterval);
+  const timerEl = document.getElementById('otp-timer');
+  const resendBtn = document.getElementById('otp-resend');
+  let sec = 28;
+  resendBtn.disabled = true;
+  timerEl.textContent = 'Resend in 0:' + String(sec).padStart(2, '0');
+  resendInterval = setInterval(function() {
+    sec--;
+    if (sec <= 0) {
+      clearInterval(resendInterval);
+      timerEl.textContent = '';
+      resendBtn.disabled = false;
+    } else {
+      timerEl.textContent = 'Resend in 0:' + String(sec).padStart(2, '0');
+    }
+  }, 1000);
+};
+
+/* ── WORKSPACE ── */
+window.toggleWorkspace = function() {
+  const overlay = document.getElementById('ws-overlay');
+  const panel = document.getElementById('ws-panel');
+  const isOpen = panel.classList.contains('open');
+  if (isOpen) {
+    panel.classList.remove('open');
+    overlay.classList.remove('open');
+  } else {
+    overlay.classList.add('open');
+    requestAnimationFrame(function() { panel.classList.add('open'); });
+  }
+};
+
+/* ── DARK MODE ── */
+window.toggleDarkMode = function() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? '' : 'dark');
+  const label = document.getElementById('theme-label');
+  if (label) label.textContent = isDark ? 'Light' : 'Dark';
+};
+
+/* ── HOME STATES ── */
+let savedDefault = null;
+
+window.setHomeState = function(state) {
+  const states = ['default', 'loading', 'empty', 'error'];
+  states.forEach(function(s) {
+    const el = document.getElementById('home-' + s);
+    if (el) el.style.display = (s === state) ? '' : 'none';
+  });
+  updateProtoButtons();
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+  setHomeState('default');
+});
+
+})();
+</script>
+</body>
+</html>
