@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>nAI Mobile Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg:#f7f9fc;--surface:#ffffff;--surface-secondary:#f0f5ff;
+--border:#e5e9f0;--border-light:#eef2f7;
+--text-primary:#111827;--text-secondary:#6b7280;--text-tertiary:#9ca3af;
+--action-blue:#1a56db;--action-blue-light:#ebf2ff;--action-blue-hover:#1648c0;
+--success:#059669;--success-bg:#ecfdf5;
+--warning:#d97706;--warning-bg:#fffbeb;
+--critical:#dc2626;--critical-bg:#fef2f2;
+--neutral:#6b7280;--neutral-bg:#f3f4f6;
+--radius:12px;--radius-sm:8px;--radius-xs:6px;
+--safe-top:54px;--safe-bottom:34px;--nav-height:56px;
+}
+[data-theme="dark"]{
+--bg:#0f1117;--surface:#1a1d26;--surface-secondary:#232733;
+--border:#2d3140;--border-light:#252936;
+--text-primary:#f1f3f5;--text-secondary:#9ca3af;--text-tertiary:#6b7280;
+--action-blue:#3b82f6;--action-blue-light:#1e2a4a;--action-blue-hover:#60a5fa;
+--success-bg:#052e1c;--warning-bg:#2d1b00;--critical-bg:#2d0a0a;--neutral-bg:#252936;
+}
+body{font-family:'Inter',sans-serif;background:#111318;min-height:100vh;display:flex;justify-content:center;align-items:flex-start;padding:40px 0;color:#fff;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+.app-wrapper{display:flex;gap:32px;align-items:flex-start}
+
+/* ── Controls Panel ── */
+.controls{width:210px;position:sticky;top:40px;display:flex;flex-direction:column;gap:16px}
+.ctrl-header{margin-bottom:4px}
+.ctrl-header h2{font-size:15px;font-weight:700;color:#fff}
+.ctrl-header p{font-size:11px;color:#6b7280;margin-top:2px}
+.ctrl-card{background:#1a1d26;border:1px solid #2d3140;border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:6px}
+.ctrl-card h3{font-size:10px;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:.8px;margin-bottom:2px}
+.ctrl-btn{background:transparent;border:1px solid #2d3140;color:#9ca3af;font-size:11px;font-weight:500;padding:7px 10px;border-radius:6px;cursor:pointer;text-align:left;transition:all .15s;font-family:inherit}
+.ctrl-btn:hover{border-color:#3b82f6;color:#e5e7eb}
+.ctrl-btn.active{background:#1a56db;border-color:#1a56db;color:#fff}
+.ctrl-row{display:flex;gap:6px}
+.ctrl-row .ctrl-btn{flex:1;text-align:center}
+.state-badge{font-size:10px;color:#6b7280;text-align:center;padding:6px;background:#1a1d26;border-radius:6px;border:1px solid #2d3140}
+
+/* ── Phone Frame ── */
+.phone-outer{position:relative;width:390px;height:844px;border-radius:48px;background:#000;box-shadow:0 0 0 3px #2d3140,0 0 0 6px #1a1d26,0 25px 80px rgba(0,0,0,.6);overflow:hidden;flex-shrink:0}
+.phone-notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:126px;height:34px;background:#000;border-radius:0 0 18px 18px;z-index:100}
+.phone-screen{width:100%;height:100%;overflow:hidden;position:relative;background:var(--bg)}
+
+/* Status Bar */
+.status-bar{position:absolute;top:0;left:0;right:0;height:var(--safe-top);display:flex;align-items:center;justify-content:space-between;padding:14px 28px 0;z-index:90;font-size:12px;font-weight:600;color:var(--text-primary)}
+.status-bar .sb-time{font-size:14px;font-weight:700}
+.status-bar .sb-icons{display:flex;gap:6px;align-items:center;font-size:13px}
+.status-bar.sb-splash{color:#333}
+
+/* Screens */
+.screen{position:absolute;inset:0;display:none;flex-direction:column;overflow:hidden}
+.screen.active{display:flex}
+
+/* ── Splash ── */
+.splash-screen{background:#e8ecf3;align-items:center;justify-content:center}
+.splash-logo{width:160px;height:auto}
+.splash-footer{position:absolute;bottom:60px;text-align:center}
+.splash-footer .powered-label{font-size:12px;color:#888;margin-bottom:6px}
+.splash-footer .navatech-line{display:flex;align-items:center;justify-content:center;gap:4px}
+.splash-footer .navatech-line .nt-mark{display:inline-flex;width:16px;height:16px}
+.splash-footer .navatech-line .nt-name{font-size:14px;font-weight:700;color:#3d5a9e}
+.splash-footer .navatech-line .nt-group{font-size:12px;color:#999;margin-left:2px}
+
+/* ── Auth Screens (Login / Register / OTP) ── */
+.auth-screen{
+  padding:0;overflow-y:auto;
+  background:linear-gradient(180deg, var(--bg) 0%, #f0f4fc 100%);
+  flex:1;
+}
+[data-theme="dark"] .auth-screen{
+  background:linear-gradient(180deg, var(--bg) 0%, #12141c 100%);
+}
+.auth-top{
+  padding:calc(var(--safe-top) + 40px) 24px 0;
+  display:flex;flex-direction:column;align-items:center;
+}
+.auth-top .auth-logo{width:90px;height:auto;display:block}
+.auth-top .auth-tagline{
+  font-size:11px;font-weight:600;color:var(--text-tertiary);
+  text-transform:uppercase;letter-spacing:1.5px;
+  margin-top:12px;
+}
+.auth-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:28px 24px;
+  margin:32px 20px 0;
+  box-shadow:0 4px 24px rgba(0,0,0,0.04),0 1px 2px rgba(0,0,0,0.03);
+}
+[data-theme="dark"] .auth-card{
+  box-shadow:0 4px 24px rgba(0,0,0,0.2),0 1px 2px rgba(0,0,0,0.1);
+}
+.auth-card h1{
+  font-size:22px;font-weight:700;color:var(--text-primary);
+  text-align:left;margin:0 0 4px;
+}
+.auth-card .auth-sub{
+  font-size:13px;color:var(--text-secondary);
+  line-height:1.5;margin:0 0 24px;text-align:left;
+}
+.auth-card label{
+  display:block;font-size:12px;font-weight:600;
+  color:var(--text-secondary);margin-bottom:6px;
+}
+.auth-card input[type="text"],
+.auth-card input[type="email"],
+.auth-card input[type="tel"]{
+  width:100%;height:52px;
+  border:1.5px solid var(--border);border-radius:10px;
+  padding:0 16px;font-size:15px;font-family:inherit;
+  color:var(--text-primary);background:var(--bg);
+  transition:border-color .15s,box-shadow .15s;outline:none;
+}
+.auth-card input:focus{
+  border-color:var(--action-blue);
+  box-shadow:0 0 0 3px rgba(26,86,219,0.08);
+}
+[data-theme="dark"] .auth-card input:focus{
+  box-shadow:0 0 0 3px rgba(59,130,246,0.15);
+}
+.auth-card .field-group{margin-bottom:16px}
+.auth-card .field-row{display:flex;gap:10px}
+.auth-card .field-row .field-group{flex:1;margin-bottom:16px}
+.auth-card .primary-btn{
+  width:100%;height:52px;border:none;border-radius:10px;
+  background:var(--action-blue);color:#fff;
+  font-size:15px;font-weight:600;font-family:inherit;
+  cursor:pointer;transition:background .15s,box-shadow .15s;
+  margin-top:16px;
+  box-shadow:0 2px 8px rgba(26,86,219,0.25);
+}
+.auth-card .primary-btn:hover{background:var(--action-blue-hover)}
+.auth-card .primary-btn:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
+.auth-footer{
+  text-align:center;margin-top:20px;padding:0 20px;
+  font-size:13px;color:var(--text-secondary);
+}
+.auth-footer a{color:var(--action-blue);text-decoration:none;font-weight:600;cursor:pointer}
+.powered-footer{
+  text-align:center;padding:24px 20px 8px;
+  font-size:11px;color:var(--text-tertiary);
+  margin-top:auto;
+}
+
+/* ── Photo Upload ── */
+.photo-upload-wrap{display:flex;flex-direction:column;align-items:center;margin-bottom:20px}
+.photo-upload{
+  width:72px;height:72px;border-radius:50%;
+  border:2px dashed var(--border);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .2s;
+  color:var(--text-tertiary);font-size:24px;
+  background:var(--bg);
+}
+.photo-upload:hover,.photo-upload.checked{
+  border-style:solid;border-color:var(--action-blue);
+  color:var(--action-blue);background:var(--action-blue-light);
+}
+.photo-upload-label{font-size:11px;color:var(--text-secondary);margin-top:6px}
+
+/* ── Tel Prefix ── */
+.tel-wrapper{position:relative}
+.tel-prefix{
+  position:absolute;left:16px;top:50%;transform:translateY(-50%);
+  font-size:14px;font-weight:500;color:var(--text-secondary);
+  pointer-events:none;
+  display:flex;align-items:center;gap:6px;
+}
+.tel-prefix::after{
+  content:'';display:block;width:1px;height:20px;
+  background:var(--border);
+}
+.tel-wrapper input{padding-left:56px !important}
+
+/* ── Terms ── */
+.terms-row{display:flex;align-items:flex-start;gap:10px;margin:20px 0 4px}
+.terms-row input[type="checkbox"]{
+  width:18px;height:18px;border-radius:4px;
+  accent-color:var(--action-blue);flex-shrink:0;
+  margin-top:2px;cursor:pointer;
+}
+.terms-row label{font-size:13px;color:var(--text-secondary);line-height:1.4;cursor:pointer}
+.terms-row label a{color:var(--action-blue);text-decoration:none;font-weight:500}
+
+/* ── OTP ── */
+.otp-instruction{
+  background:var(--action-blue-light);border-radius:10px;
+  padding:14px 16px;display:flex;gap:10px;margin:20px 0 16px;
+}
+.otp-instruction .inst-icon{
+  width:20px;flex-shrink:0;color:var(--action-blue);
+  font-size:20px;line-height:1;
+}
+.otp-instruction .inst-text{font-size:13px;line-height:1.55;color:var(--text-primary)}
+.otp-email-wrap{text-align:center;margin-bottom:24px}
+.otp-email-pill{
+  display:inline-flex;align-items:center;padding:6px 16px;
+  border-radius:20px;background:var(--action-blue-light);
+  color:var(--action-blue);font-size:14px;font-weight:600;gap:6px;
+}
+.otp-digits{display:flex;gap:8px;justify-content:center;margin:0 auto 24px}
+.otp-digits input{
+  width:46px;height:54px;
+  border:1.5px solid var(--border);border-radius:10px;
+  text-align:center;font-size:22px;font-weight:700;
+  font-family:inherit;color:var(--text-primary);
+  background:var(--surface);outline:none;
+  transition:border-color .15s,box-shadow .15s;
+}
+.otp-digits input:focus{
+  border-color:var(--action-blue);
+  box-shadow:0 0 0 3px rgba(26,86,219,0.08);
+}
+.otp-resend{text-align:center;margin-top:16px;font-size:13px;color:var(--text-tertiary)}
+.otp-resend button{
+  background:none;border:none;color:var(--action-blue);
+  font-weight:600;font-family:inherit;font-size:13px;
+  cursor:pointer;padding:0;margin-left:4px;
+}
+.otp-resend button:disabled{color:var(--text-tertiary);cursor:default}
+
+/* ── Select Screens ── */
+.select-screen{padding:var(--safe-top) 0 0;overflow-y:auto;background:var(--bg)}
+.select-header{display:flex;align-items:center;padding:10px 20px 16px;gap:12px}
+.select-header .back-btn{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;background:var(--surface);color:var(--text-primary);font-size:16px;transition:all .15s;flex-shrink:0}
+.select-header .back-btn:hover{border-color:var(--action-blue);color:var(--action-blue)}
+.select-header .sh-content{flex:1}
+.select-header .sh-content h1{font-size:20px;font-weight:700;color:var(--text-primary)}
+.select-header .sh-content p{font-size:13px;color:var(--text-secondary);margin-top:2px}
+.select-logo{width:36px;height:36px;display:flex;align-items:center;justify-content:center}
+.stepper{display:flex;align-items:center;padding:0 24px 16px;gap:0}
+.step{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--text-tertiary)}
+.step.active{color:var(--action-blue)}
+.step.done{color:var(--success)}
+.step .step-dot{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--text-tertiary)}
+.step.active .step-dot{background:var(--action-blue);border-color:var(--action-blue);color:#fff}
+.step.done .step-dot{background:var(--success);border-color:var(--success);color:#fff}
+.step-line{flex:1;height:2px;background:var(--border);margin:0 8px;min-width:20px}
+.step-line.done{background:var(--success)}
+.search-bar{margin:0 20px 16px;position:relative}
+.search-bar input{width:100%;height:44px;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0 14px 0 40px;font-size:14px;font-family:inherit;color:var(--text-primary);background:var(--surface);outline:none}
+.search-bar input:focus{border-color:var(--action-blue)}
+.search-bar .search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-tertiary);font-size:15px}
+.select-list{padding:0 20px}
+.select-row{display:flex;align-items:center;gap:14px;padding:14px 16px;border:1.5px solid var(--border);border-radius:var(--radius);margin-bottom:10px;cursor:pointer;transition:all .15s;background:var(--surface)}
+.select-row:hover{border-color:var(--action-blue);background:var(--action-blue-light)}
+.select-row .sr-icon{width:40px;height:40px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.select-row .sr-info{flex:1}
+.select-row .sr-info h3{font-size:15px;font-weight:600;color:var(--text-primary)}
+.select-row .sr-info p{font-size:12px;color:var(--text-secondary);margin-top:2px}
+.select-row .sr-arrow{color:var(--text-tertiary);font-size:16px}
+.recent-card{margin:0 20px 16px;padding:14px 16px;border:1.5px solid var(--action-blue);border-radius:var(--radius);background:var(--action-blue-light);cursor:pointer;transition:all .15s}
+.recent-card:hover{background:var(--action-blue);color:#fff}
+.recent-card .rc-label{font-size:10px;font-weight:600;color:var(--action-blue);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.recent-card:hover .rc-label{color:rgba(255,255,255,.8)}
+.recent-card h3{font-size:15px;font-weight:600;color:var(--text-primary)}
+.recent-card:hover h3{color:#fff}
+.recent-card p{font-size:12px;color:var(--text-secondary);margin-top:2px}
+.recent-card:hover p{color:rgba(255,255,255,.8)}
+
+/* ── Home Screen ── */
+.home-screen{padding:0;overflow-y:auto;background:var(--bg)}
+.home-header{position:sticky;top:0;z-index:50;background:var(--bg);padding:var(--safe-top) 20px 12px;display:flex;align-items:center;gap:12px}
+.home-header .hh-info{flex:1}
+.home-header .hh-info h2{font-size:17px;font-weight:700;color:var(--text-primary)}
+.home-header .hh-info p{font-size:12px;color:var(--text-secondary);margin-top:2px}
+.home-header .hh-switch{font-size:10px;color:var(--action-blue);font-weight:600;border:1.5px solid var(--action-blue);border-radius:6px;padding:4px 10px;cursor:pointer;background:transparent;font-family:inherit;white-space:nowrap}
+.home-header .hh-avatar{width:36px;height:36px;border-radius:50%;background:var(--action-blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;cursor:pointer;flex-shrink:0}
+.home-body{padding:4px 20px calc(var(--nav-height) + var(--safe-bottom) + 12px)}
+.section-title{font-size:15px;font-weight:700;color:var(--text-primary);margin-bottom:12px}
+
+/* ── Home: Photo Grid (Version A) ── */
+.flow-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);
+  gap:10px;margin-bottom:20px;
+}
+.flow-card{
+  height:120px;border-radius:14px;overflow:hidden;
+  position:relative;cursor:pointer;transition:transform .15s;
+}
+.flow-card:hover{transform:scale(1.03)}
+.flow-card.span-2{grid-column:span 2;height:100px}
+.flow-card img{width:100%;height:100%;object-fit:cover;display:block}
+.flow-card .flow-overlay{
+  position:absolute;bottom:0;left:0;right:0;height:60%;
+  background:linear-gradient(transparent,rgba(0,0,0,.6));
+  pointer-events:none;
+}
+.flow-card .flow-icon-badge{
+  position:absolute;top:8px;left:8px;width:26px;height:26px;
+  border-radius:7px;background:rgba(255,255,255,.85);
+  display:flex;align-items:center;justify-content:center;font-size:12px;
+}
+.flow-card .flow-label{
+  position:absolute;bottom:8px;left:10px;color:#fff;
+  font-size:13px;font-weight:600;text-shadow:0 1px 3px rgba(0,0,0,.3);
+}
+
+/* ── Home: Icon Grid (Version B) ── */
+.icon-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:8px;margin-bottom:20px;
+}
+.icon-card{
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  padding:16px 8px;background:var(--surface);
+  border:1px solid var(--border);border-radius:12px;
+  cursor:pointer;transition:border-color .15s;
+}
+.icon-card:hover{border-color:var(--action-blue)}
+.icon-card .ic-icon{
+  width:40px;height:40px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;color:#fff;
+}
+.icon-card .ic-label{
+  font-size:11px;font-weight:600;color:var(--text-primary);
+  text-align:center;line-height:1.3;
+}
+
+/* ── Crystal Hub ── */
+.hub-card{display:flex;align-items:center;gap:14px;padding:16px;border:1.5px solid var(--border);border-radius:var(--radius);background:var(--surface);cursor:pointer;transition:all .15s;margin-bottom:16px}
+.hub-card:hover{border-color:var(--action-blue);background:var(--action-blue-light)}
+.hub-icon{width:44px;height:44px;border-radius:var(--radius-sm);background:linear-gradient(135deg,#e07a2f,#3d5a9e);display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;flex-shrink:0}
+.hub-card .hub-info{flex:1}
+.hub-card .hub-info h3{font-size:15px;font-weight:600;color:var(--text-primary)}
+.hub-card .hub-info p{font-size:13px;color:var(--action-blue);font-weight:500;margin-top:2px}
+
+/* ── Bottom Nav ── */
+.bottom-nav{position:absolute;bottom:0;left:0;right:0;height:calc(var(--nav-height) + var(--safe-bottom));background:var(--surface);border-top:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-around;padding-top:8px;z-index:60}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 12px;color:var(--text-tertiary);transition:color .15s}
+.nav-item.active{color:var(--action-blue)}
+.nav-item .nav-icon{font-size:20px;height:24px;display:flex;align-items:center;justify-content:center}
+.nav-item .nav-label{font-size:10px;font-weight:600}
+
+/* ── Profile Screen ── */
+.profile-screen{padding:var(--safe-top) 0 0;overflow-y:auto;background:var(--bg)}
+.profile-header-bar{padding:10px 20px 0;display:flex;align-items:center;gap:12px}
+.profile-header-bar .back-btn{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;background:var(--surface);color:var(--text-primary);font-size:16px}
+.profile-header-bar h2{font-size:18px;font-weight:700;color:var(--text-primary)}
+.profile-user-card{text-align:center;padding:24px 20px 20px}
+.profile-user-card .pu-avatar{
+  width:60px;height:60px;border-radius:16px;
+  background:var(--action-blue);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;font-weight:700;margin:0 auto 12px;
+}
+.profile-user-card h3{font-size:18px;font-weight:700;color:var(--text-primary)}
+.profile-user-card .pu-role{font-size:13px;color:var(--text-secondary);margin-top:4px}
+.profile-user-card .pu-email{font-size:12px;color:var(--text-tertiary);margin-top:2px}
+.profile-section{padding:0 20px;margin-bottom:16px}
+.profile-section h4{font-size:11px;font-weight:600;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.profile-section .ps-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.ps-row{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;transition:background .1s}
+.ps-row:hover{background:var(--action-blue-light)}
+.ps-row+.ps-row{border-top:1px solid var(--border)}
+.ps-row .ps-label{flex:1;font-size:14px;font-weight:500;color:var(--text-primary)}
+.ps-row .ps-value{font-size:13px;color:var(--text-secondary)}
+.ps-row .ps-arrow{color:var(--text-tertiary);font-size:14px}
+.switch-workspace-btn{
+  width:100%;height:44px;margin-top:10px;
+  border:1.5px solid var(--action-blue);border-radius:12px;
+  background:transparent;color:var(--action-blue);
+  font-size:13px;font-weight:600;font-family:inherit;
+  cursor:pointer;transition:all .15s;
+}
+.switch-workspace-btn:hover{background:var(--action-blue);color:#fff}
+.signout-btn{
+  width:100%;height:44px;margin-top:8px;
+  border:1.5px solid var(--critical);border-radius:12px;
+  background:transparent;color:var(--critical);
+  font-size:14px;font-weight:600;font-family:inherit;
+  cursor:pointer;transition:all .15s;
+}
+.signout-btn:hover{background:var(--critical-bg)}
+
+/* ── Home States ── */
+.home-state{display:none}
+.home-state.active{display:block}
+
+/* Skeleton shimmer */
+@keyframes shimmer{0%{background-position:-400px 0}100%{background-position:400px 0}}
+.skel{border-radius:var(--radius);background:linear-gradient(90deg,var(--border) 25%,var(--surface) 50%,var(--border) 75%);background-size:800px 100%;animation:shimmer 1.5s infinite}
+.skel-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:20px}
+.skel-grid .skel-card{height:120px;border-radius:14px}
+.skel-hub{height:76px;margin-bottom:16px}
+
+/* Empty / Error */
+.state-empty,.state-error{text-align:center;padding:32px 20px}
+.state-empty .se-icon,.state-error .se-icon{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:26px}
+.state-empty .se-icon{background:var(--success-bg);color:var(--success)}
+.state-error .se-icon{background:var(--critical-bg);color:var(--critical)}
+.state-empty h3,.state-error h3{font-size:17px;font-weight:700;color:var(--text-primary);margin-bottom:6px}
+.state-empty p,.state-error p{font-size:13px;color:var(--text-secondary);line-height:1.5}
+.state-error .retry-btn{margin-top:16px;padding:10px 24px;border:1.5px solid var(--action-blue);border-radius:var(--radius-sm);background:transparent;color:var(--action-blue);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s}
+.state-error .retry-btn:hover{background:var(--action-blue);color:#fff}
+
+/* ── Misc ── */
+a{color:var(--action-blue);text-decoration:none}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+
+<div class="app-wrapper">
+
+<!-- ────── Controls Panel ────── -->
+<div class="controls">
+  <div class="ctrl-header">
+    <h2>nAI Mobile</h2>
+    <p>Enterprise HSE App Prototype</p>
+  </div>
+
+  <div class="ctrl-card">
+    <h3>Screens</h3>
+    <button class="ctrl-btn active" onclick="showScreen('screen-splash')">Splash</button>
+    <button class="ctrl-btn" onclick="showScreen('screen-login')">Login</button>
+    <button class="ctrl-btn" onclick="showScreen('screen-register')">Register</button>
+    <button class="ctrl-btn" onclick="showScreen('screen-otp')">OTP</button>
+    <button class="ctrl-btn" onclick="showScreen('screen-select-org')">Select Org</button>
+    <button class="ctrl-btn" onclick="showScreen('screen-select-sub')">Select Sub</button>
+    <button class="ctrl-btn" onclick="showScreen('screen-select-proj')">Select Proj</button>
+    <button class="ctrl-btn" onclick="showScreen('screen-home')">Home</button>
+    <button class="ctrl-btn" onclick="showScreen('screen-profile')">Profile</button>
+  </div>
+
+  <div class="ctrl-card">
+    <h3>Theme</h3>
+    <div class="ctrl-row">
+      <button class="ctrl-btn active" onclick="setTheme('light')">Light</button>
+      <button class="ctrl-btn" onclick="setTheme('dark')">Dark</button>
+    </div>
+  </div>
+
+  <div class="ctrl-card">
+    <h3>Home Version</h3>
+    <div class="ctrl-row">
+      <button class="ctrl-btn active" onclick="setHomeVersion('photos')">Photos</button>
+      <button class="ctrl-btn" onclick="setHomeVersion('icons')">Icons</button>
+    </div>
+  </div>
+
+  <div class="ctrl-card">
+    <h3>Home States</h3>
+    <div class="ctrl-row">
+      <button class="ctrl-btn active" onclick="setState('default')">Default</button>
+      <button class="ctrl-btn" onclick="setState('loading')">Loading</button>
+    </div>
+    <div class="ctrl-row">
+      <button class="ctrl-btn" onclick="setState('empty')">Empty</button>
+      <button class="ctrl-btn" onclick="setState('error')">Error</button>
+    </div>
+    <div class="state-badge" id="stateLabel">State: Default</div>
+  </div>
+</div>
+
+<!-- ────── Phone Frame ────── -->
+<div class="phone-outer">
+  <div class="phone-notch"></div>
+  <div class="phone-screen" id="phoneScreen">
+
+    <!-- Status Bar -->
+    <div class="status-bar" id="statusBar">
+      <span class="sb-time">9:41</span>
+      <span class="sb-icons">
+        <span>&#9679;&#9679;&#9679;&#9679;</span>
+        <span>&#9681;</span>
+        <span>&#9608;</span>
+      </span>
+    </div>
+
+    <!-- ═══ SCREEN: Splash ═══ -->
+    <div class="screen splash-screen active" id="screen-splash">
+      <svg class="splash-logo" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M8 32L20 8L32 32" stroke="#e07a2f" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M14 32L26 8L38 32" stroke="#3d5a9e" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
+        <path d="M11 32L23 8L35 32" stroke="#8b9dc3" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
+        <text x="44" y="30" font-family="Inter,sans-serif" font-size="26" font-weight="800"><tspan fill="#2c3e6b">n</tspan><tspan fill="#3d5a9e">AI</tspan></text>
+      </svg>
+      <div class="splash-footer">
+        <div class="powered-label">Powered by</div>
+        <div class="navatech-line">
+          <svg class="nt-mark" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 18L12 6L20 18" stroke="#e07a2f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M8 18L16 6L24 18" stroke="#3d5a9e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
+          </svg>
+          <span class="nt-name">Navatech</span>
+          <span class="nt-group">Group</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SCREEN: Login ═══ -->
+    <div class="screen auth-screen" id="screen-login">
+      <div class="auth-top">
+        <svg class="auth-logo" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 32L20 8L32 32" stroke="#e07a2f" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M14 32L26 8L38 32" stroke="#3d5a9e" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
+          <path d="M11 32L23 8L35 32" stroke="#8b9dc3" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
+          <text x="44" y="30" font-family="Inter,sans-serif" font-size="26" font-weight="800"><tspan fill="#2c3e6b">n</tspan><tspan fill="#3d5a9e">AI</tspan></text>
+        </svg>
+        <div class="auth-tagline">Construction Safety Platform</div>
+      </div>
+
+      <div class="auth-card">
+        <h1>Sign In</h1>
+        <p class="auth-sub">Enter your email to receive a one-time verification code.</p>
+        <div class="field-group">
+          <label>Email address</label>
+          <input type="email" id="loginEmail" placeholder="you@company.com">
+        </div>
+        <button class="primary-btn" onclick="handleLogin()">Send Verification Code</button>
+      </div>
+
+      <div class="auth-footer">New to nAI? <a onclick="showScreen('screen-register')">Create an account</a></div>
+      <div class="powered-footer">Powered by Navatech Group</div>
+    </div>
+
+    <!-- ═══ SCREEN: Register ═══ -->
+    <div class="screen auth-screen" id="screen-register">
+      <div style="overflow-y:auto;flex:1;padding-bottom:20px">
+        <div class="auth-top" style="padding-top:calc(var(--safe-top) + 24px)">
+          <svg class="auth-logo" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:70px">
+            <path d="M8 32L20 8L32 32" stroke="#e07a2f" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M14 32L26 8L38 32" stroke="#3d5a9e" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
+            <path d="M11 32L23 8L35 32" stroke="#8b9dc3" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
+            <text x="44" y="30" font-family="Inter,sans-serif" font-size="26" font-weight="800"><tspan fill="#2c3e6b">n</tspan><tspan fill="#3d5a9e">AI</tspan></text>
+          </svg>
+          <div class="auth-tagline">Construction Safety Platform</div>
+        </div>
+
+        <div class="auth-card">
+          <h1>Create Account</h1>
+          <p class="auth-sub">Set up your profile to get started with nAI.</p>
+
+          <div class="photo-upload-wrap">
+            <div class="photo-upload" id="photoUpload" onclick="togglePhoto()">
+              <span id="photoIcon">&#128247;</span>
+            </div>
+            <div class="photo-upload-label">Upload photo</div>
+          </div>
+
+          <div class="field-row">
+            <div class="field-group">
+              <label>First Name</label>
+              <input type="text" id="regFirstName" placeholder="First name">
+            </div>
+            <div class="field-group">
+              <label>Last Name</label>
+              <input type="text" id="regLastName" placeholder="Last name">
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Email Address</label>
+            <input type="email" id="regEmail" placeholder="you@company.com">
+          </div>
+          <div class="field-group">
+            <label>Mobile Number</label>
+            <div class="tel-wrapper">
+              <span class="tel-prefix">+91</span>
+              <input type="tel" id="regPhone" placeholder="Enter mobile number">
+            </div>
+          </div>
+
+          <div class="terms-row">
+            <input type="checkbox" id="termsCheck" onchange="toggleTerms()">
+            <label for="termsCheck">I agree to the <a href="#">Terms &amp; Conditions</a> and <a href="#">Privacy Policy</a></label>
+          </div>
+
+          <button class="primary-btn" id="signUpBtn" disabled onclick="handleRegister()">Sign Up</button>
+        </div>
+
+        <div class="auth-footer">Already have an account? <a onclick="showScreen('screen-login')">Sign In</a></div>
+      </div>
+    </div>
+
+    <!-- ═══ SCREEN: OTP ═══ -->
+    <div class="screen auth-screen" id="screen-otp">
+      <div class="auth-top" style="padding-top:calc(var(--safe-top) + 24px)">
+        <svg class="auth-logo" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:70px">
+          <path d="M8 32L20 8L32 32" stroke="#e07a2f" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M14 32L26 8L38 32" stroke="#3d5a9e" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
+          <path d="M11 32L23 8L35 32" stroke="#8b9dc3" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
+          <text x="44" y="30" font-family="Inter,sans-serif" font-size="26" font-weight="800"><tspan fill="#2c3e6b">n</tspan><tspan fill="#3d5a9e">AI</tspan></text>
+        </svg>
+        <div class="auth-tagline">Construction Safety Platform</div>
+      </div>
+
+      <div class="auth-card">
+        <h1>Verification Code</h1>
+
+        <div class="otp-instruction">
+          <div class="inst-icon">&#9432;</div>
+          <div class="inst-text">We sent a 6-digit code to your email. Open your email app, find the message from nAI, and enter the code below. Check spam if you can't find it.</div>
+        </div>
+
+        <div class="otp-email-wrap">
+          <span class="otp-email-pill">&#9993; r****@navatech.com</span>
+        </div>
+
+        <div class="otp-digits" id="otpDigits">
+          <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="one-time-code">
+          <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
+          <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
+          <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
+          <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
+          <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
+        </div>
+
+        <button class="primary-btn" onclick="handleVerify()" style="margin-top:0">Verify &amp; Sign In</button>
+
+        <div class="otp-resend">
+          <span id="resendTimer">Resend in 0:28</span>
+          <button id="resendBtn" disabled onclick="startResendTimer()">Resend Code</button>
+        </div>
+      </div>
+
+      <div class="auth-footer" style="margin-top:16px"><a onclick="showScreen('screen-login')">Use a different email</a></div>
+    </div>
+
+    <!-- ═══ SCREEN: Select Org ═══ -->
+    <div class="screen select-screen" id="screen-select-org">
+      <div class="select-header">
+        <div class="back-btn" onclick="showScreen('screen-login')">&#8592;</div>
+        <div class="sh-content">
+          <h1>Select Organization</h1>
+          <p>Choose your workspace</p>
+        </div>
+        <div class="select-logo">
+          <svg viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg" width="36">
+            <path d="M8 32L20 8L32 32" stroke="#e07a2f" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M14 32L26 8L38 32" stroke="#3d5a9e" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="stepper">
+        <div class="step active"><span class="step-dot">1</span> Org</div>
+        <div class="step-line"></div>
+        <div class="step"><span class="step-dot">2</span> Subsidiary</div>
+        <div class="step-line"></div>
+        <div class="step"><span class="step-dot">3</span> Project</div>
+      </div>
+
+      <div class="search-bar">
+        <span class="search-icon">&#128269;</span>
+        <input type="text" placeholder="Search organizations...">
+      </div>
+
+      <div class="select-list">
+        <div class="select-row" onclick="showScreen('screen-select-sub')">
+          <div class="sr-icon" style="background:#ebf2ff;color:#1a56db">&#9935;</div>
+          <div class="sr-info"><h3>Navatech Group</h3><p>12 subsidiaries &middot; 48 projects</p></div>
+          <span class="sr-arrow">&#8250;</span>
+        </div>
+        <div class="select-row" onclick="showScreen('screen-select-sub')">
+          <div class="sr-icon" style="background:#ecfdf5;color:#059669">&#9935;</div>
+          <div class="sr-info"><h3>Saifety Corp</h3><p>8 subsidiaries &middot; 32 projects</p></div>
+          <span class="sr-arrow">&#8250;</span>
+        </div>
+        <div class="select-row" onclick="showScreen('screen-select-sub')">
+          <div class="sr-icon" style="background:#fffbeb;color:#d97706">&#9935;</div>
+          <div class="sr-info"><h3>BuildSafe International</h3><p>5 subsidiaries &middot; 19 projects</p></div>
+          <span class="sr-arrow">&#8250;</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SCREEN: Select Subsidiary ═══ -->
+    <div class="screen select-screen" id="screen-select-sub">
+      <div class="select-header">
+        <div class="back-btn" onclick="showScreen('screen-select-org')">&#8592;</div>
+        <div class="sh-content">
+          <h1>Select Subsidiary</h1>
+          <p>Navatech Group</p>
+        </div>
+      </div>
+
+      <div class="stepper">
+        <div class="step done"><span class="step-dot">&#10003;</span> Org</div>
+        <div class="step-line done"></div>
+        <div class="step active"><span class="step-dot">2</span> Subsidiary</div>
+        <div class="step-line"></div>
+        <div class="step"><span class="step-dot">3</span> Project</div>
+      </div>
+
+      <div class="search-bar">
+        <span class="search-icon">&#128269;</span>
+        <input type="text" placeholder="Search subsidiaries...">
+      </div>
+
+      <div class="select-list">
+        <div class="select-row" onclick="showScreen('screen-select-proj')">
+          <div class="sr-icon" style="background:#ebf2ff;color:#1a56db">&#9935;</div>
+          <div class="sr-info"><h3>UAE Division</h3><p>18 projects</p></div>
+          <span class="sr-arrow">&#8250;</span>
+        </div>
+        <div class="select-row" onclick="showScreen('screen-select-proj')">
+          <div class="sr-icon" style="background:#ecfdf5;color:#059669">&#9935;</div>
+          <div class="sr-info"><h3>India Division</h3><p>14 projects</p></div>
+          <span class="sr-arrow">&#8250;</span>
+        </div>
+        <div class="select-row" onclick="showScreen('screen-select-proj')">
+          <div class="sr-icon" style="background:#fffbeb;color:#d97706">&#9935;</div>
+          <div class="sr-info"><h3>KSA Division</h3><p>10 projects</p></div>
+          <span class="sr-arrow">&#8250;</span>
+        </div>
+        <div class="select-row" onclick="showScreen('screen-select-proj')">
+          <div class="sr-icon" style="background:#fef2f2;color:#dc2626">&#9935;</div>
+          <div class="sr-info"><h3>UK Division</h3><p>6 projects</p></div>
+          <span class="sr-arrow">&#8250;</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SCREEN: Select Project ═══ -->
+    <div class="screen select-screen" id="screen-select-proj">
+      <div class="select-header">
+        <div class="back-btn" onclick="showScreen('screen-select-sub')">&#8592;</div>
+        <div class="sh-content">
+          <h1>Select Project</h1>
+          <p>UAE Division</p>
+        </div>
+      </div>
+
+      <div class="stepper">
+        <div class="step done"><span class="step-dot">&#10003;</span> Org</div>
+        <div class="step-line done"></div>
+        <div class="step done"><span class="step-dot">&#10003;</span> Subsidiary</div>
+        <div class="step-line done"></div>
+        <div class="step active"><span class="step-dot">3</span> Project</div>
+      </div>
+
+      <div class="recent-card" onclick="showScreen('screen-home')">
+        <div class="rc-label">&#9203; Recent</div>
+        <h3>Marina Bay Tower</h3>
+        <p>Last accessed 2h ago</p>
+      </div>
+
+      <div class="search-bar">
+        <span class="search-icon">&#128269;</span>
+        <input type="text" placeholder="Search projects...">
+      </div>
+
+      <div class="select-list">
+        <div class="select-row" onclick="showScreen('screen-home')">
+          <div class="sr-icon" style="background:#ebf2ff;color:#1a56db">&#9965;</div>
+          <div class="sr-info"><h3>Marina Bay Tower</h3><p>Dubai &middot; Phase 3</p></div>
+          <span class="sr-arrow">&#8250;</span>
+        </div>
+        <div class="select-row" onclick="showScreen('screen-home')">
+          <div class="sr-icon" style="background:#ecfdf5;color:#059669">&#9965;</div>
+          <div class="sr-info"><h3>Palm Residences</h3><p>Abu Dhabi &middot; Phase 1</p></div>
+          <span class="sr-arrow">&#8250;</span>
+        </div>
+        <div class="select-row" onclick="showScreen('screen-home')">
+          <div class="sr-icon" style="background:#fffbeb;color:#d97706">&#9965;</div>
+          <div class="sr-info"><h3>Creek Harbor Mall</h3><p>Dubai &middot; Phase 2</p></div>
+          <span class="sr-arrow">&#8250;</span>
+        </div>
+        <div class="select-row" onclick="showScreen('screen-home')">
+          <div class="sr-icon" style="background:#fef2f2;color:#dc2626">&#9965;</div>
+          <div class="sr-info"><h3>Yas Arena Extension</h3><p>Abu Dhabi &middot; Phase 1</p></div>
+          <span class="sr-arrow">&#8250;</span>
+        </div>
+        <div class="select-row" onclick="showScreen('screen-home')">
+          <div class="sr-icon" style="background:#f3f4f6;color:#6b7280">&#9965;</div>
+          <div class="sr-info"><h3>Sharjah Tech Park</h3><p>Sharjah &middot; Phase 4</p></div>
+          <span class="sr-arrow">&#8250;</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SCREEN: Home ═══ -->
+    <div class="screen home-screen" id="screen-home">
+      <div class="home-header">
+        <div class="hh-info">
+          <h2>Marina Bay Tower</h2>
+          <p>Navatech Group &middot; UAE Division</p>
+        </div>
+        <button class="hh-switch" onclick="showScreen('screen-select-org')">Switch</button>
+        <div class="hh-avatar" onclick="showScreen('screen-profile')">RK</div>
+      </div>
+
+      <div class="home-body">
+
+        <!-- STATE: Default -->
+        <div class="home-state active" id="home-default">
+
+          <!-- VERSION A: Photo Grid -->
+          <div id="home-photos">
+            <div class="section-title">nAI Flow</div>
+            <div class="flow-grid">
+              <div class="flow-card">
+                <img src="nai-flow-observation.png" alt="Observation">
+                <div class="flow-overlay"></div>
+                <div class="flow-icon-badge">&#128065;</div>
+                <div class="flow-label">Observation</div>
+              </div>
+              <div class="flow-card">
+                <img src="nai-flow-site-walkthrough.png" alt="Site Walkthrough">
+                <div class="flow-overlay"></div>
+                <div class="flow-icon-badge">&#128694;</div>
+                <div class="flow-label">Site Walkthrough</div>
+              </div>
+              <div class="flow-card">
+                <img src="nai-flow-incident.png" alt="Incident">
+                <div class="flow-overlay"></div>
+                <div class="flow-icon-badge">&#9888;</div>
+                <div class="flow-label">Incident</div>
+              </div>
+              <div class="flow-card">
+                <img src="nai-flow-inspections.png" alt="Inspections">
+                <div class="flow-overlay"></div>
+                <div class="flow-icon-badge">&#10003;</div>
+                <div class="flow-label">Inspections</div>
+              </div>
+              <div class="flow-card span-2">
+                <img src="nai-flow-permit.png" alt="Permit to Work">
+                <div class="flow-overlay"></div>
+                <div class="flow-icon-badge">&#128196;</div>
+                <div class="flow-label">Permit to Work</div>
+              </div>
+            </div>
+
+            <div class="section-title">nAI Hub</div>
+            <div class="hub-card">
+              <div class="hub-icon">&#10024;</div>
+              <div class="hub-info">
+                <h3>Crystal</h3>
+                <p>Ask Anything &#8594;</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- VERSION B: Icon Grid -->
+          <div id="home-icons" style="display:none">
+            <div class="section-title">nAI Flow</div>
+            <div class="icon-grid">
+              <div class="icon-card">
+                <div class="ic-icon" style="background:var(--action-blue)">&#128065;</div>
+                <div class="ic-label">Observation</div>
+              </div>
+              <div class="icon-card">
+                <div class="ic-icon" style="background:#059669">&#128694;</div>
+                <div class="ic-label">Site Walkthrough</div>
+              </div>
+              <div class="icon-card">
+                <div class="ic-icon" style="background:var(--critical)">&#9888;</div>
+                <div class="ic-label">Incident</div>
+              </div>
+              <div class="icon-card">
+                <div class="ic-icon" style="background:var(--success)">&#10003;</div>
+                <div class="ic-label">Inspections</div>
+              </div>
+              <div class="icon-card">
+                <div class="ic-icon" style="background:var(--warning)">&#128196;</div>
+                <div class="ic-label">Permit to Work</div>
+              </div>
+            </div>
+
+            <div class="section-title">nAI Hub</div>
+            <div class="hub-card">
+              <div class="hub-icon">&#10024;</div>
+              <div class="hub-info">
+                <h3>Crystal</h3>
+                <p>Ask Anything &#8594;</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- STATE: Loading -->
+        <div class="home-state" id="home-loading">
+          <div class="section-title">nAI Flow</div>
+          <div class="skel-grid">
+            <div class="skel skel-card"></div>
+            <div class="skel skel-card"></div>
+            <div class="skel skel-card"></div>
+            <div class="skel skel-card"></div>
+          </div>
+          <div class="section-title">nAI Hub</div>
+          <div class="skel skel-hub"></div>
+        </div>
+
+        <!-- STATE: Empty -->
+        <div class="home-state" id="home-empty">
+          <div class="state-empty">
+            <div class="se-icon">&#10003;</div>
+            <h3>All Clear</h3>
+            <p>No pending items. Your safety dashboard is looking good.</p>
+          </div>
+          <div class="section-title">nAI Flow</div>
+          <div class="flow-grid">
+            <div class="flow-card">
+              <img src="nai-flow-observation.png" alt="Observation">
+              <div class="flow-overlay"></div>
+              <div class="flow-icon-badge">&#128065;</div>
+              <div class="flow-label">Observation</div>
+            </div>
+            <div class="flow-card">
+              <img src="nai-flow-site-walkthrough.png" alt="Site Walkthrough">
+              <div class="flow-overlay"></div>
+              <div class="flow-icon-badge">&#128694;</div>
+              <div class="flow-label">Site Walkthrough</div>
+            </div>
+            <div class="flow-card">
+              <img src="nai-flow-incident.png" alt="Incident">
+              <div class="flow-overlay"></div>
+              <div class="flow-icon-badge">&#9888;</div>
+              <div class="flow-label">Incident</div>
+            </div>
+            <div class="flow-card">
+              <img src="nai-flow-inspections.png" alt="Inspections">
+              <div class="flow-overlay"></div>
+              <div class="flow-icon-badge">&#10003;</div>
+              <div class="flow-label">Inspections</div>
+            </div>
+            <div class="flow-card span-2">
+              <img src="nai-flow-permit.png" alt="Permit to Work">
+              <div class="flow-overlay"></div>
+              <div class="flow-icon-badge">&#128196;</div>
+              <div class="flow-label">Permit to Work</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STATE: Error -->
+        <div class="home-state" id="home-error">
+          <div class="state-error">
+            <div class="se-icon">&#9889;</div>
+            <h3>Connection Lost</h3>
+            <p>We couldn't reach the server. Please check your internet connection and try again.</p>
+            <button class="retry-btn" onclick="setState('default')">Retry</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Bottom Nav -->
+      <div class="bottom-nav">
+        <div class="nav-item">
+          <span class="nav-icon">&#9744;</span>
+          <span class="nav-label">Tasks</span>
+        </div>
+        <div class="nav-item active">
+          <span class="nav-icon">&#8962;</span>
+          <span class="nav-label">Home</span>
+        </div>
+        <div class="nav-item">
+          <span class="nav-icon">&#9638;</span>
+          <span class="nav-label">Dashboard</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SCREEN: Profile ═══ -->
+    <div class="screen profile-screen" id="screen-profile">
+      <div class="profile-header-bar">
+        <div class="back-btn" onclick="showScreen('screen-home')">&#8592;</div>
+        <h2>Profile</h2>
+      </div>
+
+      <div class="profile-user-card">
+        <div class="pu-avatar">RK</div>
+        <h3>Rajesh Kumar</h3>
+        <div class="pu-role">HSE Manager</div>
+        <div class="pu-email">rajesh.k@navatech.com</div>
+      </div>
+
+      <div class="profile-section">
+        <h4>Current Workspace</h4>
+        <div class="ps-card">
+          <div class="ps-row">
+            <div class="ps-label">Organization</div>
+            <div class="ps-value">Navatech Group</div>
+            <span class="ps-arrow">&#8250;</span>
+          </div>
+          <div class="ps-row">
+            <div class="ps-label">Subsidiary</div>
+            <div class="ps-value">UAE Division</div>
+            <span class="ps-arrow">&#8250;</span>
+          </div>
+          <div class="ps-row">
+            <div class="ps-label">Project</div>
+            <div class="ps-value">Marina Bay Tower</div>
+            <span class="ps-arrow">&#8250;</span>
+          </div>
+        </div>
+        <button class="switch-workspace-btn" onclick="showScreen('screen-select-org')">Switch Workspace</button>
+      </div>
+
+      <div class="profile-section">
+        <h4>Account</h4>
+        <div class="ps-card">
+          <div class="ps-row">
+            <div class="ps-label">Edit Profile</div>
+            <span class="ps-arrow">&#8250;</span>
+          </div>
+          <div class="ps-row">
+            <div class="ps-label">Change Language</div>
+            <div class="ps-value">English</div>
+            <span class="ps-arrow">&#8250;</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-section">
+        <h4>Help &amp; Onboarding</h4>
+        <div class="ps-card">
+          <div class="ps-row">
+            <div class="ps-label">Guided Tour</div>
+            <span class="ps-arrow">&#8250;</span>
+          </div>
+          <div class="ps-row">
+            <div class="ps-label">Contact Us</div>
+            <span class="ps-arrow">&#8250;</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-section">
+        <h4>Support</h4>
+        <div class="ps-card">
+          <div class="ps-row">
+            <div class="ps-label">About</div>
+            <div class="ps-value">v2.4.1</div>
+            <span class="ps-arrow">&#8250;</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-section">
+        <h4>Appearance</h4>
+        <div class="ps-card">
+          <div class="ps-row" onclick="setTheme(document.getElementById('phoneScreen').getAttribute('data-theme')==='dark'?'light':'dark')">
+            <div class="ps-label">Theme</div>
+            <div class="ps-value" id="themeValueLabel">Light</div>
+            <span class="ps-arrow">&#8250;</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-section" style="padding-bottom:calc(var(--nav-height) + var(--safe-bottom) + 20px)">
+        <button class="signout-btn" onclick="showScreen('screen-login')">Sign Out</button>
+      </div>
+
+      <!-- Bottom Nav -->
+      <div class="bottom-nav">
+        <div class="nav-item">
+          <span class="nav-icon">&#9744;</span>
+          <span class="nav-label">Tasks</span>
+        </div>
+        <div class="nav-item">
+          <span class="nav-icon">&#8962;</span>
+          <span class="nav-label">Home</span>
+        </div>
+        <div class="nav-item">
+          <span class="nav-icon">&#9638;</span>
+          <span class="nav-label">Dashboard</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /phone-screen -->
+</div><!-- /phone-outer -->
+
+</div><!-- /app-wrapper -->
+
+<script>
+(function(){
+
+var SCREEN_MAP = {
+  'screen-splash':0,'screen-login':1,'screen-register':2,'screen-otp':3,
+  'screen-select-org':4,'screen-select-sub':5,'screen-select-proj':6,
+  'screen-home':7,'screen-profile':8
+};
+var SCREEN_IDS = Object.keys(SCREEN_MAP);
+var splashTimer = null;
+var resendInterval = null;
+var currentHomeVersion = 'photos';
+
+window.showScreen = function(id){
+  if(splashTimer){ clearTimeout(splashTimer); splashTimer = null; }
+  SCREEN_IDS.forEach(function(sid){
+    var el = document.getElementById(sid);
+    if(el) el.classList.toggle('active', sid === id);
+  });
+  var screenBtns = document.querySelectorAll('.controls .ctrl-card:nth-child(2) .ctrl-btn');
+  var idx = SCREEN_MAP[id];
+  screenBtns.forEach(function(b,i){ b.classList.toggle('active', i === idx); });
+
+  var sb = document.getElementById('statusBar');
+  if(id === 'screen-splash'){
+    sb.className = 'status-bar sb-splash';
+    splashTimer = setTimeout(function(){ window.showScreen('screen-login'); }, 2500);
+  } else {
+    sb.className = 'status-bar';
+  }
+
+  if(id === 'screen-otp'){
+    initOTP();
+    startResendTimer();
+  }
+};
+
+window.setTheme = function(theme){
+  var ps = document.getElementById('phoneScreen');
+  if(theme === 'dark'){
+    ps.setAttribute('data-theme','dark');
+  } else {
+    ps.removeAttribute('data-theme');
+  }
+  var themeBtns = document.querySelectorAll('.controls .ctrl-card:nth-child(3) .ctrl-btn');
+  themeBtns.forEach(function(b,i){ b.classList.toggle('active', (theme==='light'?0:1) === i); });
+  var tvl = document.getElementById('themeValueLabel');
+  if(tvl) tvl.textContent = theme === 'dark' ? 'Dark' : 'Light';
+};
+
+window.setHomeVersion = function(version){
+  currentHomeVersion = version;
+  var photos = document.getElementById('home-photos');
+  var icons = document.getElementById('home-icons');
+  if(version === 'photos'){
+    photos.style.display = '';
+    icons.style.display = 'none';
+  } else {
+    photos.style.display = 'none';
+    icons.style.display = '';
+  }
+  var verBtns = document.querySelectorAll('.controls .ctrl-card:nth-child(4) .ctrl-btn');
+  verBtns.forEach(function(b,i){ b.classList.toggle('active', (version==='photos'?0:1) === i); });
+};
+
+var currentState = 'default';
+window.setState = function(state){
+  currentState = state;
+  ['default','loading','empty','error'].forEach(function(s){
+    var el = document.getElementById('home-'+s);
+    if(el) el.classList.toggle('active', s === state);
+  });
+  var stateBtns = document.querySelectorAll('.controls .ctrl-card:nth-child(5) .ctrl-btn');
+  var stateIdx = {default:0,loading:1,empty:2,error:3}[state];
+  stateBtns.forEach(function(b,i){ b.classList.toggle('active', i === stateIdx); });
+  document.getElementById('stateLabel').textContent = 'State: ' + state.charAt(0).toUpperCase() + state.slice(1);
+};
+
+window.handleLogin = function(){
+  var email = document.getElementById('loginEmail').value.trim();
+  if(!email){
+    document.getElementById('loginEmail').focus();
+    return;
+  }
+  showScreen('screen-otp');
+};
+
+window.handleRegister = function(){
+  var fn = document.getElementById('regFirstName').value.trim();
+  var ln = document.getElementById('regLastName').value.trim();
+  var em = document.getElementById('regEmail').value.trim();
+  var ph = document.getElementById('regPhone').value.trim();
+  if(!fn || !ln || !em || !ph){
+    if(!fn) document.getElementById('regFirstName').focus();
+    else if(!ln) document.getElementById('regLastName').focus();
+    else if(!em) document.getElementById('regEmail').focus();
+    else document.getElementById('regPhone').focus();
+    return;
+  }
+  showScreen('screen-otp');
+};
+
+window.handleVerify = function(){
+  var inputs = document.querySelectorAll('#otpDigits input');
+  var code = '';
+  inputs.forEach(function(inp){ code += inp.value; });
+  if(code.length < 6){
+    for(var i=0;i<inputs.length;i++){
+      if(!inputs[i].value){ inputs[i].focus(); break; }
+    }
+    return;
+  }
+  showScreen('screen-select-org');
+};
+
+window.toggleTerms = function(){
+  var cb = document.getElementById('termsCheck');
+  var btn = document.getElementById('signUpBtn');
+  btn.disabled = !cb.checked;
+};
+
+window.togglePhoto = function(){
+  var el = document.getElementById('photoUpload');
+  el.classList.toggle('checked');
+  var icon = document.getElementById('photoIcon');
+  if(el.classList.contains('checked')){
+    icon.innerHTML = '&#10003;';
+  } else {
+    icon.innerHTML = '&#128247;';
+  }
+};
+
+function initOTP(){
+  var inputs = document.querySelectorAll('#otpDigits input');
+  inputs.forEach(function(inp,i){
+    inp.value = '';
+    inp.addEventListener('input', function(){
+      var v = this.value.replace(/[^0-9]/g,'');
+      this.value = v;
+      if(v && i < inputs.length - 1) inputs[i+1].focus();
+    });
+    inp.addEventListener('keydown', function(e){
+      if(e.key === 'Backspace' && !this.value && i > 0){
+        inputs[i-1].focus();
+        inputs[i-1].value = '';
+      }
+    });
+    inp.addEventListener('paste', function(e){
+      e.preventDefault();
+      var data = (e.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g,'').slice(0,6);
+      for(var j=0;j<data.length && (i+j)<inputs.length;j++){
+        inputs[i+j].value = data[j];
+      }
+      var next = Math.min(i + data.length, inputs.length - 1);
+      inputs[next].focus();
+    });
+  });
+  if(inputs[0]) inputs[0].focus();
+}
+
+function startResendTimer(){
+  if(resendInterval) clearInterval(resendInterval);
+  var secs = 28;
+  var timerEl = document.getElementById('resendTimer');
+  var btn = document.getElementById('resendBtn');
+  btn.disabled = true;
+  timerEl.textContent = 'Resend in 0:' + (secs < 10 ? '0' : '') + secs;
+  resendInterval = setInterval(function(){
+    secs--;
+    if(secs <= 0){
+      clearInterval(resendInterval);
+      timerEl.textContent = '';
+      btn.disabled = false;
+    } else {
+      timerEl.textContent = 'Resend in 0:' + (secs < 10 ? '0' : '') + secs;
+    }
+  }, 1000);
+}
+window.startResendTimer = startResendTimer;
+
+splashTimer = setTimeout(function(){ window.showScreen('screen-login'); }, 2500);
+
+})();
+</script>
+
+</body>
+</html>
