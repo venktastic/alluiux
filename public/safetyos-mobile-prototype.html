@@ -70,6 +70,32 @@ body{font-family:'Inter',sans-serif;background:#111318;min-height:100vh;display:
 .splash-footer .navatech-line .nt-name{font-size:14px;font-weight:700;color:#3d5a9e}
 .splash-footer .navatech-line .nt-group{font-size:12px;color:#999;margin-left:2px}
 
+/* ── Language Selection ── */
+.lang-screen{padding:var(--safe-top) 0 0;overflow-y:auto;background:var(--bg);align-items:stretch}
+.lang-body{flex:1;display:flex;flex-direction:column;padding:40px 0 0}
+.lang-body h1{font-size:22px;font-weight:700;color:var(--text-primary);text-align:center}
+.lang-body .lang-sub{font-size:13px;color:var(--text-secondary);text-align:center;margin-top:6px;margin-bottom:24px}
+.lang-list{padding:0 20px;flex:1}
+.lang-row{
+  height:56px;display:flex;align-items:center;padding:0 20px;
+  background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);
+  margin-bottom:10px;cursor:pointer;transition:all .15s;
+}
+.lang-row:hover{border-color:var(--action-blue)}
+.lang-row.selected{border-color:var(--action-blue);background:var(--action-blue-light);border-left:3px solid var(--action-blue)}
+.lang-row .lang-en{flex:1;font-size:15px;font-weight:600;color:var(--text-primary)}
+.lang-row .lang-native{font-size:14px;font-weight:500;color:var(--text-secondary)}
+.lang-row.selected .lang-check{color:var(--action-blue);font-size:16px;font-weight:700;margin-left:8px}
+.lang-continue{
+  margin:auto 20px calc(var(--safe-bottom) + 16px);
+  height:52px;border:none;border-radius:10px;
+  background:var(--action-blue);color:#fff;
+  font-size:15px;font-weight:600;font-family:inherit;
+  cursor:pointer;transition:background .15s,box-shadow .15s;
+  box-shadow:0 2px 8px rgba(26,86,219,0.25);
+}
+.lang-continue:hover{background:var(--action-blue-hover)}
+
 /* ── Auth Screens (Login / Register / OTP) ── */
 .auth-screen{
   padding:0;overflow-y:auto;
@@ -146,6 +172,11 @@ body{font-family:'Inter',sans-serif;background:#111318;min-height:100vh;display:
   font-size:13px;color:var(--text-secondary);
 }
 .auth-footer a{color:var(--action-blue);text-decoration:none;font-weight:600;cursor:pointer}
+.auth-tc-notice{
+  text-align:center;margin-top:12px;padding:0 20px;
+  font-size:12px;color:var(--text-tertiary);line-height:1.5;
+}
+.auth-tc-notice a{color:var(--action-blue);text-decoration:none;font-weight:500}
 .powered-footer{
   text-align:center;padding:24px 20px 8px;
   font-size:11px;color:var(--text-tertiary);
@@ -222,6 +253,7 @@ body{font-family:'Inter',sans-serif;background:#111318;min-height:100vh;display:
   box-shadow:0 0 0 3px rgba(26,86,219,0.08);
 }
 .otp-resend{text-align:center;margin-top:16px;font-size:13px;color:var(--text-tertiary)}
+.otp-resend .otp-timer-expired{color:var(--critical)}
 .otp-resend button{
   background:none;border:none;color:var(--action-blue);
   font-weight:600;font-family:inherit;font-size:13px;
@@ -271,10 +303,22 @@ body{font-family:'Inter',sans-serif;background:#111318;min-height:100vh;display:
 /* ── Home Screen ── */
 .home-screen{padding:0;overflow-y:auto;background:var(--bg)}
 .home-header{position:sticky;top:0;z-index:50;background:var(--bg);padding:var(--safe-top) 20px 12px;display:flex;align-items:center;gap:12px}
+.hh-hamburger{
+  width:32px;height:32px;border-radius:50%;
+  border:1.5px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;background:var(--surface);color:var(--text-primary);
+  font-size:16px;flex-shrink:0;transition:all .15s;
+}
+.hh-hamburger:hover{border-color:var(--action-blue);color:var(--action-blue)}
 .home-header .hh-info{flex:1}
-.home-header .hh-info h2{font-size:17px;font-weight:700;color:var(--text-primary)}
+.home-header .hh-proj-dropdown{
+  display:flex;align-items:center;gap:4px;
+  font-size:17px;font-weight:700;color:var(--text-primary);
+  cursor:pointer;background:none;border:none;font-family:inherit;padding:0;
+}
+.home-header .hh-proj-dropdown .hh-chevron{font-size:10px;color:var(--text-tertiary)}
 .home-header .hh-info p{font-size:12px;color:var(--text-secondary);margin-top:2px}
-.home-header .hh-switch{font-size:10px;color:var(--action-blue);font-weight:600;border:1.5px solid var(--action-blue);border-radius:6px;padding:4px 10px;cursor:pointer;background:transparent;font-family:inherit;white-space:nowrap}
 .home-header .hh-avatar{width:36px;height:36px;border-radius:50%;background:var(--action-blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;cursor:pointer;flex-shrink:0}
 .home-body{padding:4px 20px calc(var(--nav-height) + var(--safe-bottom) + 12px)}
 .section-title{font-size:15px;font-weight:700;color:var(--text-primary);margin-bottom:12px}
@@ -343,6 +387,65 @@ body{font-family:'Inter',sans-serif;background:#111318;min-height:100vh;display:
 .nav-item .nav-icon{font-size:20px;height:24px;display:flex;align-items:center;justify-content:center}
 .nav-item .nav-label{font-size:10px;font-weight:600}
 
+/* ── Tasks Screen ── */
+.tasks-screen{padding:0;overflow-y:auto;background:var(--bg)}
+.tasks-header{padding:var(--safe-top) 20px 12px}
+.tasks-header h2{font-size:20px;font-weight:700;color:var(--text-primary)}
+.tasks-header .tasks-proj{font-size:12px;color:var(--text-secondary);margin-top:2px}
+.tasks-tab-bar{display:flex;border-bottom:1px solid var(--border);padding:0 20px}
+.tasks-tab{
+  flex:1;text-align:center;padding:12px 0;
+  font-size:14px;font-weight:600;color:var(--text-secondary);
+  cursor:pointer;border-bottom:2px solid transparent;
+  transition:all .15s;background:none;border-top:none;border-left:none;border-right:none;
+  font-family:inherit;
+}
+.tasks-tab.active{color:var(--action-blue);border-bottom-color:var(--action-blue)}
+.tasks-body{padding:16px 20px calc(var(--nav-height) + var(--safe-bottom) + 12px)}
+.tasks-metrics{display:flex;gap:8px;margin-bottom:16px}
+.task-metric{
+  flex:1;background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:10px;text-align:center;
+}
+.task-metric .tm-count{font-size:20px;font-weight:700;line-height:1.2}
+.task-metric .tm-label{font-size:11px;color:var(--text-secondary);margin-top:2px}
+.task-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;
+  transition:all .15s;
+}
+.task-card.overdue{border-left:3px solid var(--critical)}
+.task-card.stuck{border-left:3px solid var(--warning)}
+.task-card .tc-title{font-size:14px;font-weight:600;color:var(--text-primary);line-height:1.35;margin-bottom:8px}
+.task-card .tc-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.task-chip{
+  display:inline-flex;padding:3px 8px;border-radius:4px;
+  font-size:11px;font-weight:600;line-height:1.3;
+}
+.chip-blue{background:var(--action-blue-light);color:var(--action-blue)}
+.chip-warning{background:var(--warning-bg);color:var(--warning)}
+.chip-critical{background:var(--critical-bg);color:var(--critical)}
+.chip-success{background:var(--success-bg);color:var(--success)}
+.chip-neutral{background:var(--neutral-bg);color:var(--neutral)}
+.task-card .tc-bottom{display:flex;align-items:center;justify-content:space-between}
+.task-card .tc-meta{font-size:12px;color:var(--text-secondary);line-height:1.4}
+.task-card .tc-cta{
+  padding:4px 12px;border:1.5px solid var(--action-blue);
+  border-radius:var(--radius-xs);background:transparent;
+  color:var(--action-blue);font-size:11px;font-weight:600;
+  cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap;
+}
+.task-card .tc-cta:hover{background:var(--action-blue);color:#fff}
+.task-card .tc-assignee{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.task-card .tc-assignee-avatar{
+  width:24px;height:24px;border-radius:50%;
+  background:var(--action-blue-light);color:var(--action-blue);
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700;flex-shrink:0;
+}
+.task-card .tc-assignee-name{font-size:14px;font-weight:600;color:var(--text-primary)}
+.task-card .tc-desc{font-size:13px;color:var(--text-secondary);margin-bottom:8px;line-height:1.4}
+
 /* ── Profile Screen ── */
 .profile-screen{padding:var(--safe-top) 0 0;overflow-y:auto;background:var(--bg)}
 .profile-header-bar{padding:10px 20px 0;display:flex;align-items:center;gap:12px}
@@ -383,6 +486,47 @@ body{font-family:'Inter',sans-serif;background:#111318;min-height:100vh;display:
   cursor:pointer;transition:all .15s;
 }
 .signout-btn:hover{background:var(--critical-bg)}
+.profile-terms-row{display:flex;align-items:flex-start;gap:10px;padding:14px 16px}
+.profile-terms-row input[type="checkbox"]{
+  width:18px;height:18px;border-radius:4px;
+  accent-color:var(--action-blue);flex-shrink:0;
+  margin-top:2px;cursor:pointer;
+}
+.profile-terms-row label{font-size:13px;color:var(--text-secondary);line-height:1.4;cursor:pointer}
+.profile-terms-row label a{color:var(--action-blue);text-decoration:none;font-weight:500}
+
+/* ── Guided Tour Overlay ── */
+.tour-overlay{
+  position:absolute;inset:0;z-index:200;display:none;
+}
+.tour-overlay.active{display:block}
+.tour-spotlight{
+  position:absolute;border-radius:12px;
+  box-shadow:0 0 0 9999px rgba(0,0,0,0.7);
+  z-index:201;transition:all .3s ease;
+}
+.tour-tooltip{
+  position:absolute;z-index:202;
+  background:var(--surface);border-radius:12px;
+  padding:16px;max-width:280px;
+  box-shadow:0 4px 20px rgba(0,0,0,0.3);
+}
+.tour-tooltip .tt-title{font-size:14px;font-weight:600;color:var(--text-primary);margin-bottom:6px}
+.tour-tooltip .tt-text{font-size:13px;color:var(--text-secondary);line-height:1.5;margin-bottom:14px}
+.tour-tooltip .tt-footer{display:flex;align-items:center;justify-content:space-between}
+.tour-tooltip .tt-skip{
+  font-size:13px;color:var(--text-tertiary);
+  background:none;border:none;cursor:pointer;font-family:inherit;padding:0;
+}
+.tour-tooltip .tt-skip:hover{color:var(--text-secondary)}
+.tour-tooltip .tt-right{display:flex;align-items:center;gap:10px}
+.tour-tooltip .tt-counter{font-size:12px;color:var(--text-tertiary)}
+.tour-tooltip .tt-next{
+  padding:6px 16px;background:var(--action-blue);color:#fff;
+  border:none;border-radius:6px;font-size:12px;font-weight:600;
+  cursor:pointer;font-family:inherit;transition:background .15s;
+}
+.tour-tooltip .tt-next:hover{background:var(--action-blue-hover)}
 
 /* ── Home States ── */
 .home-state{display:none}
@@ -424,13 +568,14 @@ a{color:var(--action-blue);text-decoration:none}
   <div class="ctrl-card">
     <h3>Screens</h3>
     <button class="ctrl-btn active" onclick="showScreen('screen-splash')">Splash</button>
+    <button class="ctrl-btn" onclick="showScreen('screen-lang')">Language</button>
     <button class="ctrl-btn" onclick="showScreen('screen-login')">Login</button>
     <button class="ctrl-btn" onclick="showScreen('screen-register')">Register</button>
     <button class="ctrl-btn" onclick="showScreen('screen-otp')">OTP</button>
-    <button class="ctrl-btn" onclick="showScreen('screen-select-org')">Select Org</button>
     <button class="ctrl-btn" onclick="showScreen('screen-select-sub')">Select Sub</button>
     <button class="ctrl-btn" onclick="showScreen('screen-select-proj')">Select Proj</button>
     <button class="ctrl-btn" onclick="showScreen('screen-home')">Home</button>
+    <button class="ctrl-btn" onclick="showScreen('screen-tasks')">Tasks</button>
     <button class="ctrl-btn" onclick="showScreen('screen-profile')">Profile</button>
   </div>
 
@@ -461,6 +606,11 @@ a{color:var(--action-blue);text-decoration:none}
       <button class="ctrl-btn" onclick="setState('error')">Error</button>
     </div>
     <div class="state-badge" id="stateLabel">State: Default</div>
+  </div>
+
+  <div class="ctrl-card">
+    <h3>Tour</h3>
+    <button class="ctrl-btn" onclick="showScreen('screen-home');setTimeout(startTour,400)">Start Tour</button>
   </div>
 </div>
 
@@ -500,6 +650,41 @@ a{color:var(--action-blue);text-decoration:none}
       </div>
     </div>
 
+    <!-- ═══ SCREEN: Language Selection ═══ -->
+    <div class="screen lang-screen" id="screen-lang">
+      <div class="lang-body">
+        <h1>Choose Language</h1>
+        <p class="lang-sub">Select your preferred language</p>
+        <div class="lang-list">
+          <div class="lang-row selected" onclick="selectLanguage(this)" data-lang="en">
+            <span class="lang-en">English</span>
+            <span class="lang-check">&#10003;</span>
+          </div>
+          <div class="lang-row" onclick="selectLanguage(this)" data-lang="ar">
+            <span class="lang-en">Arabic</span>
+            <span class="lang-native">&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;</span>
+          </div>
+          <div class="lang-row" onclick="selectLanguage(this)" data-lang="hi">
+            <span class="lang-en">Hindi</span>
+            <span class="lang-native">&#2361;&#2367;&#2344;&#2381;&#2342;&#2368;</span>
+          </div>
+          <div class="lang-row" onclick="selectLanguage(this)" data-lang="bn">
+            <span class="lang-en">Bengali</span>
+            <span class="lang-native">&#2476;&#2494;&#2434;&#2482;&#2494;</span>
+          </div>
+          <div class="lang-row" onclick="selectLanguage(this)" data-lang="ml">
+            <span class="lang-en">Malayalam</span>
+            <span class="lang-native">&#3374;&#3378;&#3375;&#3390;&#3379;&#3330;</span>
+          </div>
+          <div class="lang-row" onclick="selectLanguage(this)" data-lang="ur">
+            <span class="lang-en">Urdu</span>
+            <span class="lang-native">&#1575;&#1585;&#1583;&#1608;</span>
+          </div>
+        </div>
+        <button class="lang-continue" onclick="showScreen('screen-login')">Continue</button>
+      </div>
+    </div>
+
     <!-- ═══ SCREEN: Login ═══ -->
     <div class="screen auth-screen" id="screen-login">
       <div class="auth-top">
@@ -523,6 +708,7 @@ a{color:var(--action-blue);text-decoration:none}
       </div>
 
       <div class="auth-footer">New to nAI? <a onclick="showScreen('screen-register')">Create an account</a></div>
+      <div class="auth-tc-notice">By signing in, you agree to our <a href="#">Terms &amp; Conditions</a></div>
       <div class="powered-footer">Powered by Navatech Group</div>
     </div>
 
@@ -574,7 +760,7 @@ a{color:var(--action-blue);text-decoration:none}
 
           <div class="terms-row">
             <input type="checkbox" id="termsCheck" onchange="toggleTerms()">
-            <label for="termsCheck">I agree to the <a href="#">Terms &amp; Conditions</a> and <a href="#">Privacy Policy</a></label>
+            <label for="termsCheck">I agree to the <a href="#">Terms &amp; Conditions</a></label>
           </div>
 
           <button class="primary-btn" id="signUpBtn" disabled onclick="handleRegister()">Sign Up</button>
@@ -620,7 +806,7 @@ a{color:var(--action-blue);text-decoration:none}
         <button class="primary-btn" onclick="handleVerify()" style="margin-top:0">Verify &amp; Sign In</button>
 
         <div class="otp-resend">
-          <span id="resendTimer">Resend in 0:28</span>
+          <span id="resendTimer">Code expires in 01:59</span>
           <button id="resendBtn" disabled onclick="startResendTimer()">Resend Code</button>
         </div>
       </div>
@@ -628,58 +814,10 @@ a{color:var(--action-blue);text-decoration:none}
       <div class="auth-footer" style="margin-top:16px"><a onclick="showScreen('screen-login')">Use a different email</a></div>
     </div>
 
-    <!-- ═══ SCREEN: Select Org ═══ -->
-    <div class="screen select-screen" id="screen-select-org">
-      <div class="select-header">
-        <div class="back-btn" onclick="showScreen('screen-login')">&#8592;</div>
-        <div class="sh-content">
-          <h1>Select Organization</h1>
-          <p>Choose your workspace</p>
-        </div>
-        <div class="select-logo">
-          <svg viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg" width="36">
-            <path d="M8 32L20 8L32 32" stroke="#e07a2f" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M14 32L26 8L38 32" stroke="#3d5a9e" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
-          </svg>
-        </div>
-      </div>
-
-      <div class="stepper">
-        <div class="step active"><span class="step-dot">1</span> Org</div>
-        <div class="step-line"></div>
-        <div class="step"><span class="step-dot">2</span> Subsidiary</div>
-        <div class="step-line"></div>
-        <div class="step"><span class="step-dot">3</span> Project</div>
-      </div>
-
-      <div class="search-bar">
-        <span class="search-icon">&#128269;</span>
-        <input type="text" placeholder="Search organizations...">
-      </div>
-
-      <div class="select-list">
-        <div class="select-row" onclick="showScreen('screen-select-sub')">
-          <div class="sr-icon" style="background:#ebf2ff;color:#1a56db">&#9935;</div>
-          <div class="sr-info"><h3>Navatech Group</h3><p>12 subsidiaries &middot; 48 projects</p></div>
-          <span class="sr-arrow">&#8250;</span>
-        </div>
-        <div class="select-row" onclick="showScreen('screen-select-sub')">
-          <div class="sr-icon" style="background:#ecfdf5;color:#059669">&#9935;</div>
-          <div class="sr-info"><h3>Saifety Corp</h3><p>8 subsidiaries &middot; 32 projects</p></div>
-          <span class="sr-arrow">&#8250;</span>
-        </div>
-        <div class="select-row" onclick="showScreen('screen-select-sub')">
-          <div class="sr-icon" style="background:#fffbeb;color:#d97706">&#9935;</div>
-          <div class="sr-info"><h3>BuildSafe International</h3><p>5 subsidiaries &middot; 19 projects</p></div>
-          <span class="sr-arrow">&#8250;</span>
-        </div>
-      </div>
-    </div>
-
     <!-- ═══ SCREEN: Select Subsidiary ═══ -->
     <div class="screen select-screen" id="screen-select-sub">
       <div class="select-header">
-        <div class="back-btn" onclick="showScreen('screen-select-org')">&#8592;</div>
+        <div class="back-btn" onclick="showScreen('screen-login')">&#8592;</div>
         <div class="sh-content">
           <h1>Select Subsidiary</h1>
           <p>Navatech Group</p>
@@ -687,11 +825,9 @@ a{color:var(--action-blue);text-decoration:none}
       </div>
 
       <div class="stepper">
-        <div class="step done"><span class="step-dot">&#10003;</span> Org</div>
-        <div class="step-line done"></div>
-        <div class="step active"><span class="step-dot">2</span> Subsidiary</div>
+        <div class="step active"><span class="step-dot">1</span> Subsidiary</div>
         <div class="step-line"></div>
-        <div class="step"><span class="step-dot">3</span> Project</div>
+        <div class="step"><span class="step-dot">2</span> Project</div>
       </div>
 
       <div class="search-bar">
@@ -734,11 +870,9 @@ a{color:var(--action-blue);text-decoration:none}
       </div>
 
       <div class="stepper">
-        <div class="step done"><span class="step-dot">&#10003;</span> Org</div>
-        <div class="step-line done"></div>
         <div class="step done"><span class="step-dot">&#10003;</span> Subsidiary</div>
         <div class="step-line done"></div>
-        <div class="step active"><span class="step-dot">3</span> Project</div>
+        <div class="step active"><span class="step-dot">2</span> Project</div>
       </div>
 
       <div class="recent-card" onclick="showScreen('screen-home')">
@@ -784,11 +918,11 @@ a{color:var(--action-blue);text-decoration:none}
     <!-- ═══ SCREEN: Home ═══ -->
     <div class="screen home-screen" id="screen-home">
       <div class="home-header">
+        <div class="hh-hamburger" onclick="showScreen('screen-select-sub')">&#9776;</div>
         <div class="hh-info">
-          <h2>Marina Bay Tower</h2>
+          <button class="hh-proj-dropdown" onclick="showScreen('screen-select-proj')">Marina Bay Tower <span class="hh-chevron">&#9662;</span></button>
           <p>Navatech Group &middot; UAE Division</p>
         </div>
-        <button class="hh-switch" onclick="showScreen('screen-select-org')">Switch</button>
         <div class="hh-avatar" onclick="showScreen('screen-profile')">RK</div>
       </div>
 
@@ -948,13 +1082,182 @@ a{color:var(--action-blue);text-decoration:none}
 
       </div>
 
+      <!-- Guided Tour Overlay -->
+      <div class="tour-overlay" id="guidedTour">
+        <div class="tour-spotlight" id="tourSpotlight"></div>
+        <div class="tour-tooltip" id="tourTooltip">
+          <div class="tt-title" id="tourTitle"></div>
+          <div class="tt-text" id="tourText"></div>
+          <div class="tt-footer">
+            <button class="tt-skip" onclick="skipTour()">Skip</button>
+            <div class="tt-right">
+              <span class="tt-counter" id="tourCounter"></span>
+              <button class="tt-next" id="tourNextBtn" onclick="nextTourStep()">Next</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Bottom Nav -->
       <div class="bottom-nav">
-        <div class="nav-item">
+        <div class="nav-item" onclick="showScreen('screen-tasks')">
           <span class="nav-icon">&#9744;</span>
           <span class="nav-label">Tasks</span>
         </div>
         <div class="nav-item active">
+          <span class="nav-icon">&#8962;</span>
+          <span class="nav-label">Home</span>
+        </div>
+        <div class="nav-item">
+          <span class="nav-icon">&#9638;</span>
+          <span class="nav-label">Dashboard</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SCREEN: Tasks ═══ -->
+    <div class="screen tasks-screen" id="screen-tasks">
+      <div class="tasks-header">
+        <h2>Tasks</h2>
+        <div class="tasks-proj">Marina Bay Tower</div>
+      </div>
+
+      <div class="tasks-tab-bar">
+        <button class="tasks-tab active" onclick="toggleTaskTab('mine')">Assigned to Me</button>
+        <button class="tasks-tab" onclick="toggleTaskTab('assigned')">Assigned by Me</button>
+      </div>
+
+      <!-- Assigned to Me -->
+      <div class="tasks-body" id="tasks-mine">
+        <div class="tasks-metrics">
+          <div class="task-metric">
+            <div class="tm-count" style="color:var(--critical)">3</div>
+            <div class="tm-label">Overdue</div>
+          </div>
+          <div class="task-metric">
+            <div class="tm-count" style="color:var(--warning)">5</div>
+            <div class="tm-label">Due Today</div>
+          </div>
+          <div class="task-metric">
+            <div class="tm-count" style="color:var(--critical)">2</div>
+            <div class="tm-label">High Severity</div>
+          </div>
+        </div>
+
+        <div class="task-card">
+          <div class="tc-title">Review scaffolding observation #OBS-142</div>
+          <div class="tc-chips">
+            <span class="task-chip chip-blue">Observation</span>
+            <span class="task-chip chip-warning">Open</span>
+            <span class="task-chip chip-critical">High</span>
+          </div>
+          <div class="tc-bottom">
+            <div class="tc-meta">Due: Today &middot; by Ahmed K.</div>
+            <button class="tc-cta">Open</button>
+          </div>
+        </div>
+
+        <div class="task-card">
+          <div class="tc-title">Close CAPA for incident #INC-031</div>
+          <div class="tc-chips">
+            <span class="task-chip chip-critical">Incident</span>
+            <span class="task-chip chip-blue">In Progress</span>
+          </div>
+          <div class="tc-bottom">
+            <div class="tc-meta">Due: Tomorrow &middot; by Fatima R.</div>
+            <button class="tc-cta">Update</button>
+          </div>
+        </div>
+
+        <div class="task-card overdue">
+          <div class="tc-title">Complete Zone C inspection checklist</div>
+          <div class="tc-chips">
+            <span class="task-chip chip-success">Inspection</span>
+            <span class="task-chip chip-neutral">Pending</span>
+          </div>
+          <div class="tc-bottom">
+            <div class="tc-meta">Due: Overdue 2d &middot; by Site Manager</div>
+            <button class="tc-cta">Start</button>
+          </div>
+        </div>
+
+        <div class="task-card">
+          <div class="tc-title">Upload training certificate &#8212; crane ops</div>
+          <div class="tc-chips">
+            <span class="task-chip chip-warning">Training</span>
+            <span class="task-chip chip-neutral">Pending</span>
+          </div>
+          <div class="tc-bottom">
+            <div class="tc-meta">Due: Apr 8 &middot; by HR Admin</div>
+            <button class="tc-cta">Complete</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Assigned by Me -->
+      <div class="tasks-body" id="tasks-assigned" style="display:none">
+        <div class="tasks-metrics">
+          <div class="task-metric">
+            <div class="tm-count" style="color:var(--critical)">2</div>
+            <div class="tm-label">Overdue Assigned</div>
+          </div>
+          <div class="task-metric">
+            <div class="tm-count" style="color:var(--warning)">1</div>
+            <div class="tm-label">Stuck</div>
+          </div>
+          <div class="task-metric">
+            <div class="tm-count" style="color:var(--critical)">1</div>
+            <div class="tm-label">Critical Pending</div>
+          </div>
+        </div>
+
+        <div class="task-card overdue">
+          <div class="tc-assignee">
+            <div class="tc-assignee-avatar">MS</div>
+            <span class="tc-assignee-name">Mohammed S.</span>
+            <span class="task-chip chip-critical" style="margin-left:auto">Overdue</span>
+          </div>
+          <div class="tc-desc">Inspect fire exits Zone A</div>
+          <div class="tc-bottom">
+            <div class="tc-meta">Last updated: 3 days ago</div>
+            <button class="tc-cta">Follow Up</button>
+          </div>
+        </div>
+
+        <div class="task-card">
+          <div class="tc-assignee">
+            <div class="tc-assignee-avatar">PM</div>
+            <span class="tc-assignee-name">Priya M.</span>
+            <span class="task-chip chip-blue" style="margin-left:auto">In Progress</span>
+          </div>
+          <div class="tc-desc">Submit permit renewal docs</div>
+          <div class="tc-bottom">
+            <div class="tc-meta">Last updated: Yesterday</div>
+            <button class="tc-cta">Reassign</button>
+          </div>
+        </div>
+
+        <div class="task-card stuck">
+          <div class="tc-assignee">
+            <div class="tc-assignee-avatar">KA</div>
+            <span class="tc-assignee-name">Khalid A.</span>
+            <span class="task-chip chip-warning" style="margin-left:auto">Stuck</span>
+          </div>
+          <div class="tc-desc">Crane certification verification</div>
+          <div class="tc-bottom">
+            <div class="tc-meta">No updates in 5 days</div>
+            <button class="tc-cta">Escalate</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Nav -->
+      <div class="bottom-nav">
+        <div class="nav-item active">
+          <span class="nav-icon">&#9744;</span>
+          <span class="nav-label">Tasks</span>
+        </div>
+        <div class="nav-item" onclick="showScreen('screen-home')">
           <span class="nav-icon">&#8962;</span>
           <span class="nav-label">Home</span>
         </div>
@@ -983,11 +1286,6 @@ a{color:var(--action-blue);text-decoration:none}
         <h4>Current Workspace</h4>
         <div class="ps-card">
           <div class="ps-row">
-            <div class="ps-label">Organization</div>
-            <div class="ps-value">Navatech Group</div>
-            <span class="ps-arrow">&#8250;</span>
-          </div>
-          <div class="ps-row">
             <div class="ps-label">Subsidiary</div>
             <div class="ps-value">UAE Division</div>
             <span class="ps-arrow">&#8250;</span>
@@ -998,7 +1296,7 @@ a{color:var(--action-blue);text-decoration:none}
             <span class="ps-arrow">&#8250;</span>
           </div>
         </div>
-        <button class="switch-workspace-btn" onclick="showScreen('screen-select-org')">Switch Workspace</button>
+        <button class="switch-workspace-btn" onclick="showScreen('screen-select-sub')">Switch Workspace</button>
       </div>
 
       <div class="profile-section">
@@ -1008,7 +1306,7 @@ a{color:var(--action-blue);text-decoration:none}
             <div class="ps-label">Edit Profile</div>
             <span class="ps-arrow">&#8250;</span>
           </div>
-          <div class="ps-row">
+          <div class="ps-row" onclick="showScreen('screen-lang')">
             <div class="ps-label">Change Language</div>
             <div class="ps-value">English</div>
             <span class="ps-arrow">&#8250;</span>
@@ -1019,13 +1317,23 @@ a{color:var(--action-blue);text-decoration:none}
       <div class="profile-section">
         <h4>Help &amp; Onboarding</h4>
         <div class="ps-card">
-          <div class="ps-row">
+          <div class="ps-row" onclick="showScreen('screen-home');setTimeout(startTour,400)">
             <div class="ps-label">Guided Tour</div>
             <span class="ps-arrow">&#8250;</span>
           </div>
           <div class="ps-row">
             <div class="ps-label">Contact Us</div>
             <span class="ps-arrow">&#8250;</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-section">
+        <h4>Terms</h4>
+        <div class="ps-card">
+          <div class="profile-terms-row">
+            <input type="checkbox" id="profileTermsCheck" checked>
+            <label for="profileTermsCheck">I agree to the <a href="#">Terms &amp; Conditions</a></label>
           </div>
         </div>
       </div>
@@ -1058,11 +1366,11 @@ a{color:var(--action-blue);text-decoration:none}
 
       <!-- Bottom Nav -->
       <div class="bottom-nav">
-        <div class="nav-item">
+        <div class="nav-item" onclick="showScreen('screen-tasks')">
           <span class="nav-icon">&#9744;</span>
           <span class="nav-label">Tasks</span>
         </div>
-        <div class="nav-item">
+        <div class="nav-item" onclick="showScreen('screen-home')">
           <span class="nav-icon">&#8962;</span>
           <span class="nav-label">Home</span>
         </div>
@@ -1082,14 +1390,15 @@ a{color:var(--action-blue);text-decoration:none}
 (function(){
 
 var SCREEN_MAP = {
-  'screen-splash':0,'screen-login':1,'screen-register':2,'screen-otp':3,
-  'screen-select-org':4,'screen-select-sub':5,'screen-select-proj':6,
-  'screen-home':7,'screen-profile':8
+  'screen-splash':0,'screen-lang':1,'screen-login':2,'screen-register':3,'screen-otp':4,
+  'screen-select-sub':5,'screen-select-proj':6,
+  'screen-home':7,'screen-tasks':8,'screen-profile':9
 };
 var SCREEN_IDS = Object.keys(SCREEN_MAP);
 var splashTimer = null;
 var resendInterval = null;
 var currentHomeVersion = 'photos';
+var currentTourStep = 0;
 
 window.showScreen = function(id){
   if(splashTimer){ clearTimeout(splashTimer); splashTimer = null; }
@@ -1104,7 +1413,7 @@ window.showScreen = function(id){
   var sb = document.getElementById('statusBar');
   if(id === 'screen-splash'){
     sb.className = 'status-bar sb-splash';
-    splashTimer = setTimeout(function(){ window.showScreen('screen-login'); }, 2500);
+    splashTimer = setTimeout(function(){ window.showScreen('screen-lang'); }, 2500);
   } else {
     sb.className = 'status-bar';
   }
@@ -1113,6 +1422,8 @@ window.showScreen = function(id){
     initOTP();
     startResendTimer();
   }
+
+  skipTour();
 };
 
 window.setTheme = function(theme){
@@ -1190,7 +1501,7 @@ window.handleVerify = function(){
     }
     return;
   }
-  showScreen('screen-select-org');
+  showScreen('screen-select-sub');
 };
 
 window.toggleTerms = function(){
@@ -1209,6 +1520,124 @@ window.togglePhoto = function(){
     icon.innerHTML = '&#128247;';
   }
 };
+
+window.selectLanguage = function(row){
+  var rows = document.querySelectorAll('.lang-row');
+  rows.forEach(function(r){
+    r.classList.remove('selected');
+    var chk = r.querySelector('.lang-check');
+    if(chk) chk.remove();
+  });
+  row.classList.add('selected');
+  var checkSpan = document.createElement('span');
+  checkSpan.className = 'lang-check';
+  checkSpan.innerHTML = '&#10003;';
+  var native = row.querySelector('.lang-native');
+  if(native) native.style.display = 'none';
+  row.appendChild(checkSpan);
+
+  rows.forEach(function(r){
+    if(r !== row){
+      var n = r.querySelector('.lang-native');
+      if(n) n.style.display = '';
+    }
+  });
+};
+
+window.toggleTaskTab = function(tab){
+  var mine = document.getElementById('tasks-mine');
+  var assigned = document.getElementById('tasks-assigned');
+  var tabs = document.querySelectorAll('.tasks-tab');
+  if(tab === 'mine'){
+    mine.style.display = '';
+    assigned.style.display = 'none';
+    tabs[0].classList.add('active');
+    tabs[1].classList.remove('active');
+  } else {
+    mine.style.display = 'none';
+    assigned.style.display = '';
+    tabs[0].classList.remove('active');
+    tabs[1].classList.add('active');
+  }
+};
+
+var tourSteps = [
+  {
+    title: 'Your Project Workspace',
+    text: 'This is your project workspace. All safety data for your current project lives here.',
+    spot: {top:44,left:10,width:370,height:60},
+    tip: {top:110,left:20}
+  },
+  {
+    title: 'nAI Flow',
+    text: 'Raise Observation, Incident, Inspection, Site Walkthrough, or Permit from here.',
+    spot: {top:130,left:20,width:350,height:280},
+    tip: {top:420,left:20}
+  },
+  {
+    title: 'Tasks',
+    text: 'Track and complete assigned safety tasks.',
+    spot: {top:748,left:20,width:110,height:52},
+    tip: {top:640,left:20}
+  },
+  {
+    title: 'Dashboard',
+    text: 'View safety performance and reports.',
+    spot: {top:748,left:260,width:110,height:52},
+    tip: {top:640,left:80}
+  },
+  {
+    title: 'Profile & Settings',
+    text: 'Switch workspace, change settings, or take the tour again.',
+    spot: {top:56,left:338,width:42,height:42},
+    tip: {top:110,left:80}
+  }
+];
+
+window.startTour = function(){
+  currentTourStep = 0;
+  var overlay = document.getElementById('guidedTour');
+  overlay.classList.add('active');
+  renderTourStep();
+};
+
+window.nextTourStep = function(){
+  currentTourStep++;
+  if(currentTourStep >= tourSteps.length){
+    skipTour();
+    return;
+  }
+  renderTourStep();
+};
+
+window.skipTour = function(){
+  var overlay = document.getElementById('guidedTour');
+  if(overlay) overlay.classList.remove('active');
+  currentTourStep = 0;
+};
+
+function renderTourStep(){
+  var step = tourSteps[currentTourStep];
+  var spot = document.getElementById('tourSpotlight');
+  var tip = document.getElementById('tourTooltip');
+  var title = document.getElementById('tourTitle');
+  var text = document.getElementById('tourText');
+  var counter = document.getElementById('tourCounter');
+  var nextBtn = document.getElementById('tourNextBtn');
+
+  spot.style.top = step.spot.top + 'px';
+  spot.style.left = step.spot.left + 'px';
+  spot.style.width = step.spot.width + 'px';
+  spot.style.height = step.spot.height + 'px';
+
+  tip.style.top = step.tip.top + 'px';
+  tip.style.left = step.tip.left + 'px';
+
+  title.textContent = step.title;
+  text.textContent = step.text;
+  counter.textContent = (currentTourStep + 1) + ' of ' + tourSteps.length;
+  nextBtn.textContent = currentTourStep === tourSteps.length - 1 ? 'Done' : 'Next';
+}
 
 function initOTP(){
   var inputs = document.querySelectorAll('#otpDigits input');
@@ -1240,25 +1669,32 @@ function initOTP(){
 
 function startResendTimer(){
   if(resendInterval) clearInterval(resendInterval);
-  var secs = 28;
+  var secs = 120;
   var timerEl = document.getElementById('resendTimer');
   var btn = document.getElementById('resendBtn');
   btn.disabled = true;
-  timerEl.textContent = 'Resend in 0:' + (secs < 10 ? '0' : '') + secs;
+  function formatTime(s){
+    var m = Math.floor(s/60);
+    var sec = s % 60;
+    return (m < 10 ? '0' : '') + m + ':' + (sec < 10 ? '0' : '') + sec;
+  }
+  timerEl.textContent = 'Code expires in ' + formatTime(secs);
+  timerEl.className = '';
   resendInterval = setInterval(function(){
     secs--;
     if(secs <= 0){
       clearInterval(resendInterval);
-      timerEl.textContent = '';
+      timerEl.textContent = 'Code expired. Request a new one.';
+      timerEl.className = 'otp-timer-expired';
       btn.disabled = false;
     } else {
-      timerEl.textContent = 'Resend in 0:' + (secs < 10 ? '0' : '') + secs;
+      timerEl.textContent = 'Code expires in ' + formatTime(secs);
     }
   }, 1000);
 }
 window.startResendTimer = startResendTimer;
 
-splashTimer = setTimeout(function(){ window.showScreen('screen-login'); }, 2500);
+splashTimer = setTimeout(function(){ window.showScreen('screen-lang'); }, 2500);
 
 })();
 </script>
