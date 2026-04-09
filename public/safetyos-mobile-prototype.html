@@ -1829,6 +1829,8 @@ window.setTheme = function(theme){
   themeBtns.forEach(function(b,i){ b.classList.toggle('active', (theme==='light'?0:1) === i); });
   var tvl = document.getElementById('themeValueLabel');
   if(tvl) tvl.textContent = theme === 'dark' ? 'Dark' : 'Light';
+  var currentColor = ps.style.getPropertyValue('--client-brand') || '#1a56db';
+  setClientColor(currentColor.trim());
 };
 
 window.setHomeVersion = function(version){
@@ -1958,9 +1960,83 @@ window.setDashTab = function(el){
   el.classList.add('active');
 };
 
+function hexToHsl(hex){
+  var r=parseInt(hex.slice(1,3),16)/255, g=parseInt(hex.slice(3,5),16)/255, b=parseInt(hex.slice(5,7),16)/255;
+  var max=Math.max(r,g,b), min=Math.min(r,g,b), h,s,l=(max+min)/2;
+  if(max===min){h=s=0}else{
+    var d=max-min; s=l>0.5?d/(2-max-min):d/(max+min);
+    switch(max){case r:h=(g-b)/d+(g<b?6:0);break;case g:h=(b-r)/d+2;break;case b:h=(r-g)/d+4;break}
+    h/=6;
+  }
+  return [h*360,s*100,l*100];
+}
+function hslToHex(h,s,l){
+  h/=360;s/=100;l/=100;
+  var r,g,b;
+  if(s===0){r=g=b=l}else{
+    function hue2rgb(p,q,t){if(t<0)t+=1;if(t>1)t-=1;if(t<1/6)return p+(q-p)*6*t;if(t<1/2)return q;if(t<2/3)return p+(q-p)*(2/3-t)*6;return p}
+    var q=l<0.5?l*(1+s):l+s-l*s, p=2*l-q;
+    r=hue2rgb(p,q,h+1/3);g=hue2rgb(p,q,h);b=hue2rgb(p,q,h-1/3);
+  }
+  return '#'+[r,g,b].map(function(x){var hex=Math.round(x*255).toString(16);return hex.length===1?'0'+hex:hex}).join('');
+}
+
 window.setClientColor = function(color){
   var ps = document.getElementById('phoneScreen');
+  var hsl = hexToHsl(color);
+  var h=hsl[0], s=hsl[1];
+  var isDark = ps.getAttribute('data-theme')==='dark';
+
   ps.style.setProperty('--client-brand', color);
+
+  if(!isDark){
+    ps.style.setProperty('--md-primary', hslToHex(h, Math.min(s,75), 42));
+    ps.style.setProperty('--md-on-primary', '#ffffff');
+    ps.style.setProperty('--md-primary-container', hslToHex(h, Math.min(s,50), 90));
+    ps.style.setProperty('--md-on-primary-container', hslToHex(h, Math.min(s,60), 15));
+    ps.style.setProperty('--md-secondary', hslToHex(h, Math.max(s*0.25,8), 42));
+    ps.style.setProperty('--md-on-secondary', '#ffffff');
+    ps.style.setProperty('--md-secondary-container', hslToHex(h, Math.max(s*0.3,10), 90));
+    ps.style.setProperty('--md-on-secondary-container', hslToHex(h, Math.max(s*0.2,6), 15));
+    ps.style.setProperty('--md-surface', hslToHex(h, Math.max(s*0.08,3), 99));
+    ps.style.setProperty('--md-on-surface', hslToHex(h, Math.max(s*0.05,2), 10));
+    ps.style.setProperty('--md-surface-variant', hslToHex(h, Math.max(s*0.15,6), 90));
+    ps.style.setProperty('--md-on-surface-variant', hslToHex(h, Math.max(s*0.1,4), 30));
+    ps.style.setProperty('--md-surface-container-lowest', hslToHex(h, Math.max(s*0.06,2), 100));
+    ps.style.setProperty('--md-surface-container-low', hslToHex(h, Math.max(s*0.08,3), 97));
+    ps.style.setProperty('--md-surface-container', hslToHex(h, Math.max(s*0.1,4), 95));
+    ps.style.setProperty('--md-surface-container-high', hslToHex(h, Math.max(s*0.1,4), 93));
+    ps.style.setProperty('--md-surface-container-highest', hslToHex(h, Math.max(s*0.1,4), 90));
+    ps.style.setProperty('--md-outline', hslToHex(h, Math.max(s*0.08,3), 50));
+    ps.style.setProperty('--md-outline-variant', hslToHex(h, Math.max(s*0.12,5), 80));
+    ps.style.setProperty('--md-inverse-surface', hslToHex(h, Math.max(s*0.08,3), 20));
+    ps.style.setProperty('--md-inverse-on-surface', hslToHex(h, Math.max(s*0.08,3), 95));
+    ps.style.setProperty('--md-inverse-primary', hslToHex(h, Math.min(s,55), 80));
+  } else {
+    ps.style.setProperty('--md-primary', hslToHex(h, Math.min(s,55), 80));
+    ps.style.setProperty('--md-on-primary', hslToHex(h, Math.min(s,70), 22));
+    ps.style.setProperty('--md-primary-container', hslToHex(h, Math.min(s,70), 32));
+    ps.style.setProperty('--md-on-primary-container', hslToHex(h, Math.min(s,50), 90));
+    ps.style.setProperty('--md-secondary', hslToHex(h, Math.max(s*0.25,8), 80));
+    ps.style.setProperty('--md-on-secondary', hslToHex(h, Math.max(s*0.2,6), 22));
+    ps.style.setProperty('--md-secondary-container', hslToHex(h, Math.max(s*0.2,8), 32));
+    ps.style.setProperty('--md-on-secondary-container', hslToHex(h, Math.max(s*0.3,10), 90));
+    ps.style.setProperty('--md-surface', hslToHex(h, Math.max(s*0.06,2), 10));
+    ps.style.setProperty('--md-on-surface', hslToHex(h, Math.max(s*0.06,2), 90));
+    ps.style.setProperty('--md-surface-variant', hslToHex(h, Math.max(s*0.1,4), 28));
+    ps.style.setProperty('--md-on-surface-variant', hslToHex(h, Math.max(s*0.12,5), 80));
+    ps.style.setProperty('--md-surface-container-lowest', hslToHex(h, Math.max(s*0.05,2), 6));
+    ps.style.setProperty('--md-surface-container-low', hslToHex(h, Math.max(s*0.06,2), 10));
+    ps.style.setProperty('--md-surface-container', hslToHex(h, Math.max(s*0.07,3), 13));
+    ps.style.setProperty('--md-surface-container-high', hslToHex(h, Math.max(s*0.07,3), 17));
+    ps.style.setProperty('--md-surface-container-highest', hslToHex(h, Math.max(s*0.08,3), 22));
+    ps.style.setProperty('--md-outline', hslToHex(h, Math.max(s*0.08,3), 55));
+    ps.style.setProperty('--md-outline-variant', hslToHex(h, Math.max(s*0.1,4), 28));
+    ps.style.setProperty('--md-inverse-surface', hslToHex(h, Math.max(s*0.08,3), 90));
+    ps.style.setProperty('--md-inverse-on-surface', hslToHex(h, Math.max(s*0.06,2), 20));
+    ps.style.setProperty('--md-inverse-primary', hslToHex(h, Math.min(s,75), 42));
+  }
+
   var picker = document.getElementById('colorPicker');
   if(picker) picker.value = color;
   var hex = document.getElementById('colorHex');
