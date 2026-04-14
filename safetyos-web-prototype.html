@@ -3,1178 +3,1991 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SafetyOS — Enterprise Construction Safety Platform</title>
+<title>nAI Admin Portal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
-  --bg:#f7f9fc;
-  --surface:#ffffff;
-  --surface-raised:#ffffff;
-  --surface-secondary:#f0f5ff;
-  --border:#e5e9f0;
-  --border-light:#eef2f7;
-  --text-primary:#111827;
-  --text-secondary:#6b7280;
-  --text-tertiary:#9ca3af;
-  --action-blue:#1a56db;
-  --action-blue-light:#ebf2ff;
-  --action-blue-hover:#1648c0;
-  --action-blue-10:rgba(26,86,219,0.1);
+  --bg:#f8f9fb;--surface:#ffffff;--surface-raised:#ffffff;--surface-secondary:#f3f6fb;
+  --border:#e2e6ee;--border-light:#edf0f5;
+  --text-primary:#111827;--text-secondary:#5f6775;--text-tertiary:#9ca3af;
+  --primary:#1a56db;--primary-light:#e8f0fe;--primary-hover:#1648c0;--primary-10:rgba(26,86,219,0.08);
   --success:#059669;--success-bg:#ecfdf5;
   --warning:#d97706;--warning-bg:#fffbeb;
   --critical:#dc2626;--critical-bg:#fef2f2;
   --neutral:#6b7280;--neutral-bg:#f3f4f6;
-  --radius:12px;--radius-sm:8px;--radius-xs:6px;
-  --sidebar-w:240px;--topbar-h:56px;
+  --radius-xs:4px;--radius-sm:8px;--radius:12px;--radius-lg:16px;--radius-full:9999px;
+  --sidebar-w:260px;--topbar-h:56px;
+  --elevation-1:0 1px 3px rgba(0,0,0,0.06),0 1px 2px rgba(0,0,0,0.04);
+  --elevation-2:0 2px 8px rgba(0,0,0,0.06),0 1px 3px rgba(0,0,0,0.04);
+  --elevation-3:0 4px 16px rgba(0,0,0,0.08),0 2px 4px rgba(0,0,0,0.04);
 }
 [data-theme="dark"]{
-  --bg:#0d0f14;
-  --surface:#151820;
-  --surface-raised:#1a1e28;
-  --surface-secondary:#1e2230;
-  --border:#262b38;
-  --border-light:#1f2430;
-  --text-primary:#f1f3f5;
-  --text-secondary:#9ca3af;
-  --text-tertiary:#5c6370;
-  --action-blue:#3b82f6;
-  --action-blue-light:#172554;
-  --action-blue-hover:#60a5fa;
-  --action-blue-10:rgba(59,130,246,0.15);
+  --bg:#0d0f14;--surface:#161a22;--surface-raised:#1c2029;--surface-secondary:#1e2230;
+  --border:#2a2f3a;--border-light:#222733;
+  --text-primary:#f0f2f5;--text-secondary:#9ca3af;--text-tertiary:#5c6370;
+  --primary:#6b9eff;--primary-light:#1e2d50;--primary-hover:#89b4ff;--primary-10:rgba(107,158,255,0.12);
   --success-bg:#052e1c;--warning-bg:#2d1b00;--critical-bg:#2d0a0a;--neutral-bg:#1e2230;
 }
 html,body{height:100%;font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text-primary);-webkit-font-smoothing:antialiased;}
 body{overflow:hidden;}
-a{color:var(--action-blue);text-decoration:none;}
+a{color:var(--primary);text-decoration:none;}
 a:hover{text-decoration:underline;}
 input{font-family:inherit;}
 button{font-family:inherit;cursor:pointer;border:none;background:none;}
 
-/* ── SCREEN SYSTEM ── */
+/* SCREENS */
 .screen{display:none;height:100%;width:100%;}
 .screen.active{display:flex;}
 
-/* ── AUTH LAYOUT ── */
+/* AUTH */
 .auth-layout{flex-direction:column;align-items:center;justify-content:center;background:var(--bg);padding:24px;min-height:100%;}
-.auth-card{width:100%;max-width:420px;display:flex;flex-direction:column;align-items:center;}
-.auth-logo{width:44px;height:44px;background:var(--action-blue);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;font-weight:800;margin-bottom:28px;box-shadow:0 2px 8px rgba(26,86,219,0.25);}
+.auth-card{width:100%;max-width:440px;background:var(--surface);border-radius:var(--radius-lg);box-shadow:var(--elevation-2);padding:40px;display:flex;flex-direction:column;align-items:center;}
+.auth-logo{height:36px;margin-bottom:28px;}
 .auth-title{font-size:24px;font-weight:700;margin-bottom:8px;text-align:center;}
 .auth-subtitle{font-size:14px;color:var(--text-secondary);text-align:center;line-height:1.55;margin-bottom:28px;max-width:360px;}
 .auth-form{width:100%;display:flex;flex-direction:column;gap:6px;}
 .form-label{font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:2px;}
-.form-input{width:100%;height:46px;padding:0 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:15px;color:var(--text-primary);background:var(--surface);outline:none;transition:border .15s,box-shadow .15s;}
-.form-input:focus{border-color:var(--action-blue);box-shadow:0 0 0 3px var(--action-blue-10);}
-.form-input.error{border-color:var(--critical);}
-.form-hint{font-size:12px;color:var(--text-tertiary);margin-top:2px;margin-bottom:16px;}
-.btn-primary{width:100%;height:48px;background:var(--action-blue);color:#fff;font-size:15px;font-weight:600;border-radius:var(--radius-sm);border:none;cursor:pointer;transition:background .15s,opacity .15s;}
-.btn-primary:hover:not(:disabled){background:var(--action-blue-hover);}
-.btn-primary:disabled{opacity:.6;cursor:not-allowed;}
-.auth-footer{margin-top:32px;font-size:12px;color:var(--text-tertiary);text-align:center;}
-.auth-terms{margin-top:14px;font-size:12px;color:var(--text-tertiary);text-align:center;line-height:1.5;}
-.auth-terms a{color:var(--action-blue);font-weight:500;}
-.auth-link{margin-top:20px;font-size:13px;color:var(--action-blue);cursor:pointer;background:none;border:none;font-family:inherit;}
-.auth-link:hover{text-decoration:underline;}
+.form-input{width:100%;height:48px;padding:0 16px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:14px;background:var(--surface);color:var(--text-primary);transition:border-color .2s,box-shadow .2s;outline:none;}
+.form-input:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-10);}
+.form-input::placeholder{color:var(--text-tertiary);}
+.btn-primary{height:48px;width:100%;background:var(--primary);color:#fff;border-radius:var(--radius-sm);font-size:14px;font-weight:600;border:none;cursor:pointer;box-shadow:var(--elevation-1);transition:background .2s,box-shadow .2s,transform .1s;}
+.btn-primary:hover{background:var(--primary-hover);box-shadow:var(--elevation-2);}
+.btn-primary:active{transform:scale(0.985);}
+.auth-terms{font-size:12px;color:var(--text-tertiary);text-align:center;margin-top:20px;line-height:1.5;}
+.auth-footer{font-size:11px;color:var(--text-tertiary);text-align:center;margin-top:24px;letter-spacing:0.02em;}
 
-/* ── NOTICE ── */
-.notice{width:100%;padding:12px 14px;border-radius:var(--radius-sm);font-size:13px;font-weight:500;margin-bottom:14px;display:none;align-items:center;gap:8px;}
-.notice.error{background:var(--critical-bg);color:var(--critical);display:flex;}
-.notice.success{background:var(--success-bg);color:var(--success);display:flex;}
+/* OTP */
+.otp-email-badge{display:inline-flex;align-items:center;background:var(--primary-light);color:var(--primary);border-radius:var(--radius-full);padding:6px 16px;font-size:14px;font-weight:600;margin-bottom:24px;}
+.otp-inputs{display:flex;gap:10px;margin-bottom:24px;justify-content:center;}
+.otp-input{width:48px;height:56px;text-align:center;font-size:20px;font-weight:700;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);color:var(--text-primary);outline:none;transition:border-color .2s,box-shadow .2s;}
+.otp-input:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-10);}
+.otp-timer{font-size:13px;color:var(--text-secondary);text-align:center;margin-top:16px;}
+.otp-timer.expired{color:var(--critical);}
+.otp-link{font-size:13px;color:var(--primary);text-align:center;margin-top:12px;cursor:pointer;background:none;border:none;font-family:inherit;}
+.otp-link:hover{text-decoration:underline;}
+.otp-resend{font-size:13px;color:var(--primary);cursor:pointer;background:none;border:none;font-family:inherit;font-weight:600;margin-top:8px;}
+.otp-resend:disabled{color:var(--text-tertiary);cursor:default;}
 
-/* ── OTP INPUTS ── */
-.otp-email-badge{display:inline-flex;align-items:center;padding:6px 16px;background:var(--action-blue-light);color:var(--action-blue);border-radius:20px;font-size:13px;font-weight:600;margin-bottom:28px;}
-.otp-inputs{display:flex;gap:10px;justify-content:center;margin-bottom:24px;}
-.otp-input{width:48px;height:56px;text-align:center;font-size:22px;font-weight:700;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);color:var(--text-primary);outline:none;transition:border .15s,box-shadow .15s;}
-.otp-input:focus{border-color:var(--action-blue);box-shadow:0 0 0 3px var(--action-blue-10);}
-.otp-footer{display:flex;justify-content:space-between;align-items:center;width:100%;margin-top:16px;}
-.otp-timer{font-size:13px;color:var(--text-tertiary);}
-.otp-timer.expired{color:var(--critical);font-weight:500;}
-.otp-resend{font-size:13px;font-weight:600;color:var(--action-blue);background:none;border:none;cursor:pointer;font-family:inherit;}
-.otp-resend:disabled{color:var(--text-tertiary);cursor:not-allowed;}
+/* WORKSPACE SELECT */
+.ws-layout{flex-direction:column;align-items:center;justify-content:flex-start;background:var(--bg);padding:48px 24px;min-height:100%;overflow-y:auto;}
+.ws-container{width:100%;max-width:840px;}
+.ws-logo{height:36px;margin-bottom:32px;display:block;margin-left:auto;margin-right:auto;}
+.ws-title{font-size:28px;font-weight:700;text-align:center;margin-bottom:8px;}
+.ws-subtitle{font-size:14px;color:var(--text-secondary);text-align:center;margin-bottom:36px;}
+.ws-org-label{font-size:11px;font-weight:700;text-transform:uppercase;color:var(--text-tertiary);letter-spacing:0.08em;margin-bottom:12px;margin-top:28px;}
+.ws-org-label:first-of-type{margin-top:0;}
+.ws-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:8px;}
+.ws-card{display:flex;align-items:center;gap:14px;padding:18px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:border-color .2s,box-shadow .2s;}
+.ws-card:hover{border-color:var(--primary);box-shadow:var(--elevation-2);}
+.ws-card-avatar{width:44px;height:44px;border-radius:var(--radius-full);background:var(--primary-light);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0;}
+.ws-card-info{flex:1;min-width:0;}
+.ws-card-name{font-size:15px;font-weight:600;margin-bottom:3px;}
+.ws-card-meta{font-size:12px;color:var(--text-tertiary);}
+.ws-card-chevron{color:var(--text-tertiary);font-size:18px;flex-shrink:0;}
 
-/* ── APP SHELL ── */
-.app-shell{display:flex;flex-direction:row;height:100%;width:100%;}
-.sidebar{width:var(--sidebar-w);min-width:var(--sidebar-w);background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;}
-.sidebar-header{height:var(--topbar-h);min-height:var(--topbar-h);display:flex;align-items:center;gap:10px;padding:0 16px;border-bottom:1px solid var(--border);}
-.sidebar-logo{width:32px;height:32px;background:var(--action-blue);border-radius:var(--radius-xs);display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;font-weight:800;}
-.sidebar-brand{font-size:16px;font-weight:700;color:var(--text-primary);}
-.sidebar-nav{flex:1;padding:12px 8px;display:flex;flex-direction:column;gap:2px;}
-.nav-section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-tertiary);padding:16px 12px 6px;margin-top:4px;}
-.nav-section-label:first-child{padding-top:4px;margin-top:0;}
-.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--radius-sm);font-size:14px;font-weight:500;color:var(--text-secondary);cursor:pointer;transition:background .12s,color .12s;user-select:none;}
-.nav-item:hover{background:var(--surface-secondary);color:var(--text-primary);}
-.nav-item.active{background:var(--action-blue-light);color:var(--action-blue);font-weight:600;}
-.nav-icon{width:20px;font-size:16px;text-align:center;flex-shrink:0;line-height:1;}
-.nav-badge{margin-left:auto;font-size:11px;font-weight:600;background:var(--surface-secondary);color:var(--text-secondary);padding:2px 8px;border-radius:10px;line-height:1.4;}
-.nav-item.active .nav-badge{background:var(--action-blue-10);color:var(--action-blue);}
+/* APP SHELL */
+.app-shell{display:flex;flex-direction:row;height:100%;width:100%;position:relative;}
 
-.main-content{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg);}
+/* SIDEBAR */
+.sidebar{width:var(--sidebar-w);height:100%;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto;overflow-x:hidden;z-index:20;}
+.sidebar::-webkit-scrollbar{width:4px;}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+.sidebar-logo{display:flex;align-items:center;gap:10px;padding:16px 20px;border-bottom:1px solid var(--border-light);}
+.sidebar-logo img{height:24px;}
+.sidebar-logo-text{font-size:16px;font-weight:700;color:var(--text-primary);}
+.sidebar-section{padding:16px 12px 4px;}
+.sidebar-section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-tertiary);padding:0 8px;margin-bottom:6px;}
+.sidebar-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--radius-sm);font-size:13px;font-weight:500;color:var(--text-secondary);cursor:pointer;transition:background .15s,color .15s;position:relative;user-select:none;}
+.sidebar-item:hover{background:var(--primary-10);color:var(--text-primary);}
+.sidebar-item.active{background:var(--primary-light);color:var(--primary);font-weight:600;}
+.sidebar-item .item-icon{width:20px;text-align:center;font-size:15px;flex-shrink:0;opacity:0.7;}
+.sidebar-item.active .item-icon{opacity:1;}
+.sidebar-badge{margin-left:auto;font-size:11px;font-weight:700;background:var(--critical);color:#fff;border-radius:var(--radius-full);padding:1px 7px;min-width:20px;text-align:center;}
+.sidebar-badge.neutral{background:var(--neutral-bg);color:var(--neutral);}
+.sidebar-badge.warning{background:var(--warning-bg);color:var(--warning);}
 
-/* ── TOPBAR ── */
-.topbar{height:var(--topbar-h);min-height:var(--topbar-h);display:flex;align-items:center;padding:0 24px;background:var(--surface);border-bottom:1px solid var(--border);gap:12px;}
-.breadcrumb{display:flex;flex-direction:column;justify-content:center;flex:1;min-width:0;}
-.breadcrumb-org{font-size:12px;color:var(--text-tertiary);white-space:nowrap;line-height:1.3;}
-.breadcrumb-sub{font-size:14px;color:var(--text-primary);font-weight:600;white-space:nowrap;line-height:1.3;}
-.btn-outline{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-weight:500;color:var(--text-secondary);background:var(--surface);cursor:pointer;transition:border-color .12s,color .12s;}
-.btn-outline:hover{border-color:var(--action-blue);color:var(--action-blue);}
-.topbar-actions{display:flex;align-items:center;gap:8px;}
-.icon-btn{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface);cursor:pointer;font-size:16px;color:var(--text-secondary);transition:border-color .12s;}
-.icon-btn:hover{border-color:var(--action-blue);color:var(--action-blue);}
-.avatar-btn{width:32px;height:32px;background:var(--action-blue);border-radius:var(--radius-xs);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;cursor:pointer;border:none;flex-shrink:0;}
+/* PROJECT CONTEXT BLOCK */
+.sidebar-context{margin:12px;padding:14px;background:var(--surface-secondary);border-radius:var(--radius);border:1px solid var(--border-light);}
+.sidebar-context-org{font-size:11px;color:var(--text-tertiary);margin-bottom:2px;}
+.sidebar-context-sub{font-size:13px;color:var(--text-secondary);font-weight:500;margin-bottom:6px;}
+.sidebar-context-back{font-size:12px;color:var(--primary);cursor:pointer;display:inline-flex;align-items:center;gap:4px;margin-bottom:10px;}
+.sidebar-context-back:hover{text-decoration:underline;}
+.sidebar-context-divider{height:1px;background:var(--border-light);margin:10px 0;}
+.sidebar-context-project{display:flex;align-items:center;gap:10px;}
+.sidebar-context-project-icon{width:28px;height:28px;border-radius:var(--radius-xs);background:var(--primary-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.sidebar-context-project-icon svg{width:14px;height:14px;color:var(--primary);}
+.sidebar-context-project-info{flex:1;min-width:0;}
+.sidebar-context-project-name{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sidebar-context-project-scope{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--primary);letter-spacing:0.05em;}
+.sidebar-context-switcher{font-size:12px;color:var(--primary);cursor:pointer;margin-top:8px;display:inline-flex;align-items:center;gap:4px;}
+.sidebar-context-switcher:hover{text-decoration:underline;}
 
-/* ── PAGE CONTENT ── */
-.page-content{flex:1;overflow-y:auto;padding:24px;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
-.page-content::-webkit-scrollbar{width:6px;}
-.page-content::-webkit-scrollbar-track{background:transparent;}
-.page-content::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
-.page{display:none;}
-.page.active{display:block;}
+/* PROJECT SWITCHER DROPDOWN */
+.project-switcher-dropdown{position:absolute;left:12px;top:0;width:236px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--elevation-3);z-index:100;display:none;max-height:300px;overflow-y:auto;padding:6px;}
+.project-switcher-dropdown.open{display:block;}
+.project-switcher-item{padding:10px 12px;border-radius:var(--radius-sm);font-size:13px;font-weight:500;color:var(--text-primary);cursor:pointer;transition:background .15s;}
+.project-switcher-item:hover{background:var(--primary-10);}
+.project-switcher-item.active{background:var(--primary-light);color:var(--primary);font-weight:600;}
 
-/* ── PAGE HEADER ── */
-.page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:16px;flex-wrap:wrap;}
-.page-title{font-size:22px;font-weight:700;line-height:1.3;}
-.page-subtitle{font-size:14px;color:var(--text-secondary);margin-top:4px;}
-.page-actions{display:flex;gap:8px;align-items:center;}
-.btn-primary-sm{padding:9px 18px;font-size:13px;font-weight:600;background:var(--action-blue);color:#fff;border-radius:var(--radius-sm);border:none;cursor:pointer;transition:background .15s;}
-.btn-primary-sm:hover{background:var(--action-blue-hover);}
-.btn-outline-sm{padding:9px 18px;font-size:13px;font-weight:500;background:var(--surface);color:var(--text-secondary);border:1.5px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;transition:all .12s;}
-.btn-outline-sm:hover{border-color:var(--action-blue);color:var(--action-blue);}
+/* TOPBAR */
+.topbar{height:var(--topbar-h);border-bottom:1px solid var(--border);background:var(--surface);display:flex;align-items:center;padding:0 20px;gap:12px;flex-shrink:0;z-index:15;}
+.breadcrumb{display:flex;align-items:center;gap:6px;flex:1;min-width:0;font-size:13px;}
+.breadcrumb-item{color:var(--text-tertiary);font-size:12px;white-space:nowrap;}
+.breadcrumb-item.clickable{cursor:pointer;}
+.breadcrumb-item.clickable:hover{color:var(--primary);}
+.breadcrumb-item.sub{font-size:13px;color:var(--text-secondary);}
+.breadcrumb-item.project{font-size:13px;color:var(--primary);font-weight:500;}
+.breadcrumb-item.current{font-size:14px;color:var(--text-primary);font-weight:600;}
+.breadcrumb-sep{color:var(--text-tertiary);font-size:11px;}
+.topbar-ws-btn{display:flex;align-items:center;gap:8px;padding:6px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;background:var(--surface);transition:border-color .2s,box-shadow .2s;}
+.topbar-ws-btn:hover{border-color:var(--primary);box-shadow:var(--elevation-1);}
+.topbar-ws-org{font-size:11px;color:var(--text-tertiary);}
+.topbar-ws-sub{font-size:13px;font-weight:600;color:var(--text-primary);}
+.topbar-ws-chevron{font-size:10px;color:var(--text-tertiary);margin-left:4px;}
+.topbar-icon-btn{width:36px;height:36px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:var(--text-secondary);transition:background .15s;position:relative;}
+.topbar-icon-btn:hover{background:var(--primary-10);}
+.topbar-icon-btn .notif-dot{position:absolute;top:6px;right:6px;width:7px;height:7px;background:var(--critical);border-radius:50%;border:1.5px solid var(--surface);}
+.topbar-avatar{width:32px;height:32px;border-radius:var(--radius-sm);background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;cursor:pointer;}
 
-/* ── SUMMARY CARDS ── */
-.summary-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:24px;}
-.summary-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;display:flex;flex-direction:column;gap:6px;}
-.summary-card-label{font-size:12px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.04em;}
-.summary-card-value{font-size:26px;font-weight:700;line-height:1.2;}
-.summary-card-value.critical{color:var(--critical);}
-.summary-card-value.warning{color:var(--warning);}
-.summary-card-trend{font-size:12px;font-weight:500;display:flex;align-items:center;gap:4px;}
-.summary-card-trend.up{color:var(--critical);}
-.summary-card-trend.down{color:var(--success);}
-.summary-card-trend.stable{color:var(--neutral);}
+/* MAIN CONTENT */
+.main-area{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden;}
+.content-area{flex:1;overflow-y:auto;padding:24px 28px;background:var(--bg);}
 
-/* ── MODULE GRID ── */
-.module-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px;}
-.module-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;cursor:pointer;transition:border-color .12s,box-shadow .12s;}
-.module-card:hover{border-color:var(--action-blue);box-shadow:0 2px 8px rgba(0,0,0,.04);}
-.module-card-icon{width:40px;height:40px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:12px;}
-.module-card-icon.blue{background:var(--action-blue-10);color:var(--action-blue);}
-.module-card-icon.critical{background:var(--critical-bg);color:var(--critical);}
-.module-card-icon.success{background:var(--success-bg);color:var(--success);}
-.module-card-icon.warning{background:var(--warning-bg);color:var(--warning);}
-.module-card-icon.neutral{background:var(--neutral-bg);color:var(--neutral);}
-.module-card-title{font-size:14px;font-weight:600;margin-bottom:4px;}
-.module-card-desc{font-size:12px;color:var(--text-secondary);}
+/* PAGE HEADER */
+.page-header{margin-bottom:24px;}
+.page-title-row{display:flex;align-items:center;gap:12px;margin-bottom:4px;}
+.page-title{font-size:22px;font-weight:700;}
+.page-title-badge{font-size:12px;font-weight:600;padding:3px 10px;border-radius:var(--radius-full);}
+.page-subtitle{font-size:13px;color:var(--text-secondary);}
 
-/* ── CHIP ── */
-.chip{display:inline-flex;align-items:center;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600;white-space:nowrap;}
-.chip.critical{background:var(--critical-bg);color:var(--critical);}
-.chip.warning{background:var(--warning-bg);color:var(--warning);}
+/* VIEW-ONLY BANNER */
+.view-only-banner{background:var(--warning-bg);border-radius:var(--radius);padding:12px 16px;font-size:13px;color:var(--warning);margin-bottom:20px;display:none;border:1px solid rgba(217,119,6,0.15);}
+
+/* KPI CARDS */
+.kpi-row{display:grid;gap:16px;margin-bottom:24px;}
+.kpi-row.cols-5{grid-template-columns:repeat(5,1fr);}
+.kpi-row.cols-4{grid-template-columns:repeat(4,1fr);}
+.kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;transition:box-shadow .2s;}
+.kpi-card:hover{box-shadow:var(--elevation-1);}
+.kpi-label{font-size:12px;font-weight:500;color:var(--text-secondary);margin-bottom:10px;}
+.kpi-value{font-size:26px;font-weight:700;margin-bottom:4px;line-height:1.1;}
+.kpi-trend{font-size:12px;font-weight:500;}
+.kpi-trend.up-bad{color:var(--critical);}
+.kpi-trend.down-good{color:var(--success);}
+.kpi-trend.stable{color:var(--text-tertiary);}
+.kpi-trend.warn{color:var(--warning);}
+.kpi-trend.neutral{color:var(--neutral);}
+
+/* DASHBOARD TABS */
+.dash-tabs{display:flex;gap:0;margin-bottom:20px;border-bottom:2px solid var(--border-light);}
+.dash-tab{padding:10px 18px;font-size:13px;font-weight:500;color:var(--text-secondary);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:color .2s,border-color .2s;}
+.dash-tab:hover{color:var(--text-primary);}
+.dash-tab.active{color:var(--primary);border-bottom-color:var(--primary);font-weight:600;}
+
+/* FILTER BAR */
+.filter-bar{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:20px;flex-wrap:wrap;}
+.filter-select{height:34px;padding:0 28px 0 10px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-weight:500;color:var(--text-primary);background:var(--surface);cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%239ca3af' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;}
+.filter-select:focus{outline:none;border-color:var(--primary);}
+.filter-btn{height:34px;padding:0 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-weight:500;color:var(--text-secondary);background:var(--surface);cursor:pointer;display:flex;align-items:center;gap:6px;transition:border-color .2s,color .2s;}
+.filter-btn:hover{border-color:var(--primary);color:var(--primary);}
+.filter-spacer{flex:1;}
+
+/* CHARTS */
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;}
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;}
+.chart-title{font-size:14px;font-weight:600;margin-bottom:16px;}
+
+/* TABLE CARD */
+.table-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:24px;}
+.table-card-header{padding:16px 20px;border-bottom:1px solid var(--border-light);font-size:14px;font-weight:600;}
+
+/* ENTERPRISE TABLE */
+.enterprise-table-wrapper{overflow-x:auto;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);}
+.enterprise-table{width:100%;border-collapse:collapse;font-size:13px;table-layout:auto;min-width:1400px;}
+.enterprise-table thead{position:sticky;top:0;z-index:5;}
+.enterprise-table th{background:var(--surface-secondary);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-tertiary);padding:10px 14px;text-align:left;white-space:nowrap;border-bottom:1px solid var(--border);user-select:none;position:relative;}
+.enterprise-table th.sorted{border-bottom:2px solid var(--primary);color:var(--primary);}
+.enterprise-table th .sort-icon{font-size:8px;margin-left:4px;opacity:0;transition:opacity .15s;}
+.enterprise-table th:hover .sort-icon{opacity:1;}
+.enterprise-table td{padding:10px 14px;border-bottom:1px solid var(--border-light);white-space:nowrap;vertical-align:middle;color:var(--text-primary);}
+.enterprise-table tbody tr{height:48px;transition:background .12s;}
+.enterprise-table tbody tr:hover{background:var(--primary-10);}
+.enterprise-table tbody tr:last-child td{border-bottom:none;}
+.enterprise-table .sticky-left{position:sticky;left:0;background:inherit;z-index:2;}
+.enterprise-table .sticky-right{position:sticky;right:0;background:inherit;z-index:2;}
+.enterprise-table tbody tr:hover .sticky-left,
+.enterprise-table tbody tr:hover .sticky-right{background:color-mix(in srgb,var(--surface) 92%,var(--primary));}
+.enterprise-table .cell-detail{max-width:240px;white-space:normal;line-height:1.4;}
+
+/* CHIPS */
+.chip{display:inline-flex;align-items:center;padding:3px 10px;border-radius:var(--radius-full);font-size:11px;font-weight:600;white-space:nowrap;gap:4px;}
 .chip.success{background:var(--success-bg);color:var(--success);}
+.chip.warning{background:var(--warning-bg);color:var(--warning);}
+.chip.critical{background:var(--critical-bg);color:var(--critical);}
 .chip.neutral{background:var(--neutral-bg);color:var(--neutral);}
-.chip.blue{background:var(--action-blue-light);color:var(--action-blue);}
+.chip.primary{background:var(--primary-light);color:var(--primary);}
+.chip.info{background:var(--primary-light);color:var(--primary);}
 
-/* ── TABLE ── */
-.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
-.section-title{font-size:16px;font-weight:700;}
-.section-link{font-size:13px;font-weight:500;color:var(--action-blue);cursor:pointer;}
-.data-table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
-.data-table{width:100%;border-collapse:collapse;}
-.data-table th{text-align:left;padding:12px 16px;font-size:12px;font-weight:600;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.04em;background:var(--surface);border-bottom:1px solid var(--border);}
-.data-table td{padding:14px 16px;font-size:14px;border-bottom:1px solid var(--border-light);}
-.data-table tr:last-child td{border-bottom:none;}
-.data-table tbody tr{transition:background .1s;}
-.data-table tbody tr:hover{background:var(--surface-secondary);}
-.project-name{font-weight:600;color:var(--text-primary);}
-.project-code{font-size:12px;color:var(--text-tertiary);}
-.td-count{font-weight:600;}
-.td-count.critical{color:var(--critical);}
-.td-count.warning{color:var(--warning);}
-.btn-table{font-size:13px;font-weight:600;color:var(--action-blue);background:none;border:none;cursor:pointer;padding:4px 0;}
-.btn-table:hover{text-decoration:underline;}
+/* PAGINATION */
+.pagination{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-top:1px solid var(--border);font-size:13px;color:var(--text-secondary);background:var(--surface);flex-shrink:0;}
+.pagination-left{display:flex;align-items:center;gap:8px}
+.pagination-left label{font-size:13px;color:var(--text-secondary)}
+.pagination-select{height:30px;padding:0 8px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;color:var(--text-primary);background:var(--surface);cursor:pointer;font-family:inherit;outline:none}
+.pagination-select:focus{border-color:var(--primary)}
+.pagination-info{font-size:13px;color:var(--text-secondary)}
+.pagination-btns{display:flex;gap:4px;}
+.pagination-btn{width:32px;height:32px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;border:1px solid var(--border);font-size:12px;font-weight:600;color:var(--text-secondary);background:var(--surface);cursor:pointer;transition:all .15s;}
+.pagination-btn:hover{border-color:var(--primary);color:var(--primary);}
+.pagination-btn.active{background:var(--primary);color:#fff;border-color:var(--primary);}
 
-/* ── TASK MANAGER ── */
-.task-tabs{display:flex;flex-direction:row;border-bottom:1px solid var(--border);gap:0;margin-bottom:20px;}
-.task-tab{flex:1;padding:12px;text-align:center;font-size:14px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;color:var(--text-secondary);background:none;border-top:none;border-left:none;border-right:none;transition:color .12s,border-color .12s;}
-.task-tab:hover{color:var(--text-primary);}
-.task-tab.active{color:var(--action-blue);border-bottom-color:var(--action-blue);}
-.task-tab-content{display:none;}
-.task-tab-content.active{display:block;}
-.task-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;}
-.task-summary-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;text-align:center;}
-.task-summary-card .ts-value{font-size:22px;font-weight:700;line-height:1.3;}
-.task-summary-card .ts-label{font-size:12px;color:var(--text-secondary);margin-top:2px;}
-.task-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:10px;transition:border-color .12s;}
-.task-card:hover{border-color:var(--action-blue-10);}
-.task-card.overdue{border-left:3px solid var(--critical);}
-.task-card .tc-title{font-size:14px;font-weight:600;color:var(--text-primary);}
-.task-card .tc-meta{font-size:12px;color:var(--text-secondary);margin-top:6px;}
-.task-card .tc-chips{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;}
-.task-card .tc-footer{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid var(--border-light);}
-.task-cta{padding:5px 14px;border:1.5px solid var(--action-blue);border-radius:6px;font-size:12px;font-weight:600;color:var(--action-blue);background:transparent;cursor:pointer;transition:background .12s,color .12s;}
-.task-cta:hover{background:var(--action-blue);color:#fff;}
-.task-assignee{display:flex;align-items:center;gap:8px;}
-.task-assignee-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;}
-.task-assignee-name{font-size:13px;font-weight:600;color:var(--text-primary);}
+/* LISTING LAYOUT — fixed table region */
+.listing-layout{display:flex;flex-direction:column;height:100%;overflow:hidden}
+.listing-header{flex-shrink:0;padding:20px 24px 0}
+.listing-toolbar{flex-shrink:0}
+.listing-table-region{flex:1;overflow:auto;min-height:0;border-left:1px solid var(--border);border-right:1px solid var(--border)}
+.listing-table-region .enterprise-table thead{position:sticky;top:0;z-index:5}
+.listing-pagination{flex-shrink:0;border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius) var(--radius)}
 
-/* ── WORKSPACE PANEL ── */
-.workspace-overlay{position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:100;display:none;opacity:0;transition:opacity .2s;}
-.workspace-overlay.open{display:block;opacity:1;}
-.workspace-panel{position:fixed;top:0;right:0;width:400px;height:100%;background:var(--surface);border-left:1px solid var(--border);box-shadow:-4px 0 24px rgba(0,0,0,.1);z-index:101;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .25s ease;}
+/* TOOLBAR */
+.toolbar{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius) var(--radius) 0 0;border-bottom:none;flex-wrap:wrap;}
+.toolbar-search{width:240px;height:36px;padding:0 12px 0 34px;border:1px solid var(--border);border-radius:var(--radius-full);font-size:13px;background:var(--surface);color:var(--text-primary);outline:none;transition:border-color .2s,box-shadow .2s;background-image:url("data:image/svg+xml,%3Csvg width='14' height='14' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='11' cy='11' r='7' stroke='%239ca3af' stroke-width='2'/%3E%3Cpath d='M16 16l4 4' stroke='%239ca3af' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:10px center;}
+.toolbar-search:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-10);}
+.filter-chip{height:32px;padding:0 12px;border:1px solid var(--border);border-radius:var(--radius-full);font-size:13px;font-weight:500;color:var(--text-secondary);background:var(--surface);cursor:pointer;display:flex;align-items:center;gap:4px;transition:border-color .2s;}
+.filter-chip:hover{border-color:var(--primary);color:var(--primary);}
+.toolbar-spacer{flex:1;}
+.toolbar-icon-btn{width:34px;height:34px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;border:1px solid var(--border);color:var(--text-secondary);cursor:pointer;transition:all .15s;background:var(--surface);}
+.toolbar-icon-btn:hover{border-color:var(--primary);color:var(--primary);}
+
+/* ROUNDED TABLE BOTTOM */
+.enterprise-table-wrapper.with-toolbar{border-radius:0 0 var(--radius) var(--radius);}
+
+/* SEGMENTED CONTROL */
+.segmented{display:inline-flex;background:var(--surface-secondary);border-radius:var(--radius-full);padding:3px;gap:2px;}
+.segmented-btn{padding:6px 14px;border-radius:var(--radius-full);font-size:13px;font-weight:500;color:var(--text-secondary);cursor:pointer;background:transparent;border:none;transition:all .15s;}
+.segmented-btn.active{background:var(--primary-light);color:var(--primary);font-weight:600;}
+.segmented-btn:hover:not(.active){color:var(--text-primary);}
+
+/* PROJECT CARDS */
+.project-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.project-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:20px;transition:box-shadow .2s,border-color .2s;position:relative;}
+.project-card:hover{box-shadow:var(--elevation-1);border-color:color-mix(in srgb,var(--border) 60%,var(--primary));}
+.project-card.linked{border-left:3px solid var(--neutral);}
+.project-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px;}
+.project-card-name{font-size:16px;font-weight:700;}
+.project-card-type{font-size:13px;color:var(--text-secondary);margin-bottom:10px;}
+.project-card-badges{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;}
+.project-card-stats{font-size:12px;color:var(--text-tertiary);margin-bottom:14px;}
+.project-card-divider{height:1px;background:var(--border-light);margin-bottom:14px;}
+.project-card-actions{display:flex;gap:8px;flex-wrap:wrap;}
+.btn-sm{height:30px;padding:0 12px;font-size:12px;font-weight:600;border-radius:var(--radius-sm);cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:4px;}
+.btn-sm.primary{background:var(--primary);color:#fff;border:none;}
+.btn-sm.primary:hover{background:var(--primary-hover);}
+.btn-sm.outline{background:var(--surface);color:var(--text-secondary);border:1px solid var(--border);}
+.btn-sm.outline:hover{border-color:var(--primary);color:var(--primary);}
+
+/* PROJECT OVERVIEW */
+.quick-links-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.quick-link-card{display:flex;align-items:center;gap:12px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:border-color .2s,box-shadow .2s;}
+.quick-link-card:hover{border-color:var(--primary);box-shadow:var(--elevation-1);}
+.quick-link-icon{width:40px;height:40px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.quick-link-info{flex:1;min-width:0;}
+.quick-link-name{font-size:14px;font-weight:600;margin-bottom:2px;}
+.quick-link-count{font-size:12px;color:var(--text-tertiary);}
+.details-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:20px;}
+.details-card-title{font-size:14px;font-weight:600;margin-bottom:16px;}
+.details-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 32px;}
+.detail-item{display:flex;flex-direction:column;gap:3px;}
+.detail-label{font-size:12px;color:var(--text-tertiary);font-weight:500;}
+.detail-value{font-size:13px;font-weight:500;color:var(--text-primary);}
+
+/* AI HUB */
+.ai-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.ai-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;display:flex;flex-direction:column;gap:16px;}
+.ai-card-top{display:flex;align-items:flex-start;gap:14px;}
+.ai-card-icon{width:44px;height:44px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;flex-shrink:0;}
+.ai-card-icon.crystal{background:linear-gradient(135deg,#e07a2f,#1a56db);}
+.ai-card-icon.safebot{background:linear-gradient(135deg,#1a56db,#6b9eff);}
+.ai-card-info{flex:1;}
+.ai-card-name{font-size:16px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px;}
+.ai-card-stats{font-size:12px;color:var(--text-tertiary);line-height:1.6;}
+
+/* ADMIN CONFIG */
+.admin-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:16px;}
+.admin-section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-tertiary);padding:14px 20px 8px;}
+.admin-row{display:flex;align-items:center;padding:14px 20px;border-top:1px solid var(--border-light);gap:12px;}
+.admin-row:first-of-type{border-top:none;}
+.admin-row-label{font-size:14px;font-weight:500;flex:1;}
+.admin-row-meta{font-size:12px;color:var(--text-tertiary);margin-right:12px;}
+.admin-row-btn{height:30px;padding:0 14px;font-size:12px;font-weight:600;border-radius:var(--radius-sm);cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text-secondary);transition:all .15s;}
+.admin-row-btn:hover{border-color:var(--primary);color:var(--primary);}
+.toggle-switch{width:40px;height:22px;border-radius:11px;background:var(--border);cursor:pointer;position:relative;transition:background .2s;flex-shrink:0;}
+.toggle-switch.on{background:var(--primary);}
+.toggle-switch::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:var(--elevation-1);transition:transform .2s;}
+.toggle-switch.on::after{transform:translateX(18px);}
+
+/* WORKSPACE PANEL */
+.workspace-panel{position:fixed;top:0;right:0;width:400px;height:100%;background:var(--surface);border-left:1px solid var(--border);box-shadow:var(--elevation-3);z-index:200;transform:translateX(100%);transition:transform .25s cubic-bezier(0.4,0,0.2,1);display:flex;flex-direction:column;}
 .workspace-panel.open{transform:translateX(0);}
-.ws-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);}
-.ws-header-title{font-size:16px;font-weight:700;}
-.ws-close{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-xs);border:1px solid var(--border);background:var(--surface);cursor:pointer;font-size:18px;color:var(--text-secondary);}
-.ws-close:hover{color:var(--text-primary);}
-.ws-body{flex:1;overflow-y:auto;padding:16px 20px;}
-.ws-context-label{font-size:12px;font-weight:600;color:var(--text-tertiary);margin-bottom:12px;}
-.ws-current{background:var(--action-blue-light);border-radius:var(--radius);padding:14px 16px;margin-bottom:16px;}
-.ws-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-tertiary);margin-bottom:6px;}
-.ws-current-org{font-size:13px;color:var(--text-secondary);margin-bottom:2px;}
-.ws-current-sub{font-size:15px;font-weight:700;color:var(--text-primary);}
-.ws-recent{background:var(--surface-secondary);border:1px solid var(--border-light);border-radius:var(--radius);padding:14px 16px;margin-bottom:16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:border-color .12s;}
-.ws-recent:hover{border-color:var(--action-blue);}
-.ws-recent-info{display:flex;flex-direction:column;gap:2px;}
-.ws-recent-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-tertiary);}
-.ws-recent-name{font-size:14px;font-weight:600;color:var(--text-primary);}
-.ws-recent-time{font-size:12px;color:var(--text-tertiary);}
-.ws-recent-arrow{font-size:18px;color:var(--text-tertiary);}
-.ws-search{width:100%;height:40px;padding:0 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:13px;color:var(--text-primary);background:var(--surface);outline:none;margin-bottom:16px;transition:border-color .15s;}
-.ws-search:focus{border-color:var(--action-blue);}
-.ws-section{margin-bottom:16px;}
-.ws-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-tertiary);margin-bottom:8px;}
-.ws-item{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:var(--radius-sm);cursor:pointer;transition:background .1s;margin-bottom:2px;font-size:14px;color:var(--text-primary);}
-.ws-item:hover{background:var(--surface-secondary);}
-.ws-item.active{background:var(--action-blue-light);color:var(--action-blue);font-weight:600;}
-.ws-item-right{font-size:12px;color:var(--text-tertiary);display:flex;align-items:center;gap:4px;}
-.ws-item.active .ws-item-right{color:var(--action-blue);}
-.ws-project{display:flex;flex-direction:column;padding:10px 12px;border-radius:var(--radius-sm);cursor:pointer;transition:background .1s;margin-bottom:2px;}
-.ws-project:hover{background:var(--surface-secondary);}
-.ws-project-name{font-size:14px;font-weight:500;color:var(--text-primary);}
-.ws-project-meta{font-size:12px;color:var(--text-tertiary);margin-top:2px;}
+.workspace-panel-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.2);z-index:199;display:none;}
+.workspace-panel-overlay.open{display:block;}
+.ws-panel-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);}
+.ws-panel-title{font-size:16px;font-weight:700;}
+.ws-panel-close{width:32px;height:32px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-secondary);transition:background .15s;}
+.ws-panel-close:hover{background:var(--primary-10);}
+.ws-panel-body{flex:1;overflow-y:auto;padding:16px 20px;}
+.ws-panel-current{background:var(--primary-light);border:1px solid color-mix(in srgb,var(--primary) 20%,transparent);border-radius:var(--radius);padding:14px;margin-bottom:20px;display:flex;align-items:center;gap:12px;}
+.ws-panel-current-dot{width:8px;height:8px;border-radius:50%;background:var(--success);flex-shrink:0;}
+.ws-panel-current-info{}
+.ws-panel-current-name{font-size:14px;font-weight:600;color:var(--primary);}
+.ws-panel-current-org{font-size:12px;color:var(--text-secondary);}
+.ws-panel-search{width:100%;height:38px;padding:0 12px 0 36px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;background:var(--surface);color:var(--text-primary);outline:none;margin-bottom:16px;background-image:url("data:image/svg+xml,%3Csvg width='14' height='14' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='11' cy='11' r='7' stroke='%239ca3af' stroke-width='2'/%3E%3Cpath d='M16 16l4 4' stroke='%239ca3af' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:12px center;transition:border-color .2s;}
+.ws-panel-search:focus{border-color:var(--primary);}
+.ws-panel-org-label{font-size:11px;font-weight:700;text-transform:uppercase;color:var(--text-tertiary);letter-spacing:0.08em;margin:16px 0 8px;}
+.ws-panel-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--radius-sm);cursor:pointer;transition:background .15s;}
+.ws-panel-item:hover{background:var(--primary-10);}
+.ws-panel-item-avatar{width:36px;height:36px;border-radius:var(--radius-full);background:var(--surface-secondary);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;}
+.ws-panel-item-info{}
+.ws-panel-item-name{font-size:13px;font-weight:600;}
+.ws-panel-item-meta{font-size:11px;color:var(--text-tertiary);}
 
-/* ── PROFILE ── */
-.profile-wrap{max-width:680px;width:100%;}
-.profile-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:14px;overflow:hidden;}
-.profile-card-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border-light);}
-.profile-card-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-tertiary);}
-.profile-card-action{font-size:13px;font-weight:600;color:var(--action-blue);background:none;border:none;cursor:pointer;font-family:inherit;}
-.profile-card-action:hover{text-decoration:underline;}
-.profile-user{display:flex;align-items:center;gap:14px;padding:18px;}
-.profile-avatar{width:56px;height:56px;background:var(--action-blue);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;font-weight:700;flex-shrink:0;}
-.profile-user-info{display:flex;flex-direction:column;gap:2px;}
-.profile-name{font-size:16px;font-weight:700;}
-.profile-role{font-size:13px;color:var(--text-secondary);}
-.profile-email{font-size:13px;color:var(--text-tertiary);}
-.profile-row{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border-light);font-size:14px;cursor:default;}
-.profile-row:last-child{border-bottom:none;}
-.profile-row-label{color:var(--text-secondary);font-weight:500;}
-.profile-row-value{color:var(--text-primary);font-weight:500;display:flex;align-items:center;gap:6px;}
-.profile-row-chevron{color:var(--text-tertiary);font-size:16px;}
-.profile-row.clickable{cursor:pointer;transition:background .1s;}
-.profile-row.clickable:hover{background:var(--surface-secondary);}
-.profile-checkbox{width:18px;height:18px;accent-color:var(--action-blue);cursor:pointer;}
-.btn-signout{width:100%;height:48px;background:var(--critical);color:#fff;font-size:15px;font-weight:600;border-radius:var(--radius);border:none;cursor:pointer;transition:opacity .15s;margin-top:6px;}
-.btn-signout:hover{opacity:.9;}
+/* PLACEHOLDER */
+.tab-placeholder{display:flex;align-items:center;justify-content:center;padding:80px 20px;color:var(--text-tertiary);font-size:14px;font-weight:500;}
 
-/* ── STATES ── */
-.state-center{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px;text-align:center;}
-.state-icon{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:16px;}
-.state-icon.empty{background:var(--action-blue-10);color:var(--action-blue);}
-.state-icon.error{background:var(--warning-bg);color:var(--warning);}
-.state-title{font-size:18px;font-weight:700;margin-bottom:6px;}
-.state-desc{font-size:14px;color:var(--text-secondary);margin-bottom:20px;max-width:320px;}
-.state-note{font-size:12px;color:var(--text-tertiary);margin-top:12px;}
+/* FLOATING CONTROLS */
+.floating-controls{position:fixed;bottom:16px;right:16px;z-index:500;display:flex;flex-direction:column;align-items:flex-end;gap:6px;}
+.floating-toggle{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-full);padding:6px 14px;font-size:11px;font-weight:600;color:var(--primary);cursor:pointer;box-shadow:var(--elevation-2);transition:all .15s;white-space:nowrap;}
+.floating-toggle:hover{background:var(--primary);color:#fff;}
+.floating-panel{display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--elevation-3);padding:12px;max-height:400px;overflow-y:auto;width:280px;}
+.floating-panel.open{display:block;}
+.floating-panel-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-tertiary);margin-bottom:8px;}
+.floating-panel-grid{display:flex;flex-wrap:wrap;gap:4px;}
+.fp-btn{padding:5px 10px;border:1px solid var(--border);border-radius:var(--radius-xs);font-size:11px;font-weight:500;color:var(--text-secondary);cursor:pointer;background:var(--surface);transition:all .15s;}
+.fp-btn:hover{border-color:var(--primary);color:var(--primary);background:var(--primary-10);}
+.fp-btn.active{background:var(--primary);color:#fff;border-color:var(--primary);}
 
-/* ── SKELETON ── */
-.skeleton{background:var(--border-light);border-radius:var(--radius-sm);position:relative;overflow:hidden;}
-.skeleton::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);animation:shimmer 1.5s infinite;}
-[data-theme="dark"] .skeleton::after{background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent);}
-@keyframes shimmer{0%{transform:translateX(-100%);}100%{transform:translateX(100%);}}
-.skel-card{height:100px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;}
-.skel-bar{height:14px;margin-bottom:10px;border-radius:6px;}
-.skel-bar.w60{width:60%;}
-.skel-bar.w40{width:40%;}
-.skel-bar.w80{width:80%;}
-.skel-bar.w30{width:30%;}
-.skel-bar.tall{height:28px;margin-bottom:8px;}
-.skel-row{display:flex;gap:14px;margin-bottom:14px;}
-.skel-module{height:90px;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface);}
-.skel-table{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
-.skel-table-row{display:flex;gap:16px;padding:14px 16px;border-bottom:1px solid var(--border-light);}
-.skel-table-row:last-child{border-bottom:none;}
+/* SVG CHART STYLES */
+.chart-line{fill:none;stroke:var(--primary);stroke-width:2;}
+.chart-area{fill:url(#chartGrad);opacity:0.15;}
+.chart-grid{stroke:var(--border);stroke-width:1;}
+.chart-axis-label{font-size:10px;fill:var(--text-tertiary);font-family:'Inter',sans-serif;}
+.chart-dot{fill:var(--primary);r:3;}
 
-/* ── FLOATING CONTROLS ── */
-.proto-controls{position:fixed;bottom:16px;right:16px;display:flex;flex-wrap:wrap;gap:4px;max-width:420px;z-index:200;background:var(--surface-raised);border:1px solid var(--border);border-radius:var(--radius);padding:8px;box-shadow:0 4px 16px rgba(0,0,0,.12);}
-.proto-btn{padding:5px 10px;font-size:11px;font-weight:600;border-radius:var(--radius-xs);border:1px solid var(--border);background:var(--surface);color:var(--text-secondary);cursor:pointer;transition:all .12s;white-space:nowrap;}
-.proto-btn:hover{border-color:var(--action-blue);color:var(--action-blue);}
-.proto-btn.active{background:var(--action-blue);color:#fff;border-color:var(--action-blue);}
+/* TABLE */
+.summary-table{width:100%;border-collapse:collapse;}
+.summary-table th{text-align:left;padding:10px 16px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-tertiary);background:var(--surface-secondary);border-bottom:1px solid var(--border);}
+.summary-table td{padding:10px 16px;font-size:13px;border-bottom:1px solid var(--border-light);}
+.summary-table tr:last-child td{border-bottom:none;}
+.summary-table tr:hover td{background:var(--primary-10);}
+
+/* PROFILE PLACEHOLDER */
+.profile-page{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;text-align:center;}
+.profile-avatar-large{width:72px;height:72px;border-radius:var(--radius);background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;margin-bottom:16px;}
+.profile-name{font-size:20px;font-weight:700;margin-bottom:4px;}
+.profile-email{font-size:14px;color:var(--text-secondary);margin-bottom:24px;}
+
+/* QUIZ & VIDEO PLACEHOLDERS */
+.coming-soon-page{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 20px;text-align:center;color:var(--text-tertiary);}
+.coming-soon-icon{font-size:40px;margin-bottom:16px;opacity:0.4;}
+.coming-soon-title{font-size:18px;font-weight:600;color:var(--text-primary);margin-bottom:8px;}
+.coming-soon-subtitle{font-size:14px;}
+
+/* ACTION BUTTON IN TABLE */
+.table-action-btn{width:28px;height:28px;border-radius:var(--radius-xs);display:inline-flex;align-items:center;justify-content:center;color:var(--text-tertiary);cursor:pointer;transition:all .12s;border:1px solid transparent;}
+.table-action-btn:hover{background:var(--primary-10);color:var(--primary);border-color:var(--border);}
 </style>
 </head>
 <body>
 
-<!-- ═══════ LOGIN SCREEN ═══════ -->
-<div class="screen auth-layout active" id="screen-login">
+<!-- ==================== LOGIN ==================== -->
+<div id="screen-login" class="screen auth-layout active">
   <div class="auth-card">
-    <div class="auth-logo">S</div>
-    <div class="auth-title">Sign in to SafetyOS</div>
-    <div class="auth-subtitle">Enter your email address. We'll send you a one-time verification code to sign in securely.</div>
-    <div id="login-notice" class="notice"></div>
-    <form class="auth-form" onsubmit="handleLogin(event)">
-      <label class="form-label" for="login-email">Email address</label>
-      <input class="form-input" type="email" id="login-email" placeholder="name@company.com" autocomplete="email">
-      <div class="form-hint">We'll send a 6-digit verification code to this address.</div>
-      <button class="btn-primary" type="submit" id="login-btn">Send Verification Code</button>
-      <div class="auth-terms">By signing in, you agree to our <a href="#" onclick="event.preventDefault()">Terms &amp; Conditions</a></div>
-    </form>
-    <div class="auth-footer">Enterprise construction safety platform</div>
+    <img src="nai-logo.png" alt="nAI" class="auth-logo">
+    <h1 class="auth-title">Sign in to nAI</h1>
+    <p class="auth-subtitle">Enter your email to receive a verification code.</p>
+    <div class="auth-form">
+      <label class="form-label">Email address</label>
+      <input type="email" id="login-email" class="form-input" placeholder="you@company.com" value="rk@navatech.ai">
+      <div style="height:10px"></div>
+      <button class="btn-primary" onclick="handleLogin()">Send Verification Code</button>
+    </div>
+    <p class="auth-terms">By signing in, you agree to our Terms &amp; Conditions</p>
+    <p class="auth-footer">Enterprise Construction Safety Platform</p>
   </div>
 </div>
 
-<!-- ═══════ OTP SCREEN ═══════ -->
-<div class="screen auth-layout" id="screen-otp">
+<!-- ==================== OTP ==================== -->
+<div id="screen-otp" class="screen auth-layout">
   <div class="auth-card">
-    <div class="auth-logo">S</div>
-    <div class="auth-title">Verify your identity</div>
-    <div class="auth-subtitle">Enter the 6-digit code sent to</div>
-    <div class="otp-email-badge">r****@navatech.com</div>
-    <div id="otp-notice" class="notice"></div>
-    <form class="auth-form" onsubmit="handleVerify(event)" style="align-items:center;">
-      <div class="otp-inputs" id="otp-inputs">
-        <input class="otp-input" type="text" maxlength="1" inputmode="numeric" data-idx="0">
-        <input class="otp-input" type="text" maxlength="1" inputmode="numeric" data-idx="1">
-        <input class="otp-input" type="text" maxlength="1" inputmode="numeric" data-idx="2">
-        <input class="otp-input" type="text" maxlength="1" inputmode="numeric" data-idx="3">
-        <input class="otp-input" type="text" maxlength="1" inputmode="numeric" data-idx="4">
-        <input class="otp-input" type="text" maxlength="1" inputmode="numeric" data-idx="5">
-      </div>
-      <button class="btn-primary" type="submit" id="otp-btn" style="width:100%;">Verify &amp; Sign In</button>
-      <div class="otp-footer">
-        <span class="otp-timer" id="otp-timer">Code expires in 01:59</span>
-        <button type="button" class="otp-resend" id="otp-resend" disabled onclick="startResendTimer()">Resend Code</button>
-      </div>
-    </form>
-    <button class="auth-link" onclick="nav('login')">Use a different email</button>
+    <img src="nai-logo.png" alt="nAI" class="auth-logo">
+    <h1 class="auth-title">Verify your identity</h1>
+    <div class="otp-email-badge" id="otp-email-display">r&#8226;&#8226;&#8226;@navatech.ai</div>
+    <div class="otp-inputs" id="otp-inputs">
+      <input type="text" maxlength="1" class="otp-input" data-idx="0" inputmode="numeric">
+      <input type="text" maxlength="1" class="otp-input" data-idx="1" inputmode="numeric">
+      <input type="text" maxlength="1" class="otp-input" data-idx="2" inputmode="numeric">
+      <input type="text" maxlength="1" class="otp-input" data-idx="3" inputmode="numeric">
+      <input type="text" maxlength="1" class="otp-input" data-idx="4" inputmode="numeric">
+      <input type="text" maxlength="1" class="otp-input" data-idx="5" inputmode="numeric">
+    </div>
+    <button class="btn-primary" onclick="handleVerify()" style="width:100%;margin-bottom:0">Verify &amp; Sign In</button>
+    <div class="otp-timer" id="otp-timer">Code expires in 01:59</div>
+    <button class="otp-resend" id="otp-resend" disabled onclick="startResendTimer()">Resend Code</button>
+    <button class="otp-link" onclick="nav('login')">Use a different email</button>
   </div>
 </div>
 
-<!-- ═══════ APP SCREEN ═══════ -->
-<div class="screen" id="screen-app">
+<!-- ==================== WORKSPACE SELECT ==================== -->
+<div id="screen-select-workspace" class="screen ws-layout">
+  <div class="ws-container">
+    <img src="nai-logo.png" alt="nAI" class="ws-logo">
+    <h1 class="ws-title">Select Workspace</h1>
+    <p class="ws-subtitle">Choose a subsidiary to continue</p>
+
+    <div class="ws-org-label">Navatech Group</div>
+    <div class="ws-grid">
+      <div class="ws-card" onclick="selectSubsidiary('Qatar Operations','Navatech Group')">
+        <div class="ws-card-avatar">N</div>
+        <div class="ws-card-info">
+          <div class="ws-card-name">Qatar Operations</div>
+          <div class="ws-card-meta">18 projects &middot; 124 users</div>
+        </div>
+        <div class="ws-card-chevron">&#8250;</div>
+      </div>
+      <div class="ws-card" onclick="selectSubsidiary('UAE Division','Navatech Group')">
+        <div class="ws-card-avatar">N</div>
+        <div class="ws-card-info">
+          <div class="ws-card-name">UAE Division</div>
+          <div class="ws-card-meta">14 projects &middot; 98 users</div>
+        </div>
+        <div class="ws-card-chevron">&#8250;</div>
+      </div>
+      <div class="ws-card" onclick="selectSubsidiary('India Division','Navatech Group')">
+        <div class="ws-card-avatar">N</div>
+        <div class="ws-card-info">
+          <div class="ws-card-name">India Division</div>
+          <div class="ws-card-meta">10 projects &middot; 76 users</div>
+        </div>
+        <div class="ws-card-chevron">&#8250;</div>
+      </div>
+    </div>
+
+    <div class="ws-org-label">BuildSafe International</div>
+    <div class="ws-grid">
+      <div class="ws-card" onclick="selectSubsidiary('Saudi Operations','BuildSafe International')">
+        <div class="ws-card-avatar">B</div>
+        <div class="ws-card-info">
+          <div class="ws-card-name">Saudi Operations</div>
+          <div class="ws-card-meta">8 projects &middot; 52 users</div>
+        </div>
+        <div class="ws-card-chevron">&#8250;</div>
+      </div>
+      <div class="ws-card" onclick="selectSubsidiary('UK Operations','BuildSafe International')">
+        <div class="ws-card-avatar">B</div>
+        <div class="ws-card-info">
+          <div class="ws-card-name">UK Operations</div>
+          <div class="ws-card-meta">6 projects &middot; 41 users</div>
+        </div>
+        <div class="ws-card-chevron">&#8250;</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== APP SHELL ==================== -->
+<div id="screen-app" class="screen">
   <div class="app-shell">
+
     <!-- SIDEBAR -->
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <div class="sidebar-logo">S</div>
-        <div class="sidebar-brand">SafetyOS</div>
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <img src="nai-logo.png" alt="nAI" style="height:24px">
       </div>
-      <nav class="sidebar-nav">
-        <div class="nav-section-label">Main</div>
-        <div class="nav-item active" data-page="home" onclick="navApp('home')">
-          <span class="nav-icon">&#9632;</span>
-          <span>Dashboard</span>
+
+      <!-- SUBSIDIARY MODE -->
+      <div id="sidebar-sub-mode">
+        <div class="sidebar-section">
+          <div class="sidebar-section-label">Main</div>
+          <div class="sidebar-item active" onclick="showPage('dashboard')" data-page="dashboard">
+            <span class="item-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span> Dashboard
+          </div>
+          <div class="sidebar-item" onclick="showPage('projects')" data-page="projects">
+            <span class="item-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></span> Projects
+          </div>
         </div>
-        <div class="nav-item" data-page="tasks" onclick="navApp('tasks')">
-          <span class="nav-icon">&#9745;</span>
-          <span>Tasks</span>
-          <span class="nav-badge">8</span>
+        <div class="sidebar-section">
+          <div class="sidebar-section-label">Tools</div>
+          <div class="sidebar-item" onclick="showPage('quiz')" data-page="quiz">
+            <span class="item-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span> Quiz Assessment
+          </div>
+          <div class="sidebar-item" onclick="showPage('video-scripts')" data-page="video-scripts">
+            <span class="item-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></span> Video Scripts
+          </div>
+        </div>
+        <div class="sidebar-section">
+          <div class="sidebar-section-label">Admin</div>
+          <div class="sidebar-item" onclick="showPage('user-mgmt')" data-page="user-mgmt">
+            <span class="item-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span> User Management
+          </div>
+        </div>
+      </div>
+
+      <!-- PROJECT MODE -->
+      <div id="sidebar-proj-mode" style="display:none">
+        <div class="sidebar-context" id="sidebar-context">
+          <div class="sidebar-context-org" id="ctx-org">Navatech Group</div>
+          <div class="sidebar-context-sub" id="ctx-sub">Qatar Operations</div>
+          <div class="sidebar-context-back" onclick="exitProject()">&#8592; Back to <span id="ctx-back-sub">Qatar Ops</span></div>
+          <div class="sidebar-context-divider"></div>
+          <div class="sidebar-context-project">
+            <div class="sidebar-context-project-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 3v18M3 9h18"/></svg>
+            </div>
+            <div class="sidebar-context-project-info">
+              <div class="sidebar-context-project-name" id="ctx-project-name">Marina Bay Tower</div>
+              <div class="sidebar-context-project-scope">Project Scope</div>
+            </div>
+          </div>
+          <div class="sidebar-context-switcher" onclick="toggleProjectSwitcher()" id="project-switcher-toggle">&#9662; Switch Project</div>
+          <div class="project-switcher-dropdown" id="project-switcher">
+            <div class="project-switcher-item active" onclick="switchProject('Marina Bay Tower')">Marina Bay Tower</div>
+            <div class="project-switcher-item" onclick="switchProject('Expo City')">Expo City</div>
+            <div class="project-switcher-item" onclick="switchProject('Al Maryah Central')">Al Maryah Central</div>
+            <div class="project-switcher-item" onclick="switchProject('Palm Residences')">Palm Residences</div>
+            <div class="project-switcher-item" onclick="switchProject('Saadiyat Cultural Hub')">Saadiyat Cultural Hub</div>
+          </div>
         </div>
 
-        <div class="nav-section-label">Modules</div>
-        <div class="nav-item" onclick="void(0)">
-          <span class="nav-icon">&#9673;</span>
-          <span>Observations</span>
-          <span class="nav-badge">14</span>
+        <div class="sidebar-section">
+          <div class="sidebar-section-label">Project</div>
+          <div class="sidebar-item active" onclick="showPage('project-overview')" data-page="project-overview">
+            <span class="item-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span> Overview
+          </div>
         </div>
-        <div class="nav-item" onclick="void(0)">
-          <span class="nav-icon">&#9888;</span>
-          <span>Incidents</span>
-          <span class="nav-badge">3</span>
+        <div class="sidebar-section">
+          <div class="sidebar-section-label">Operations</div>
+          <div class="sidebar-item" onclick="showPage('observations')" data-page="observations">
+            <span class="item-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span> Observations <span class="sidebar-badge">14</span>
+          </div>
+          <div class="sidebar-item" onclick="showPage('incidents')" data-page="incidents">
+            <span class="item-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span> Incidents <span class="sidebar-badge" style="background:var(--warning)">3</span>
+          </div>
+          <div class="sidebar-item" onclick="showPage('walkthroughs')" data-page="walkthroughs">
+            <span class="item-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><path d="M12 7v6"/><path d="M8 19l4-6 4 6"/><line x1="6" y1="19" x2="18" y2="19"/></svg></span> Site Walkthroughs <span class="sidebar-badge neutral">5</span>
+          </div>
+          <div class="sidebar-item" onclick="showPage('training')" data-page="training">
+            <span class="item-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span> Training
+          </div>
+          <div class="sidebar-item" onclick="showPage('inspections')" data-page="inspections">
+            <span class="item-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span> Inspections <span class="sidebar-badge neutral">7</span>
+          </div>
         </div>
-        <div class="nav-item" onclick="void(0)">
-          <span class="nav-icon">&#9745;</span>
-          <span>Inspections</span>
-          <span class="nav-badge">7</span>
+        <div class="sidebar-section">
+          <div class="sidebar-section-label">AI Hub</div>
+          <div class="sidebar-item" onclick="showPage('ai-hub')" data-page="ai-hub">
+            <span class="item-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span> Crystal
+          </div>
+          <div class="sidebar-item" onclick="showPage('ai-hub')" data-page="ai-hub-safebot">
+            <span class="item-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span> SafeBot
+          </div>
         </div>
-        <div class="nav-item" onclick="void(0)">
-          <span class="nav-icon">&#9733;</span>
-          <span>Training</span>
+        <div class="sidebar-section">
+          <div class="sidebar-section-label">Admin</div>
+          <div class="sidebar-item" onclick="showPage('admin-users')" data-page="admin-users">
+            <span class="item-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></span> Users &amp; Access
+          </div>
+          <div class="sidebar-item" onclick="showPage('admin-details')" data-page="admin-details">
+            <span class="item-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-2.82 1.17V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1.08H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6V3a2 2 0 1 1 4 0v.09c.08.55.44 1.03.97 1.25a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06c-.46.46-.6 1.13-.33 1.82v.06c.22.53.7.9 1.25.97H21a2 2 0 1 1 0 4h-.09c-.55.08-1.03.44-1.25.97z"/></svg></span> Project Details
+          </div>
+          <div class="sidebar-item" onclick="showPage('admin-rules')" data-page="admin-rules">
+            <span class="item-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg></span> Rules &amp; Escalation
+          </div>
+          <div class="sidebar-item" onclick="showPage('admin-integrations')" data-page="admin-integrations">
+            <span class="item-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg></span> Integrations
+          </div>
+          <div class="sidebar-item" onclick="showPage('admin-ai')" data-page="admin-ai">
+            <span class="item-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span> AI Setup
+          </div>
         </div>
-        <div class="nav-item" onclick="void(0)">
-          <span class="nav-icon">&#9998;</span>
-          <span>Permits</span>
-          <span class="nav-badge">4</span>
-        </div>
-        <div class="nav-item" onclick="void(0)">
-          <span class="nav-icon">&#8689;</span>
-          <span>Site Walks</span>
-        </div>
-        <div class="nav-item" onclick="void(0)">
-          <span class="nav-icon">&#9776;</span>
-          <span>Statistics</span>
-        </div>
-
-        <div class="nav-section-label">Admin</div>
-        <div class="nav-item" onclick="void(0)">
-          <span class="nav-icon">&#9881;</span>
-          <span>Settings</span>
-        </div>
-      </nav>
+      </div>
     </aside>
 
     <!-- MAIN AREA -->
-    <div class="main-content">
+    <div class="main-area">
       <!-- TOPBAR -->
       <header class="topbar">
-        <div class="breadcrumb">
-          <span class="breadcrumb-org">Navatech Group</span>
-          <span class="breadcrumb-sub">Navatech Construction &mdash; UAE</span>
-        </div>
-        <button class="btn-outline" onclick="toggleWorkspace()">Switch Workspace <span style="font-size:11px;">&#9662;</span></button>
-        <div class="topbar-actions">
-          <button class="icon-btn" title="Notifications">&#9954;</button>
-          <button class="avatar-btn" onclick="navApp('profile')" title="Profile">RK</button>
-        </div>
+        <nav class="breadcrumb" id="breadcrumb">
+          <span class="breadcrumb-item">Navatech Group</span>
+          <span class="breadcrumb-sep">&#8250;</span>
+          <span class="breadcrumb-item sub clickable" onclick="exitProject()" id="bc-sub">Qatar Operations</span>
+          <span class="breadcrumb-sep">&#8250;</span>
+          <span class="breadcrumb-item current" id="bc-page">Dashboard</span>
+        </nav>
+        <button class="topbar-ws-btn" onclick="toggleWorkspace()">
+          <div style="text-align:left">
+            <div class="topbar-ws-org" id="topbar-org">Navatech Group</div>
+            <div class="topbar-ws-sub" id="topbar-sub">Qatar Operations</div>
+          </div>
+          <span class="topbar-ws-chevron">&#9662;</span>
+        </button>
+        <button class="topbar-icon-btn" onclick="showPage('profile')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 1 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="notif-dot"></span>
+        </button>
+        <div class="topbar-avatar" onclick="showPage('profile')">VM</div>
       </header>
 
-      <!-- PAGES -->
-      <div class="page-content">
+      <!-- CONTENT -->
+      <div class="content-area" id="content-area">
 
-        <!-- HOME PAGE -->
-        <div class="page active" id="page-home">
-          <div id="home-default">
-            <div class="page-header">
-              <div>
-                <div class="page-title">Subsidiary Dashboard</div>
-                <div class="page-subtitle">Navatech Construction &mdash; UAE &middot; 5 active projects</div>
-              </div>
-              <div class="page-actions">
-                <button class="btn-outline-sm">Export Report</button>
-                <button class="btn-primary-sm">+ New Record</button>
-              </div>
-            </div>
-
-            <!-- Summary Cards -->
-            <div class="summary-grid">
-              <div class="summary-card">
-                <div class="summary-card-label">Observations</div>
-                <div class="summary-card-value">142</div>
-                <div class="summary-card-trend up">&#8593; 12% vs last month</div>
-              </div>
-              <div class="summary-card">
-                <div class="summary-card-label">Incidents</div>
-                <div class="summary-card-value critical">8</div>
-                <div class="summary-card-trend down">&#8595; 3 from last month</div>
-              </div>
-              <div class="summary-card">
-                <div class="summary-card-label">Inspections</div>
-                <div class="summary-card-value">37</div>
-                <div class="summary-card-trend stable">&#9679; 7 pending</div>
-              </div>
-              <div class="summary-card">
-                <div class="summary-card-label">Training</div>
-                <div class="summary-card-value">89%</div>
-                <div class="summary-card-trend down">&#8595; Compliance rate</div>
-              </div>
-              <div class="summary-card">
-                <div class="summary-card-label">Active Permits</div>
-                <div class="summary-card-value warning">12</div>
-                <div class="summary-card-trend stable">&#9679; 4 expiring soon</div>
-              </div>
-            </div>
-
-            <!-- Module Cards -->
-            <div class="module-grid">
-              <div class="module-card">
-                <div class="module-card-icon blue">&#9673;</div>
-                <div class="module-card-title">Observations</div>
-                <div class="module-card-desc">14 open</div>
-              </div>
-              <div class="module-card">
-                <div class="module-card-icon critical">&#9888;</div>
-                <div class="module-card-title">Incidents</div>
-                <div class="module-card-desc">3 open</div>
-              </div>
-              <div class="module-card">
-                <div class="module-card-icon success">&#9745;</div>
-                <div class="module-card-title">Inspections</div>
-                <div class="module-card-desc">7 pending</div>
-              </div>
-              <div class="module-card">
-                <div class="module-card-icon warning">&#9733;</div>
-                <div class="module-card-title">Training</div>
-                <div class="module-card-desc">89% compliant</div>
-              </div>
-              <div class="module-card">
-                <div class="module-card-icon warning">&#9998;</div>
-                <div class="module-card-title">Permits</div>
-                <div class="module-card-desc">4 expiring</div>
-              </div>
-              <div class="module-card">
-                <div class="module-card-icon success">&#8689;</div>
-                <div class="module-card-title">Site Walks</div>
-                <div class="module-card-desc">2 scheduled</div>
-              </div>
-              <div class="module-card">
-                <div class="module-card-icon neutral">&#9776;</div>
-                <div class="module-card-title">Statistics</div>
-                <div class="module-card-desc">View reports</div>
-              </div>
-            </div>
-
-            <!-- Projects Table -->
-            <div class="section-header">
-              <div class="section-title">Projects</div>
-              <span class="section-link">View all projects</span>
-            </div>
-            <div class="data-table-wrap">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>Project</th>
-                    <th>Observations</th>
-                    <th>Incidents</th>
-                    <th>Inspections</th>
-                    <th>Status</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td><div class="project-name">Marina Bay Tower &mdash; Phase 2</div><div class="project-code">DXB-042</div></td>
-                    <td class="td-count">14</td>
-                    <td class="td-count critical">3</td>
-                    <td>7 pending</td>
-                    <td><span class="chip success">Active</span></td>
-                    <td><button class="btn-table">Open &rarr;</button></td>
-                  </tr>
-                  <tr>
-                    <td><div class="project-name">Expo City Infrastructure</div><div class="project-code">DXB-038</div></td>
-                    <td class="td-count">8</td>
-                    <td class="td-count warning">1</td>
-                    <td>2 pending</td>
-                    <td><span class="chip success">Active</span></td>
-                    <td><button class="btn-table">Open &rarr;</button></td>
-                  </tr>
-                  <tr>
-                    <td><div class="project-name">Al Maryah Central &mdash; Towers A&amp;B</div><div class="project-code">ABD-015</div></td>
-                    <td class="td-count">22</td>
-                    <td class="td-count critical">5</td>
-                    <td>4 pending</td>
-                    <td><span class="chip warning">At Risk</span></td>
-                    <td><button class="btn-table">Open &rarr;</button></td>
-                  </tr>
-                  <tr>
-                    <td><div class="project-name">Palm Residences Fit-Out</div><div class="project-code">DXB-039</div></td>
-                    <td class="td-count">3</td>
-                    <td class="td-count">0</td>
-                    <td>1 pending</td>
-                    <td><span class="chip success">Active</span></td>
-                    <td><button class="btn-table">Open &rarr;</button></td>
-                  </tr>
-                  <tr>
-                    <td><div class="project-name">Saadiyat Cultural Hub</div><div class="project-code">ABD-022</div></td>
-                    <td class="td-count">11</td>
-                    <td class="td-count warning">2</td>
-                    <td>3 pending</td>
-                    <td><span class="chip success">Active</span></td>
-                    <td><button class="btn-table">Open &rarr;</button></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- LOADING STATE -->
-          <div id="home-loading" style="display:none;">
-            <div class="page-header">
-              <div>
-                <div class="skeleton skel-bar tall w60"></div>
-                <div class="skeleton skel-bar w40"></div>
-              </div>
-            </div>
-            <div class="summary-grid">
-              <div class="skel-card"><div class="skeleton skel-bar w60"></div><div class="skeleton skel-bar tall w30"></div><div class="skeleton skel-bar w40"></div></div>
-              <div class="skel-card"><div class="skeleton skel-bar w60"></div><div class="skeleton skel-bar tall w30"></div><div class="skeleton skel-bar w40"></div></div>
-              <div class="skel-card"><div class="skeleton skel-bar w60"></div><div class="skeleton skel-bar tall w30"></div><div class="skeleton skel-bar w40"></div></div>
-              <div class="skel-card"><div class="skeleton skel-bar w60"></div><div class="skeleton skel-bar tall w30"></div><div class="skeleton skel-bar w40"></div></div>
-              <div class="skel-card"><div class="skeleton skel-bar w60"></div><div class="skeleton skel-bar tall w30"></div><div class="skeleton skel-bar w40"></div></div>
-            </div>
-            <div class="module-grid">
-              <div class="skeleton skel-module"></div>
-              <div class="skeleton skel-module"></div>
-              <div class="skeleton skel-module"></div>
-              <div class="skeleton skel-module"></div>
-            </div>
-            <div class="skeleton skel-bar w30" style="margin-bottom:14px;"></div>
-            <div class="skel-table">
-              <div class="skel-table-row"><div class="skeleton skel-bar w80" style="flex:2;"></div><div class="skeleton skel-bar w40" style="flex:1;"></div><div class="skeleton skel-bar w40" style="flex:1;"></div><div class="skeleton skel-bar w40" style="flex:1;"></div></div>
-              <div class="skel-table-row"><div class="skeleton skel-bar w80" style="flex:2;"></div><div class="skeleton skel-bar w40" style="flex:1;"></div><div class="skeleton skel-bar w40" style="flex:1;"></div><div class="skeleton skel-bar w40" style="flex:1;"></div></div>
-              <div class="skel-table-row"><div class="skeleton skel-bar w80" style="flex:2;"></div><div class="skeleton skel-bar w40" style="flex:1;"></div><div class="skeleton skel-bar w40" style="flex:1;"></div><div class="skeleton skel-bar w40" style="flex:1;"></div></div>
-            </div>
-          </div>
-
-          <!-- EMPTY STATE -->
-          <div id="home-empty" style="display:none;">
-            <div class="page-header">
-              <div>
-                <div class="page-title">Subsidiary Dashboard</div>
-                <div class="page-subtitle">Navatech Construction &mdash; UAE &middot; 0 active projects</div>
-              </div>
-            </div>
-            <div class="state-center">
-              <div class="state-icon empty">&#9744;</div>
-              <div class="state-title">No Projects Yet</div>
-              <div class="state-desc">This subsidiary doesn't have any active projects.</div>
-              <button class="btn-primary-sm">+ Create First Project</button>
-            </div>
-          </div>
-
-          <!-- ERROR STATE -->
-          <div id="home-error" style="display:none;">
-            <div class="page-header">
-              <div>
-                <div class="page-title">Subsidiary Dashboard</div>
-                <div class="page-subtitle">Navatech Construction &mdash; UAE</div>
-              </div>
-            </div>
-            <div class="state-center">
-              <div class="state-icon error">&#9888;</div>
-              <div class="state-title">Unable to Load Data</div>
-              <div class="state-desc">Something went wrong.</div>
-              <button class="btn-primary-sm" onclick="setHomeState('default')">Retry</button>
-              <div class="state-note">Your workspace context is preserved.</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- TASKS PAGE -->
-        <div class="page" id="page-tasks">
+        <!-- ========== DASHBOARD ========== -->
+        <div id="page-dashboard" class="page-content" style="display:block">
           <div class="page-header">
-            <div class="page-title">Tasks</div>
+            <div class="page-title-row"><h1 class="page-title">Overview</h1></div>
+            <p class="page-subtitle">Organisation Dashboard &middot; Qatar Operations</p>
           </div>
 
-          <div class="task-tabs">
-            <button class="task-tab active" data-task-tab="assigned-to" onclick="switchTaskTab('assigned-to')">Assigned to Me</button>
-            <button class="task-tab" data-task-tab="assigned-by" onclick="switchTaskTab('assigned-by')">Assigned by Me</button>
+          <div class="dash-tabs" id="dash-tabs">
+            <div class="dash-tab active" onclick="setDashTab(this,'dash-overview')">Overview</div>
+            <div class="dash-tab" onclick="setDashTab(this,'dash-observations')">Observations</div>
+            <div class="dash-tab" onclick="setDashTab(this,'dash-incidents')">Incidents</div>
+            <div class="dash-tab" onclick="setDashTab(this,'dash-training')">Training</div>
+            <div class="dash-tab" onclick="setDashTab(this,'dash-sitewalks')">Site Walks</div>
           </div>
 
-          <!-- Assigned to Me -->
-          <div class="task-tab-content active" id="tab-assigned-to">
-            <div class="task-summary">
-              <div class="task-summary-card">
-                <div class="ts-value" style="color:var(--critical);">2</div>
-                <div class="ts-label">Overdue</div>
-              </div>
-              <div class="task-summary-card">
-                <div class="ts-value" style="color:var(--warning);">4</div>
-                <div class="ts-label">In Progress</div>
-              </div>
-              <div class="task-summary-card">
-                <div class="ts-value" style="color:var(--success);">2</div>
-                <div class="ts-label">Completed</div>
-              </div>
-            </div>
-
-            <div class="task-card overdue">
-              <div class="tc-title">Resolve unsafe scaffolding access at Block C</div>
-              <div class="tc-meta">Assigned by Ahmed Al-Rashid &middot; Due: 02 Apr 2026</div>
-              <div class="tc-chips">
-                <span class="chip blue">Observations</span>
-                <span class="chip critical">Overdue</span>
-                <span class="chip critical">High</span>
-              </div>
-              <div class="tc-footer">
-                <span style="font-size:12px;color:var(--text-tertiary);">Marina Bay Tower &mdash; Phase 2</span>
-                <button class="task-cta">Open</button>
-              </div>
-            </div>
-
-            <div class="task-card overdue">
-              <div class="tc-title">Complete fire drill documentation for Q1</div>
-              <div class="tc-meta">Assigned by Sarah Chen &middot; Due: 31 Mar 2026</div>
-              <div class="tc-chips">
-                <span class="chip blue">Training</span>
-                <span class="chip critical">Overdue</span>
-                <span class="chip warning">Medium</span>
-              </div>
-              <div class="tc-footer">
-                <span style="font-size:12px;color:var(--text-tertiary);">All Projects</span>
-                <button class="task-cta">Update</button>
-              </div>
-            </div>
-
-            <div class="task-card">
-              <div class="tc-title">Review incident report IR-2026-041</div>
-              <div class="tc-meta">Assigned by Mohammed Hassan &middot; Due: 08 Apr 2026</div>
-              <div class="tc-chips">
-                <span class="chip blue">Incidents</span>
-                <span class="chip warning">In Progress</span>
-                <span class="chip warning">Medium</span>
-              </div>
-              <div class="tc-footer">
-                <span style="font-size:12px;color:var(--text-tertiary);">Expo City Infrastructure</span>
-                <button class="task-cta">Start</button>
-              </div>
-            </div>
-
-            <div class="task-card">
-              <div class="tc-title">Conduct weekly safety inspection at Zone D</div>
-              <div class="tc-meta">Assigned by Ahmed Al-Rashid &middot; Due: 10 Apr 2026</div>
-              <div class="tc-chips">
-                <span class="chip blue">Inspections</span>
-                <span class="chip neutral">Pending</span>
-                <span class="chip neutral">Normal</span>
-              </div>
-              <div class="tc-footer">
-                <span style="font-size:12px;color:var(--text-tertiary);">Al Maryah Central</span>
-                <button class="task-cta">Complete</button>
-              </div>
-            </div>
+          <div class="filter-bar">
+            <select class="filter-select"><option>Last 90 Days</option><option>Last 30 Days</option><option>Last 7 Days</option><option>Year to Date</option></select>
+            <select class="filter-select"><option>All Subsidiaries</option><option>Qatar Operations</option></select>
+            <select class="filter-select"><option>All Projects</option><option>Marina Bay Tower</option><option>Expo City</option></select>
+            <div class="filter-spacer"></div>
+            <button class="filter-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Export</button>
+            <button class="filter-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Reload</button>
           </div>
 
-          <!-- Assigned by Me -->
-          <div class="task-tab-content" id="tab-assigned-by">
-            <div class="task-summary">
-              <div class="task-summary-card">
-                <div class="ts-value" style="color:var(--warning);">1</div>
-                <div class="ts-label">Awaiting</div>
+          <!-- OVERVIEW TAB -->
+          <div id="dash-overview">
+            <div class="overview-subtabs" style="display:flex;gap:0;margin-bottom:20px;border:1px solid var(--border);border-radius:var(--radius-full);overflow:hidden;width:fit-content">
+              <button class="overview-subtab active" onclick="setOverviewSubtab('safety',this)" style="padding:8px 20px;font-size:13px;font-weight:600;cursor:pointer;background:var(--primary);color:#fff;border:none;font-family:inherit;border-radius:var(--radius-full) 0 0 var(--radius-full)">Safety Events</button>
+              <button class="overview-subtab" onclick="setOverviewSubtab('env',this)" style="padding:8px 20px;font-size:13px;font-weight:600;cursor:pointer;background:var(--surface);color:var(--text-secondary);border:none;font-family:inherit;border-radius:0 var(--radius-full) var(--radius-full) 0">Environment &amp; People</button>
+            </div>
+
+            <div id="overview-safety">
+            <div class="kpi-row cols-5">
+              <div class="kpi-card">
+                <div class="kpi-label">Total Observations</div>
+                <div class="kpi-value">142</div>
+                <div class="kpi-trend up-bad">&#9650; +12% vs last month</div>
               </div>
-              <div class="task-summary-card">
-                <div class="ts-value" style="color:var(--action-blue);">1</div>
-                <div class="ts-label">In Progress</div>
+              <div class="kpi-card">
+                <div class="kpi-label">Open Incidents</div>
+                <div class="kpi-value">8</div>
+                <div class="kpi-trend down-good">&#9660; -3 from last month</div>
               </div>
-              <div class="task-summary-card">
-                <div class="ts-value" style="color:var(--success);">1</div>
-                <div class="ts-label">Done</div>
+              <div class="kpi-card">
+                <div class="kpi-label">Inspections Completed</div>
+                <div class="kpi-value">37</div>
+                <div class="kpi-trend neutral">7 pending</div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-label">Training Compliance</div>
+                <div class="kpi-value">89%</div>
+                <div class="kpi-trend stable">Stable</div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-label">Active Permits</div>
+                <div class="kpi-value">12</div>
+                <div class="kpi-trend warn">4 expiring soon</div>
               </div>
             </div>
 
-            <div class="task-card">
-              <div class="task-assignee">
-                <div class="task-assignee-avatar" style="background:var(--success);">AK</div>
-                <span class="task-assignee-name">Anil Kapoor</span>
+            <div class="charts-grid">
+              <div class="chart-card">
+                <div class="chart-title">Safety Events Trend</div>
+                <svg width="100%" height="150" viewBox="0 0 400 150" preserveAspectRatio="none">
+                  <defs><linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--primary)" stop-opacity="0.2"/><stop offset="100%" stop-color="var(--primary)" stop-opacity="0"/></linearGradient></defs>
+                  <line x1="0" y1="30" x2="400" y2="30" class="chart-grid"/>
+                  <line x1="0" y1="70" x2="400" y2="70" class="chart-grid"/>
+                  <line x1="0" y1="110" x2="400" y2="110" class="chart-grid"/>
+                  <path d="M0,110 L67,90 L133,95 L200,70 L267,55 L333,40 L400,30" class="chart-line"/>
+                  <path d="M0,110 L67,90 L133,95 L200,70 L267,55 L333,40 L400,30 L400,150 L0,150 Z" class="chart-area"/>
+                  <circle cx="0" cy="110" class="chart-dot"/><circle cx="67" cy="90" class="chart-dot"/><circle cx="133" cy="95" class="chart-dot"/><circle cx="200" cy="70" class="chart-dot"/><circle cx="267" cy="55" class="chart-dot"/><circle cx="333" cy="40" class="chart-dot"/><circle cx="400" cy="30" class="chart-dot"/>
+                  <text x="0" y="145" class="chart-axis-label">Oct</text><text x="67" y="145" class="chart-axis-label">Nov</text><text x="133" y="145" class="chart-axis-label">Dec</text><text x="200" y="145" class="chart-axis-label">Jan</text><text x="267" y="145" class="chart-axis-label">Feb</text><text x="333" y="145" class="chart-axis-label">Mar</text><text x="390" y="145" class="chart-axis-label">Apr</text>
+                </svg>
               </div>
-              <div class="tc-title" style="margin-top:8px;">Upload PPE compliance photos for Block A</div>
-              <div class="tc-chips">
-                <span class="chip warning">Awaiting</span>
-              </div>
-              <div class="tc-footer">
-                <span style="font-size:12px;color:var(--text-tertiary);">Updated 3 hours ago</span>
-                <button class="task-cta">Follow Up</button>
-              </div>
-            </div>
-
-            <div class="task-card">
-              <div class="task-assignee">
-                <div class="task-assignee-avatar" style="background:var(--action-blue);">FS</div>
-                <span class="task-assignee-name">Fatima Sultan</span>
-              </div>
-              <div class="tc-title" style="margin-top:8px;">Submit excavation permit renewal for Zone E</div>
-              <div class="tc-chips">
-                <span class="chip blue">In Progress</span>
-              </div>
-              <div class="tc-footer">
-                <span style="font-size:12px;color:var(--text-tertiary);">Updated 1 day ago</span>
-                <button class="task-cta">Reassign</button>
-              </div>
-            </div>
-
-            <div class="task-card">
-              <div class="task-assignee">
-                <div class="task-assignee-avatar" style="background:var(--warning);">DP</div>
-                <span class="task-assignee-name">Deepak Patel</span>
-              </div>
-              <div class="tc-title" style="margin-top:8px;">Fix guardrail deficiency at Level 14 stairwell</div>
-              <div class="tc-chips">
-                <span class="chip critical">Overdue</span>
-              </div>
-              <div class="tc-footer">
-                <span style="font-size:12px;color:var(--text-tertiary);">Updated 2 days ago</span>
-                <button class="task-cta">Escalate</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- PROFILE PAGE -->
-        <div class="page" id="page-profile">
-          <div class="profile-wrap">
-            <div class="page-header">
-              <div class="page-title">Profile &amp; Settings</div>
-            </div>
-
-            <div class="profile-card">
-              <div class="profile-card-header">
-                <span class="profile-card-label">User</span>
-                <button class="profile-card-action">Edit Profile</button>
-              </div>
-              <div class="profile-user">
-                <div class="profile-avatar">RK</div>
-                <div class="profile-user-info">
-                  <div class="profile-name">Rajesh Kumar</div>
-                  <div class="profile-role">HSE Manager</div>
-                  <div class="profile-email">rajesh.k@navatech.com</div>
+              <div class="chart-card">
+                <div class="chart-title">Severity Distribution</div>
+                <svg width="160" height="160" viewBox="0 0 160 160" style="display:block;margin:0 auto;">
+                  <circle cx="80" cy="80" r="60" fill="none" stroke="var(--border)" stroke-width="24"/>
+                  <circle cx="80" cy="80" r="60" fill="none" stroke="var(--critical)" stroke-width="24" stroke-dasharray="37.7 339.3" stroke-dashoffset="0" transform="rotate(-90 80 80)"/>
+                  <circle cx="80" cy="80" r="60" fill="none" stroke="var(--warning)" stroke-width="24" stroke-dasharray="94.2 282.8" stroke-dashoffset="-37.7" transform="rotate(-90 80 80)"/>
+                  <circle cx="80" cy="80" r="60" fill="none" stroke="var(--primary)" stroke-width="24" stroke-dasharray="131.9 245.1" stroke-dashoffset="-131.9" transform="rotate(-90 80 80)"/>
+                  <circle cx="80" cy="80" r="60" fill="none" stroke="var(--neutral)" stroke-width="24" stroke-dasharray="113.1 263.9" stroke-dashoffset="-263.8" transform="rotate(-90 80 80)"/>
+                  <text x="80" y="76" text-anchor="middle" font-size="20" font-weight="700" fill="var(--text-primary)" font-family="Inter">142</text>
+                  <text x="80" y="94" text-anchor="middle" font-size="11" fill="var(--text-tertiary)" font-family="Inter">Total</text>
+                </svg>
+                <div style="display:flex;justify-content:center;gap:16px;margin-top:12px;font-size:11px;">
+                  <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:var(--critical)"></span> Critical 10</span>
+                  <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:var(--warning)"></span> High 25</span>
+                  <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:var(--primary)"></span> Moderate 35</span>
+                  <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:var(--neutral)"></span> Low 72</span>
                 </div>
               </div>
             </div>
 
-            <div class="profile-card">
-              <div class="profile-card-header">
-                <span class="profile-card-label">Current Workspace</span>
-                <button class="profile-card-action" onclick="toggleWorkspace()">Switch Workspace</button>
+            <div class="table-card">
+              <div class="table-card-header">Top Projects by Open Items</div>
+              <table class="summary-table">
+                <thead><tr><th>Project</th><th>Observations</th><th>Incidents</th><th>Inspections</th><th>Status</th></tr></thead>
+                <tbody>
+                  <tr><td style="font-weight:600">Al Maryah Central</td><td>22</td><td>5</td><td>3</td><td><span class="chip warning">At Risk</span></td></tr>
+                  <tr><td style="font-weight:600">Marina Bay Tower</td><td>14</td><td>3</td><td>7</td><td><span class="chip success">Active</span></td></tr>
+                  <tr><td style="font-weight:600">Saadiyat Cultural Hub</td><td>11</td><td>2</td><td>4</td><td><span class="chip success">Active</span></td></tr>
+                  <tr><td style="font-weight:600">Expo City</td><td>8</td><td>1</td><td>2</td><td><span class="chip success">Active</span></td></tr>
+                  <tr><td style="font-weight:600">Palm Residences</td><td>3</td><td>0</td><td>1</td><td><span class="chip success">Active</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+            </div><!-- /overview-safety -->
+
+            <div id="overview-env" style="display:none">
+              <div class="kpi-row cols-4">
+                <div class="kpi-card">
+                  <div class="kpi-label">Environmental Incidents</div>
+                  <div class="kpi-value">3</div>
+                  <div class="kpi-trend down-good">&#9660; -2 from last month</div>
+                </div>
+                <div class="kpi-card">
+                  <div class="kpi-label">Noise Complaints</div>
+                  <div class="kpi-value">7</div>
+                  <div class="kpi-trend up-bad">&#9650; +1 this month</div>
+                </div>
+                <div class="kpi-card">
+                  <div class="kpi-label">Waste Management Score</div>
+                  <div class="kpi-value">92%</div>
+                  <div class="kpi-trend stable">Stable</div>
+                </div>
+                <div class="kpi-card">
+                  <div class="kpi-label">Worker Health Checks</div>
+                  <div class="kpi-value">156</div>
+                  <div class="kpi-trend down-good">&#9650; +12% compliance</div>
+                </div>
               </div>
-              <div class="profile-row">
-                <span class="profile-row-label">Subsidiary</span>
-                <span class="profile-row-value">Navatech Construction &mdash; UAE</span>
+              <div class="chart-card" style="margin-top:16px">
+                <div class="chart-title">Environmental Compliance Trend</div>
+                <svg width="100%" height="150" viewBox="0 0 400 150" preserveAspectRatio="none">
+                  <defs><linearGradient id="envGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--success)" stop-opacity="0.2"/><stop offset="100%" stop-color="var(--success)" stop-opacity="0"/></linearGradient></defs>
+                  <line x1="0" y1="30" x2="400" y2="30" class="chart-grid"/>
+                  <line x1="0" y1="70" x2="400" y2="70" class="chart-grid"/>
+                  <line x1="0" y1="110" x2="400" y2="110" class="chart-grid"/>
+                  <path d="M0,90 L67,85 L133,70 L200,65 L267,50 L333,45 L400,35" stroke="var(--success)" fill="none" stroke-width="2.5" stroke-linecap="round"/>
+                  <path d="M0,90 L67,85 L133,70 L200,65 L267,50 L333,45 L400,35 L400,150 L0,150 Z" fill="url(#envGrad)"/>
+                  <text x="0" y="145" class="chart-axis-label">Oct</text><text x="67" y="145" class="chart-axis-label">Nov</text><text x="133" y="145" class="chart-axis-label">Dec</text><text x="200" y="145" class="chart-axis-label">Jan</text><text x="267" y="145" class="chart-axis-label">Feb</text><text x="333" y="145" class="chart-axis-label">Mar</text><text x="390" y="145" class="chart-axis-label">Apr</text>
+                </svg>
               </div>
-              <div class="profile-row">
-                <span class="profile-row-label">Role</span>
-                <span class="profile-row-value">HSE Manager</span>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px">
+                <div class="chart-card">
+                  <div class="chart-title">Waste Categories</div>
+                  <div style="padding:20px 0;font-size:13px;color:var(--text-secondary);line-height:1.8">
+                    <div style="display:flex;justify-content:space-between"><span>&#9679; Construction Debris</span><span style="font-weight:700">42%</span></div>
+                    <div style="display:flex;justify-content:space-between"><span>&#9679; Hazardous Materials</span><span style="font-weight:700">18%</span></div>
+                    <div style="display:flex;justify-content:space-between"><span>&#9679; Recyclable</span><span style="font-weight:700">28%</span></div>
+                    <div style="display:flex;justify-content:space-between"><span>&#9679; General Waste</span><span style="font-weight:700">12%</span></div>
+                  </div>
+                </div>
+                <div class="chart-card">
+                  <div class="chart-title">Worker Wellness</div>
+                  <div style="padding:20px 0;font-size:13px;color:var(--text-secondary);line-height:1.8">
+                    <div style="display:flex;justify-content:space-between"><span>&#9679; Heat Stress Incidents</span><span style="font-weight:700">4</span></div>
+                    <div style="display:flex;justify-content:space-between"><span>&#9679; Hydration Compliance</span><span style="font-weight:700">96%</span></div>
+                    <div style="display:flex;justify-content:space-between"><span>&#9679; Rest Break Adherence</span><span style="font-weight:700">91%</span></div>
+                    <div style="display:flex;justify-content:space-between"><span>&#9679; Medical Screenings Done</span><span style="font-weight:700">156</span></div>
+                  </div>
+                </div>
               </div>
-              <div class="profile-row">
-                <span class="profile-row-label">Projects</span>
-                <span class="profile-row-value">5 assigned</span>
+            </div><!-- /overview-env -->
+
+          </div>
+
+          <!-- OTHER DASH TABS -->
+          <div id="dash-observations" style="display:none"><div class="tab-placeholder">Module analytics coming soon</div></div>
+          <div id="dash-incidents" style="display:none"><div class="tab-placeholder">Module analytics coming soon</div></div>
+          <div id="dash-training" style="display:none"><div class="tab-placeholder">Module analytics coming soon</div></div>
+          <div id="dash-sitewalks" style="display:none"><div class="tab-placeholder">Module analytics coming soon</div></div>
+        </div>
+
+        <!-- ========== PROJECTS ========== -->
+        <div id="page-projects" class="page-content" style="display:none">
+          <div class="page-header">
+            <div class="page-title-row"><h1 class="page-title">Projects</h1></div>
+            <p class="page-subtitle">Qatar Operations</p>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
+            <input type="text" class="toolbar-search" id="project-search" oninput="filterProjects()" style="width:280px;border-radius:var(--radius-full)" placeholder="Search projects...">
+            <div class="segmented" id="project-segments">
+              <button class="segmented-btn active" onclick="setProjectFilter('all',this)">All Projects</button>
+              <button class="segmented-btn" onclick="setProjectFilter('regular',this)">Regular</button>
+              <button class="segmented-btn" onclick="setProjectFilter('linked',this)">Linked</button>
+            </div>
+            <div style="flex:1"></div>
+            <button class="btn-primary" style="height:38px;width:auto;padding:0 18px;font-size:13px;border-radius:var(--radius-sm)">+ New Project</button>
+          </div>
+
+          <div class="project-grid">
+            <div class="project-card" data-type="regular" onclick="enterProject('Marina Bay Tower')">
+              <div class="project-card-top">
+                <div class="project-card-name">Marina Bay Tower</div>
+                <span class="chip success">Active</span>
+              </div>
+              <div class="project-card-type">Commercial Tower</div>
+              <div class="project-card-badges">
+                <span class="chip primary">Regular</span>
+                <span class="chip neutral">Editable</span>
+              </div>
+              <div class="project-card-stats">14 observations &middot; 3 incidents &middot; 89 users</div>
+              <div class="project-card-divider"></div>
+              <div class="project-card-actions">
+                <button class="btn-sm primary" onclick="event.stopPropagation();enterProject('Marina Bay Tower')">Open</button>
+                <button class="btn-sm outline" onclick="event.stopPropagation();enterProject('Marina Bay Tower');setTimeout(()=>showPage('observations'),50)">Observations</button>
+                <button class="btn-sm outline" onclick="event.stopPropagation();enterProject('Marina Bay Tower');setTimeout(()=>showPage('incidents'),50)">Incidents</button>
+                <button class="btn-sm outline" onclick="event.stopPropagation();enterProject('Marina Bay Tower');setTimeout(()=>showPage('walkthroughs'),50)">Walkthroughs</button>
               </div>
             </div>
 
-            <div class="profile-card">
-              <div class="profile-row clickable">
-                <span class="profile-row-label">Change Language</span>
-                <span class="profile-row-value">English <span class="profile-row-chevron">&#8250;</span></span>
+            <div class="project-card linked" data-type="linked">
+              <div class="project-card-top">
+                <div class="project-card-name">Expo City</div>
+                <span class="chip success">Active</span>
               </div>
-              <div class="profile-row clickable" onclick="toggleDarkMode()">
-                <span class="profile-row-label">Theme</span>
-                <span class="profile-row-value"><span id="theme-label">Light</span> <span class="profile-row-chevron">&#8250;</span></span>
+              <div class="project-card-type">Infrastructure</div>
+              <div class="project-card-badges">
+                <span class="chip primary">Linked</span>
+                <span class="chip neutral">View Only</span>
               </div>
-            </div>
-
-            <div class="profile-card">
-              <div class="profile-card-header">
-                <span class="profile-card-label">Help</span>
-              </div>
-              <div class="profile-row clickable">
-                <span class="profile-row-label">Guided Tour</span>
-                <span class="profile-row-value"><span class="profile-row-chevron">&#8250;</span></span>
-              </div>
-              <div class="profile-row clickable">
-                <span class="profile-row-label">Contact Us</span>
-                <span class="profile-row-value"><span class="profile-row-chevron">&#8250;</span></span>
+              <div class="project-card-stats">8 observations &middot; 1 incident &middot; 45 users</div>
+              <div class="project-card-divider"></div>
+              <div class="project-card-actions">
+                <button class="btn-sm primary" onclick="event.stopPropagation();enterProject('Expo City')">Open</button>
+                <button class="btn-sm outline">Observations</button>
+                <button class="btn-sm outline">Incidents</button>
+                <button class="btn-sm outline">Walkthroughs</button>
               </div>
             </div>
 
-            <div class="profile-card">
-              <div class="profile-card-header">
-                <span class="profile-card-label">Terms</span>
+            <div class="project-card" data-type="regular">
+              <div class="project-card-top">
+                <div class="project-card-name">Al Maryah Central</div>
+                <span class="chip warning">At Risk</span>
               </div>
-              <div class="profile-row">
-                <span class="profile-row-label">Terms &amp; Conditions</span>
-                <span class="profile-row-value"><input type="checkbox" class="profile-checkbox" checked></span>
+              <div class="project-card-type">Commercial</div>
+              <div class="project-card-badges">
+                <span class="chip primary">Regular</span>
+                <span class="chip neutral">Editable</span>
+              </div>
+              <div class="project-card-stats">22 observations &middot; 5 incidents &middot; 112 users</div>
+              <div class="project-card-divider"></div>
+              <div class="project-card-actions">
+                <button class="btn-sm primary" onclick="event.stopPropagation();enterProject('Al Maryah Central')">Open</button>
+                <button class="btn-sm outline">Observations</button>
+                <button class="btn-sm outline">Incidents</button>
+                <button class="btn-sm outline">Walkthroughs</button>
               </div>
             </div>
 
-            <div class="profile-card">
-              <div class="profile-row">
-                <span class="profile-row-label">About</span>
-                <span class="profile-row-value">v2.4.1</span>
+            <div class="project-card" data-type="regular">
+              <div class="project-card-top">
+                <div class="project-card-name">Palm Residences</div>
+                <span class="chip success">Active</span>
+              </div>
+              <div class="project-card-type">Residential</div>
+              <div class="project-card-badges">
+                <span class="chip primary">Regular</span>
+                <span class="chip neutral">Editable</span>
+              </div>
+              <div class="project-card-stats">3 observations &middot; 0 incidents &middot; 34 users</div>
+              <div class="project-card-divider"></div>
+              <div class="project-card-actions">
+                <button class="btn-sm primary" onclick="event.stopPropagation();enterProject('Palm Residences')">Open</button>
+                <button class="btn-sm outline">Observations</button>
+                <button class="btn-sm outline">Incidents</button>
+                <button class="btn-sm outline">Walkthroughs</button>
               </div>
             </div>
 
-            <button class="btn-signout" onclick="nav('login')">Sign Out</button>
+            <div class="project-card" data-type="regular">
+              <div class="project-card-top">
+                <div class="project-card-name">Saadiyat Cultural Hub</div>
+                <span class="chip success">Active</span>
+              </div>
+              <div class="project-card-type">Cultural</div>
+              <div class="project-card-badges">
+                <span class="chip primary">Regular</span>
+                <span class="chip neutral">Editable</span>
+              </div>
+              <div class="project-card-stats">11 observations &middot; 2 incidents &middot; 67 users</div>
+              <div class="project-card-divider"></div>
+              <div class="project-card-actions">
+                <button class="btn-sm primary" onclick="event.stopPropagation();enterProject('Saadiyat Cultural Hub')">Open</button>
+                <button class="btn-sm outline">Observations</button>
+                <button class="btn-sm outline">Incidents</button>
+                <button class="btn-sm outline">Walkthroughs</button>
+              </div>
+            </div>
           </div>
         </div>
+
+        <!-- ========== PROJECT OVERVIEW ========== -->
+        <div id="page-project-overview" class="page-content" style="display:none">
+          <div class="view-only-banner" id="view-only-banner">&#9888; This is a linked project. Data is view-only.</div>
+          <div class="page-header">
+            <div class="page-title-row"><h1 class="page-title" id="proj-overview-title">Marina Bay Tower</h1></div>
+            <p class="page-subtitle">Project Overview</p>
+          </div>
+
+          <div class="kpi-row cols-4">
+            <div class="kpi-card"><div class="kpi-label">Open Observations</div><div class="kpi-value">14</div></div>
+            <div class="kpi-card"><div class="kpi-label">Open Incidents</div><div class="kpi-value">3</div></div>
+            <div class="kpi-card"><div class="kpi-label">Pending Inspections</div><div class="kpi-value">7</div></div>
+            <div class="kpi-card"><div class="kpi-label">Due Today</div><div class="kpi-value">5</div></div>
+          </div>
+
+          <div class="details-card">
+            <div class="details-card-title">Project Details</div>
+            <div class="details-grid">
+              <div class="detail-item"><span class="detail-label">Type</span><span class="detail-value">Commercial Tower</span></div>
+              <div class="detail-item"><span class="detail-label">Status</span><span class="detail-value"><span class="chip success">Active</span></span></div>
+              <div class="detail-item"><span class="detail-label">Location</span><span class="detail-value">Lusail, Qatar</span></div>
+              <div class="detail-item"><span class="detail-label">Start Date</span><span class="detail-value">15 Jan 2025</span></div>
+              <div class="detail-item"><span class="detail-label">Phase</span><span class="detail-value">Superstructure</span></div>
+              <div class="detail-item"><span class="detail-label">Project Code</span><span class="detail-value">QA-MBT-2025</span></div>
+              <div class="detail-item"><span class="detail-label">Manager</span><span class="detail-value">Ahmed Khalid</span></div>
+              <div class="detail-item"><span class="detail-label">Client</span><span class="detail-value">Lusail Real Estate</span></div>
+            </div>
+          </div>
+
+          <div style="font-size:14px;font-weight:600;margin-bottom:12px">Quick Links</div>
+          <div class="quick-links-grid">
+            <div class="quick-link-card" onclick="showPage('observations')">
+              <div class="quick-link-icon" style="background:var(--primary-light);color:var(--primary)">&#9678;</div>
+              <div class="quick-link-info"><div class="quick-link-name">Observations</div><div class="quick-link-count">14 open</div></div>
+            </div>
+            <div class="quick-link-card" onclick="showPage('incidents')">
+              <div class="quick-link-icon" style="background:var(--critical-bg);color:var(--critical)">&#9651;</div>
+              <div class="quick-link-info"><div class="quick-link-name">Incidents</div><div class="quick-link-count">3 open</div></div>
+            </div>
+            <div class="quick-link-card" onclick="showPage('walkthroughs')">
+              <div class="quick-link-icon" style="background:var(--success-bg);color:var(--success)">&#8599;</div>
+              <div class="quick-link-info"><div class="quick-link-name">Site Walkthroughs</div><div class="quick-link-count">5 active</div></div>
+            </div>
+            <div class="quick-link-card" onclick="showPage('training')">
+              <div class="quick-link-icon" style="background:var(--warning-bg);color:var(--warning)">&#9733;</div>
+              <div class="quick-link-info"><div class="quick-link-name">Training</div><div class="quick-link-count">89% compliance</div></div>
+            </div>
+            <div class="quick-link-card" onclick="showPage('inspections')">
+              <div class="quick-link-icon" style="background:var(--neutral-bg);color:var(--neutral)">&#9745;</div>
+              <div class="quick-link-info"><div class="quick-link-name">Inspections</div><div class="quick-link-count">7 pending</div></div>
+            </div>
+            <div class="quick-link-card" onclick="showPage('ai-hub')">
+              <div class="quick-link-icon" style="background:linear-gradient(135deg,rgba(224,122,47,0.15),rgba(26,86,219,0.15));color:var(--primary)">&#10022;</div>
+              <div class="quick-link-info"><div class="quick-link-name">AI Hub</div><div class="quick-link-count">Crystal active</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== OBSERVATIONS ========== -->
+        <div id="page-observations" class="page-content listing-layout" style="display:none">
+          <div class="listing-header">
+            <div class="page-header" style="margin-bottom:16px">
+              <div class="page-title-row">
+                <h1 class="page-title">Observations</h1>
+                <span class="page-title-badge" style="background:var(--warning-bg);color:var(--warning)">14 open</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="toolbar listing-toolbar">
+            <input type="text" class="toolbar-search" placeholder="Search observations...">
+            <button class="filter-chip">Severity <span style="font-size:9px;margin-left:2px">&#9662;</span></button>
+            <button class="filter-chip">Status <span style="font-size:9px;margin-left:2px">&#9662;</span></button>
+            <button class="filter-chip">Type <span style="font-size:9px;margin-left:2px">&#9662;</span></button>
+            <button class="filter-chip">Platform <span style="font-size:9px;margin-left:2px">&#9662;</span></button>
+            <div class="toolbar-spacer"></div>
+            <button class="toolbar-icon-btn" title="Column settings"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></button>
+            <button class="toolbar-icon-btn" title="Density"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+            <button class="toolbar-icon-btn" title="Export"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
+          </div>
+
+          <div class="listing-table-region">
+          <div class="enterprise-table-wrapper with-toolbar" style="border:none;border-radius:0">
+            <table class="enterprise-table">
+              <thead>
+                <tr>
+                  <th class="sticky-left sorted" style="min-width:80px">ID <span class="sort-icon">&#9660;</span></th>
+                  <th style="min-width:100px">Walk ID</th>
+                  <th style="min-width:240px">Details</th>
+                  <th style="min-width:110px">Type</th>
+                  <th style="min-width:90px">Platform</th>
+                  <th style="min-width:140px">Project</th>
+                  <th style="min-width:120px">Hazard Type</th>
+                  <th style="min-width:90px">Severity</th>
+                  <th style="min-width:110px">Root Cause</th>
+                  <th style="min-width:150px">Date &amp; Time</th>
+                  <th style="min-width:130px">Location</th>
+                  <th style="min-width:100px">Logged By</th>
+                  <th style="min-width:90px">Logged On</th>
+                  <th style="min-width:90px">Closed On</th>
+                  <th style="min-width:100px">Reviewer</th>
+                  <th style="min-width:80px">Status</th>
+                  <th class="sticky-right" style="min-width:60px">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="sticky-left" style="font-weight:600;color:var(--primary)">OBS-318</td>
+                  <td style="color:var(--primary)">SW-45</td>
+                  <td class="cell-detail">Scaffolding safety concern in Zone C</td>
+                  <td>Observation</td>
+                  <td><span class="chip primary">nAI</span></td>
+                  <td>Marina Bay Tower</td>
+                  <td>Structural</td>
+                  <td><span class="chip warning">High</span></td>
+                  <td>Procedural</td>
+                  <td>03 Apr 2026 09:15</td>
+                  <td>Zone C Level 12</td>
+                  <td>Ahmed K.</td>
+                  <td>03 Apr</td>
+                  <td>&mdash;</td>
+                  <td>Pending</td>
+                  <td><span class="chip warning">Open</span></td>
+                  <td class="sticky-right"><button class="table-action-btn">&#8942;</button></td>
+                </tr>
+                <tr>
+                  <td class="sticky-left" style="font-weight:600;color:var(--primary)">OBS-315</td>
+                  <td>&mdash;</td>
+                  <td class="cell-detail">PPE compliance check failure</td>
+                  <td>Observation</td>
+                  <td><span class="chip neutral">WhatsApp</span></td>
+                  <td>Marina Bay Tower</td>
+                  <td>PPE</td>
+                  <td><span class="chip info">Moderate</span></td>
+                  <td>Human Error</td>
+                  <td>02 Apr 2026 14:30</td>
+                  <td>Main Entrance</td>
+                  <td>Fatima R.</td>
+                  <td>02 Apr</td>
+                  <td>&mdash;</td>
+                  <td>&mdash;</td>
+                  <td><span class="chip warning">Open</span></td>
+                  <td class="sticky-right"><button class="table-action-btn">&#8942;</button></td>
+                </tr>
+                <tr>
+                  <td class="sticky-left" style="font-weight:600;color:var(--primary)">OBS-312</td>
+                  <td style="color:var(--primary)">SW-42</td>
+                  <td class="cell-detail">Electrical hazard near Tower 2 crane</td>
+                  <td>SiteWalkthrough</td>
+                  <td><span class="chip primary">nAI</span></td>
+                  <td>Marina Bay Tower</td>
+                  <td>Electrical</td>
+                  <td><span class="chip warning">High</span></td>
+                  <td>Equipment</td>
+                  <td>01 Apr 2026 11:00</td>
+                  <td>Tower 2 Base</td>
+                  <td>Mohammed S.</td>
+                  <td>01 Apr</td>
+                  <td>03 Apr</td>
+                  <td>Ahmed K.</td>
+                  <td><span class="chip success">Closed</span></td>
+                  <td class="sticky-right"><button class="table-action-btn">&#8942;</button></td>
+                </tr>
+                <tr>
+                  <td class="sticky-left" style="font-weight:600;color:var(--primary)">OBS-308</td>
+                  <td>&mdash;</td>
+                  <td class="cell-detail">Fall protection equipment audit</td>
+                  <td>Observation</td>
+                  <td><span class="chip primary">nAI</span></td>
+                  <td>Marina Bay Tower</td>
+                  <td>Fall Protection</td>
+                  <td><span class="chip neutral">Low</span></td>
+                  <td>&mdash;</td>
+                  <td>31 Mar 2026 08:45</td>
+                  <td>Rooftop</td>
+                  <td>Priya M.</td>
+                  <td>31 Mar</td>
+                  <td>&mdash;</td>
+                  <td>&mdash;</td>
+                  <td><span class="chip neutral">Draft</span></td>
+                  <td class="sticky-right"><button class="table-action-btn">&#8942;</button></td>
+                </tr>
+                <tr>
+                  <td class="sticky-left" style="font-weight:600;color:var(--primary)">OBS-305</td>
+                  <td style="color:var(--primary)">SW-40</td>
+                  <td class="cell-detail">Fire exit blocked by materials</td>
+                  <td>SiteWalkthrough</td>
+                  <td><span class="chip primary">nAI</span></td>
+                  <td>Marina Bay Tower</td>
+                  <td>Fire Safety</td>
+                  <td><span class="chip critical">Critical</span></td>
+                  <td>Storage</td>
+                  <td>30 Mar 2026 16:20</td>
+                  <td>B2 Basement</td>
+                  <td>Khalid A.</td>
+                  <td>30 Mar</td>
+                  <td>&mdash;</td>
+                  <td>Pending</td>
+                  <td><span class="chip warning">Open</span></td>
+                  <td class="sticky-right"><button class="table-action-btn">&#8942;</button></td>
+                </tr>
+                <tr>
+                  <td class="sticky-left" style="font-weight:600;color:var(--primary)">OBS-301</td>
+                  <td>&mdash;</td>
+                  <td class="cell-detail">Crane operation safety review</td>
+                  <td>Observation</td>
+                  <td><span class="chip primary">nAI</span></td>
+                  <td>Marina Bay Tower</td>
+                  <td>Crane Ops</td>
+                  <td><span class="chip info">Moderate</span></td>
+                  <td>Procedural</td>
+                  <td>29 Mar 2026 10:10</td>
+                  <td>Crane Bay</td>
+                  <td>Sarah T.</td>
+                  <td>29 Mar</td>
+                  <td>&mdash;</td>
+                  <td>&mdash;</td>
+                  <td><span class="chip warning">Open</span></td>
+                  <td class="sticky-right"><button class="table-action-btn">&#8942;</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          </div><!-- /listing-table-region -->
+          <div class="pagination listing-pagination">
+            <div class="pagination-left">
+              <label>Rows per page:</label>
+              <select class="pagination-select"><option>10</option><option>25</option><option>50</option><option>100</option></select>
+            </div>
+            <span class="pagination-info">1&ndash;10 of 1247</span>
+            <div class="pagination-btns">
+              <button class="pagination-btn">&laquo;</button>
+              <button class="pagination-btn active">1</button>
+              <button class="pagination-btn">2</button>
+              <button class="pagination-btn">3</button>
+              <button class="pagination-btn">...</button>
+              <button class="pagination-btn">125</button>
+              <button class="pagination-btn">&raquo;</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== INCIDENTS ========== -->
+        <div id="page-incidents" class="page-content listing-layout" style="display:none">
+          <div class="listing-header">
+            <div class="page-header" style="margin-bottom:16px">
+              <div class="page-title-row">
+                <h1 class="page-title">Incidents</h1>
+                <span class="page-title-badge" style="background:var(--critical-bg);color:var(--critical)">3 open</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="toolbar listing-toolbar">
+            <input type="text" class="toolbar-search" placeholder="Search incidents...">
+            <button class="filter-chip">Severity <span style="font-size:9px;margin-left:2px">&#9662;</span></button>
+            <button class="filter-chip">Classification <span style="font-size:9px;margin-left:2px">&#9662;</span></button>
+            <button class="filter-chip">Status <span style="font-size:9px;margin-left:2px">&#9662;</span></button>
+            <div class="toolbar-spacer"></div>
+            <button class="toolbar-icon-btn" title="Column settings"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></button>
+            <button class="toolbar-icon-btn" title="Density"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+            <button class="toolbar-icon-btn" title="Export"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
+          </div>
+
+          <div class="listing-table-region">
+          <div class="enterprise-table-wrapper with-toolbar" style="border:none;border-radius:0">
+            <table class="enterprise-table">
+              <thead>
+                <tr>
+                  <th class="sticky-left sorted" style="min-width:80px">ID <span class="sort-icon">&#9660;</span></th>
+                  <th style="min-width:260px">Details</th>
+                  <th style="min-width:130px">Severity</th>
+                  <th style="min-width:140px">Classification</th>
+                  <th style="min-width:180px">Investigation Stage</th>
+                  <th style="min-width:130px">Date &amp; Time</th>
+                  <th style="min-width:130px">Location</th>
+                  <th style="min-width:110px">Reported By</th>
+                  <th style="min-width:110px">Assigned To</th>
+                  <th style="min-width:80px">Status</th>
+                  <th class="sticky-right" style="min-width:60px">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="sticky-left" style="font-weight:600;color:var(--primary)">INC-047</td>
+                  <td class="cell-detail">Worker fall from scaffolding &mdash; Zone C</td>
+                  <td><span class="chip critical">S5. Catastrophic</span></td>
+                  <td>Lost Time Injury</td>
+                  <td>Preliminary Investigation</td>
+                  <td>02 Apr 2026</td>
+                  <td>Zone C L12</td>
+                  <td>Ahmed K.</td>
+                  <td>Safety Team</td>
+                  <td><span class="chip warning">Open</span></td>
+                  <td class="sticky-right"><button class="table-action-btn">&#8942;</button></td>
+                </tr>
+                <tr>
+                  <td class="sticky-left" style="font-weight:600;color:var(--primary)">INC-044</td>
+                  <td class="cell-detail">Chemical spill near storage area</td>
+                  <td><span class="chip warning">S3. Serious</span></td>
+                  <td>First Aid</td>
+                  <td>Root Cause Analysis</td>
+                  <td>28 Mar 2026</td>
+                  <td>Storage Bay</td>
+                  <td>Fatima R.</td>
+                  <td>HSE Manager</td>
+                  <td><span class="chip warning">Open</span></td>
+                  <td class="sticky-right"><button class="table-action-btn">&#8942;</button></td>
+                </tr>
+                <tr>
+                  <td class="sticky-left" style="font-weight:600;color:var(--primary)">INC-041</td>
+                  <td class="cell-detail">Near miss &mdash; crane load swing</td>
+                  <td><span class="chip info">S2. Minor</span></td>
+                  <td>Near Miss</td>
+                  <td>Closed</td>
+                  <td>25 Mar 2026</td>
+                  <td>Crane Bay</td>
+                  <td>Mohammed S.</td>
+                  <td>&mdash;</td>
+                  <td><span class="chip success">Closed</span></td>
+                  <td class="sticky-right"><button class="table-action-btn">&#8942;</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          </div><!-- /listing-table-region -->
+          <div class="pagination listing-pagination">
+            <div class="pagination-left">
+              <label>Rows per page:</label>
+              <select class="pagination-select"><option>10</option><option>25</option><option>50</option><option>100</option></select>
+            </div>
+            <span class="pagination-info">1&ndash;3 of 3</span>
+            <div class="pagination-btns">
+              <button class="pagination-btn active">1</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== SITE WALKTHROUGHS ========== -->
+        <div id="page-walkthroughs" class="page-content listing-layout" style="display:none">
+          <div class="listing-header">
+            <div class="page-header" style="margin-bottom:16px">
+              <div class="page-title-row">
+                <h1 class="page-title">Site Walkthroughs</h1>
+                <span class="page-title-badge" style="background:var(--success-bg);color:var(--success)">5 active</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="toolbar listing-toolbar">
+            <input type="text" class="toolbar-search" placeholder="Search walkthroughs...">
+            <button class="filter-chip">Type <span style="font-size:9px;margin-left:2px">&#9662;</span></button>
+            <button class="filter-chip">Status <span style="font-size:9px;margin-left:2px">&#9662;</span></button>
+            <div class="toolbar-spacer"></div>
+            <button class="toolbar-icon-btn" title="Column settings"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></button>
+            <button class="toolbar-icon-btn" title="Density"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+            <button class="toolbar-icon-btn" title="Export"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
+          </div>
+
+          <div class="listing-table-region">
+          <div class="enterprise-table-wrapper with-toolbar" style="border:none;border-radius:0">
+            <table class="enterprise-table" style="min-width:1100px">
+              <thead>
+                <tr>
+                  <th class="sticky-left sorted" style="min-width:80px">ID <span class="sort-icon">&#9660;</span></th>
+                  <th style="min-width:220px">Title</th>
+                  <th style="min-width:120px">Type</th>
+                  <th style="min-width:90px">Status</th>
+                  <th style="min-width:110px">Observations</th>
+                  <th style="min-width:120px">Date</th>
+                  <th style="min-width:120px">Conducted By</th>
+                  <th style="min-width:130px">Location</th>
+                  <th style="min-width:90px">Duration</th>
+                  <th class="sticky-right" style="min-width:60px">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="sticky-left" style="font-weight:600;color:var(--primary)">SW-45</td>
+                  <td>Zone C Scaffolding Inspection</td>
+                  <td>Safety Audit</td>
+                  <td><span class="chip success">Completed</span></td>
+                  <td>3 logged</td>
+                  <td>03 Apr 2026</td>
+                  <td>Ahmed K.</td>
+                  <td>Zone C Level 12</td>
+                  <td>1h 20m</td>
+                  <td class="sticky-right"><button class="table-action-btn">&#8942;</button></td>
+                </tr>
+                <tr>
+                  <td class="sticky-left" style="font-weight:600;color:var(--primary)">SW-44</td>
+                  <td>Weekly Safety Walk &mdash; Tower 1</td>
+                  <td>Routine Walk</td>
+                  <td><span class="chip warning">In Progress</span></td>
+                  <td>1 logged</td>
+                  <td>03 Apr 2026</td>
+                  <td>Fatima R.</td>
+                  <td>Tower 1 All Floors</td>
+                  <td>45m</td>
+                  <td class="sticky-right"><button class="table-action-btn">&#8942;</button></td>
+                </tr>
+                <tr>
+                  <td class="sticky-left" style="font-weight:600;color:var(--primary)">SW-42</td>
+                  <td>Electrical Systems Review</td>
+                  <td>Specialist Audit</td>
+                  <td><span class="chip success">Completed</span></td>
+                  <td>2 logged</td>
+                  <td>01 Apr 2026</td>
+                  <td>Mohammed S.</td>
+                  <td>Tower 2 Base</td>
+                  <td>2h 05m</td>
+                  <td class="sticky-right"><button class="table-action-btn">&#8942;</button></td>
+                </tr>
+                <tr>
+                  <td class="sticky-left" style="font-weight:600;color:var(--primary)">SW-40</td>
+                  <td>Fire Safety Compliance Walk</td>
+                  <td>Compliance</td>
+                  <td><span class="chip success">Completed</span></td>
+                  <td>4 logged</td>
+                  <td>30 Mar 2026</td>
+                  <td>Khalid A.</td>
+                  <td>B2 Basement</td>
+                  <td>1h 40m</td>
+                  <td class="sticky-right"><button class="table-action-btn">&#8942;</button></td>
+                </tr>
+                <tr>
+                  <td class="sticky-left" style="font-weight:600;color:var(--primary)">SW-38</td>
+                  <td>Crane Operations Check</td>
+                  <td>Equipment Audit</td>
+                  <td><span class="chip neutral">Scheduled</span></td>
+                  <td>0 logged</td>
+                  <td>05 Apr 2026</td>
+                  <td>Sarah T.</td>
+                  <td>Crane Bay</td>
+                  <td>&mdash;</td>
+                  <td class="sticky-right"><button class="table-action-btn">&#8942;</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          </div><!-- /listing-table-region -->
+          <div class="pagination listing-pagination">
+            <div class="pagination-left">
+              <label>Rows per page:</label>
+              <select class="pagination-select"><option>10</option><option>25</option><option>50</option><option>100</option></select>
+            </div>
+            <span class="pagination-info">1&ndash;5 of 5</span>
+            <div class="pagination-btns">
+              <button class="pagination-btn active">1</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== AI HUB ========== -->
+        <div id="page-ai-hub" class="page-content" style="display:none">
+          <div class="page-header">
+            <div class="page-title-row"><h1 class="page-title">AI Hub</h1></div>
+            <p class="page-subtitle">Manage your AI assistants</p>
+          </div>
+
+          <div class="ai-grid">
+            <div class="ai-card">
+              <div class="ai-card-top">
+                <div class="ai-card-icon crystal">&#10022;</div>
+                <div class="ai-card-info">
+                  <div class="ai-card-name">Crystal <span class="chip success">Active</span></div>
+                  <div class="ai-card-stats">
+                    1,247 queries/month<br>
+                    94% resolution rate
+                  </div>
+                </div>
+              </div>
+              <button class="btn-sm primary">Manage</button>
+            </div>
+            <div class="ai-card">
+              <div class="ai-card-top">
+                <div class="ai-card-icon safebot">&#9671;</div>
+                <div class="ai-card-info">
+                  <div class="ai-card-name">SafeBot <span class="chip neutral">Draft</span></div>
+                  <div class="ai-card-stats">
+                    0 queries<br>
+                    Not yet activated
+                  </div>
+                </div>
+              </div>
+              <button class="btn-sm outline">Activate</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== ADMIN: USERS & ACCESS ========== -->
+        <div id="page-admin-users" class="page-content" style="display:none;padding:24px">
+          <div class="page-header"><div class="page-title-row"><h1 class="page-title">Users &amp; Access</h1></div></div>
+          <div class="admin-section">
+            <div class="admin-section-title">Project User Management</div>
+            <div class="admin-row"><div class="admin-row-label">Total Users</div><div class="admin-row-meta">89 users across 5 roles</div></div>
+            <div class="admin-row"><div class="admin-row-label">HSE Manager</div><div class="admin-row-meta">12 users</div><button class="admin-row-btn">View &#8250;</button></div>
+            <div class="admin-row"><div class="admin-row-label">Site Supervisor</div><div class="admin-row-meta">28 users</div><button class="admin-row-btn">View &#8250;</button></div>
+            <div class="admin-row"><div class="admin-row-label">Contractor</div><div class="admin-row-meta">34 users</div><button class="admin-row-btn">View &#8250;</button></div>
+            <div class="admin-row"><div class="admin-row-label">PMC Executive</div><div class="admin-row-meta">8 users</div><button class="admin-row-btn">View &#8250;</button></div>
+            <div class="admin-row"><div class="admin-row-label">Client Executive</div><div class="admin-row-meta">7 users</div><button class="admin-row-btn">View &#8250;</button></div>
+          </div>
+        </div>
+
+        <!-- ========== ADMIN: PROJECT DETAILS ========== -->
+        <div id="page-admin-details" class="page-content" style="display:none;padding:24px">
+          <div class="page-header"><div class="page-title-row"><h1 class="page-title">Project Details</h1></div></div>
+          <div class="admin-section">
+            <div class="admin-section-title">General</div>
+            <div class="admin-row"><div class="admin-row-label">Project Name</div><div class="admin-row-meta">Marina Bay Tower</div></div>
+            <div class="admin-row"><div class="admin-row-label">Type</div><div class="admin-row-meta">Commercial Tower</div></div>
+            <div class="admin-row"><div class="admin-row-label">Phase</div><div class="admin-row-meta">Phase 3</div></div>
+            <div class="admin-row"><div class="admin-row-label">Location</div><div class="admin-row-meta">Lusail, Qatar</div></div>
+            <div class="admin-row"><div class="admin-row-label">Project Code</div><div class="admin-row-meta">QAT-MBT-003</div></div>
+          </div>
+          <div class="admin-section">
+            <div class="admin-section-title">Status</div>
+            <div class="admin-row"><div class="admin-row-label">Active Status</div><div class="toggle-switch on" onclick="this.classList.toggle('on')"></div><span class="chip success" style="margin-left:8px">Active</span></div>
+            <div class="admin-row"><div class="admin-row-label">Start Date</div><div class="admin-row-meta">15 Jan 2025</div></div>
+            <div class="admin-row"><div class="admin-row-label">Manager</div><div class="admin-row-meta">Ahmed K.</div></div>
+          </div>
+        </div>
+
+        <!-- ========== ADMIN: RULES & ESCALATION ========== -->
+        <div id="page-admin-rules" class="page-content" style="display:none;padding:24px">
+          <div class="page-header"><div class="page-title-row"><h1 class="page-title">Rules &amp; Escalation</h1></div></div>
+          <div class="admin-section">
+            <div class="admin-section-title">Active Rules</div>
+            <div class="admin-row"><div class="admin-row-label">Auto-escalate Critical observations</div><div class="admin-row-meta">Trigger: Severity = Critical</div><button class="admin-row-btn">Edit &#8250;</button></div>
+            <div class="admin-row"><div class="admin-row-label">Notify HSE Manager on incident</div><div class="admin-row-meta">Trigger: New incident created</div><button class="admin-row-btn">Edit &#8250;</button></div>
+            <div class="admin-row"><div class="admin-row-label">Overdue task reminder</div><div class="admin-row-meta">Trigger: Task overdue by 24h</div><button class="admin-row-btn">Edit &#8250;</button></div>
+          </div>
+          <div class="admin-section">
+            <div class="admin-section-title">Escalation Paths</div>
+            <div class="admin-row"><div class="admin-row-label">Critical Safety Path</div><div class="admin-row-meta">Site Supervisor &#8594; HSE Manager &#8594; PMC</div><button class="admin-row-btn">Edit &#8250;</button></div>
+            <div class="admin-row"><div class="admin-row-label">Standard Review Path</div><div class="admin-row-meta">Observer &#8594; HSE Manager</div><button class="admin-row-btn">Edit &#8250;</button></div>
+          </div>
+        </div>
+
+        <!-- ========== ADMIN: INTEGRATIONS ========== -->
+        <div id="page-admin-integrations" class="page-content" style="display:none;padding:24px">
+          <div class="page-header"><div class="page-title-row"><h1 class="page-title">Integrations</h1></div></div>
+          <div class="admin-section">
+            <div class="admin-section-title">WhatsApp</div>
+            <div class="admin-row"><div class="admin-row-label">WhatsApp Group Config</div><span class="chip success" style="margin-right:8px">Connected</span><button class="admin-row-btn">Configure &#8250;</button></div>
+            <div class="admin-row"><div class="admin-row-label">WhatsApp Hub Activation</div><div class="toggle-switch on" onclick="this.classList.toggle('on')"></div><span class="chip success" style="margin-left:8px">Active</span></div>
+          </div>
+        </div>
+
+        <!-- ========== ADMIN: AI SETUP ========== -->
+        <div id="page-admin-ai" class="page-content" style="display:none;padding:24px">
+          <div class="page-header"><div class="page-title-row"><h1 class="page-title">AI Setup</h1></div></div>
+          <div class="admin-section">
+            <div class="admin-section-title">nAI Hub</div>
+            <div class="admin-row"><div class="admin-row-label">nAI Hub Activation</div><div class="toggle-switch on" onclick="this.classList.toggle('on')"></div><span class="chip success" style="margin-left:8px">Active</span></div>
+            <div class="admin-row"><div class="admin-row-label">Deployment Mode</div><div class="admin-row-meta">Production</div></div>
+            <div class="admin-row"><div class="admin-row-label">Connected Chatbots</div><div class="admin-row-meta">2 (Crystal, SafeBot)</div><button class="admin-row-btn">Manage &#8250;</button></div>
+          </div>
+        </div>
+
+        <!-- ========== TRAINING ========== -->
+        <div id="page-training" class="page-content" style="display:none">
+          <div class="coming-soon-page">
+            <div class="coming-soon-icon">&#9733;</div>
+            <div class="coming-soon-title">Training Module</div>
+            <div class="coming-soon-subtitle">Training management coming soon</div>
+          </div>
+        </div>
+
+        <!-- ========== INSPECTIONS ========== -->
+        <div id="page-inspections" class="page-content" style="display:none">
+          <div class="coming-soon-page">
+            <div class="coming-soon-icon">&#9745;</div>
+            <div class="coming-soon-title">Inspections Module</div>
+            <div class="coming-soon-subtitle">Inspection management coming soon</div>
+          </div>
+        </div>
+
+        <!-- ========== QUIZ ========== -->
+        <div id="page-quiz" class="page-content" style="display:none">
+          <div class="coming-soon-page">
+            <div class="coming-soon-icon">&#63;</div>
+            <div class="coming-soon-title">Quiz Assessment</div>
+            <div class="coming-soon-subtitle">Safety quiz builder coming soon</div>
+          </div>
+        </div>
+
+        <!-- ========== VIDEO SCRIPTS ========== -->
+        <div id="page-video-scripts" class="page-content" style="display:none">
+          <div class="coming-soon-page">
+            <div class="coming-soon-icon">&#9654;</div>
+            <div class="coming-soon-title">Video Scripts</div>
+            <div class="coming-soon-subtitle">Video script generator coming soon</div>
+          </div>
+        </div>
+
+        <!-- ========== USER MGMT (SUBSIDIARY LEVEL) ========== -->
+        <div id="page-user-mgmt" class="page-content" style="display:none">
+          <div class="coming-soon-page">
+            <div class="coming-soon-icon">&#9786;</div>
+            <div class="coming-soon-title">User Management</div>
+            <div class="coming-soon-subtitle">Organisation user management coming soon</div>
+          </div>
+        </div>
+
+        <!-- ========== PROFILE ========== -->
+        <div id="page-profile" class="page-content" style="display:none">
+          <div class="profile-page">
+            <div class="profile-avatar-large">VM</div>
+            <div class="profile-name">Venkatesh Murthy</div>
+            <div class="profile-email">venky@navatech.ai</div>
+            <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
+              <div class="details-card" style="text-align:left;max-width:360px;margin-bottom:0">
+                <div class="details-card-title">Account Details</div>
+                <div class="detail-item" style="margin-bottom:10px"><span class="detail-label">Role</span><span class="detail-value">Safety Director</span></div>
+                <div class="detail-item" style="margin-bottom:10px"><span class="detail-label">Organisation</span><span class="detail-value">Navatech Group</span></div>
+                <div class="detail-item"><span class="detail-label">Subsidiary</span><span class="detail-value">Qatar Operations</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
 </div>
 
-<!-- ═══════ WORKSPACE PANEL ═══════ -->
-<div class="workspace-overlay" id="ws-overlay" onclick="toggleWorkspace()"></div>
+<!-- WORKSPACE PANEL -->
+<div class="workspace-panel-overlay" id="ws-overlay" onclick="toggleWorkspace()"></div>
 <div class="workspace-panel" id="ws-panel">
-  <div class="ws-header">
-    <div class="ws-header-title">Switch Workspace</div>
-    <button class="ws-close" onclick="toggleWorkspace()">&times;</button>
+  <div class="ws-panel-header">
+    <div class="ws-panel-title">Workspaces</div>
+    <button class="ws-panel-close" onclick="toggleWorkspace()">&#10005;</button>
   </div>
-  <div class="ws-body">
-    <div class="ws-context-label">Navatech Group</div>
-
-    <div class="ws-current">
-      <div class="ws-label">Current Workspace</div>
-      <div class="ws-current-sub">Navatech Construction &mdash; UAE</div>
-    </div>
-
-    <div class="ws-recent" tabindex="0">
-      <div class="ws-recent-info">
-        <div class="ws-recent-label">Recent Project</div>
-        <div class="ws-recent-name">Marina Bay Tower &mdash; Phase 2</div>
-        <div class="ws-recent-time">Opened 2 hours ago</div>
-      </div>
-      <span class="ws-recent-arrow">&rarr;</span>
-    </div>
-
-    <input class="ws-search" type="text" placeholder="Search subsidiaries and projects...">
-
-    <div class="ws-section">
-      <div class="ws-section-title">Subsidiaries</div>
-      <div class="ws-item active">
-        <span>Navatech Construction &mdash; UAE</span>
-        <span class="ws-item-right">&#10003;</span>
-      </div>
-      <div class="ws-item">
-        <span>Navatech Construction &mdash; KSA</span>
-        <span class="ws-item-right">4 projects</span>
-      </div>
-      <div class="ws-item">
-        <span>Navatech Facilities &mdash; India</span>
-        <span class="ws-item-right">3 projects</span>
+  <div class="ws-panel-body">
+    <div class="ws-panel-current">
+      <div class="ws-panel-current-dot"></div>
+      <div class="ws-panel-current-info">
+        <div class="ws-panel-current-name" id="ws-panel-current-name">Qatar Operations</div>
+        <div class="ws-panel-current-org" id="ws-panel-current-org">Navatech Group</div>
       </div>
     </div>
+    <input type="text" class="ws-panel-search" placeholder="Search workspaces...">
 
-    <div class="ws-section">
-      <div class="ws-section-title">Projects</div>
-      <div class="ws-project">
-        <span class="ws-project-name">Marina Bay Tower &mdash; Phase 2</span>
-        <span class="ws-project-meta">DXB-042 &middot; 3 incidents</span>
-      </div>
-      <div class="ws-project">
-        <span class="ws-project-name">Expo City Infrastructure</span>
-        <span class="ws-project-meta">DXB-038 &middot; 1 incident</span>
-      </div>
-      <div class="ws-project">
-        <span class="ws-project-name">Al Maryah Central &mdash; Towers A&amp;B</span>
-        <span class="ws-project-meta">ABD-015 &middot; 5 incidents</span>
-      </div>
-      <div class="ws-project">
-        <span class="ws-project-name">Palm Residences Fit-Out</span>
-        <span class="ws-project-meta">DXB-039 &middot; No incidents</span>
-      </div>
-      <div class="ws-project">
-        <span class="ws-project-name">Saadiyat Cultural Hub</span>
-        <span class="ws-project-meta">ABD-022 &middot; 2 incidents</span>
-      </div>
+    <div class="ws-panel-org-label">Navatech Group</div>
+    <div class="ws-panel-item" onclick="selectSubsidiary('Qatar Operations','Navatech Group');toggleWorkspace()">
+      <div class="ws-panel-item-avatar">N</div>
+      <div class="ws-panel-item-info"><div class="ws-panel-item-name">Qatar Operations</div><div class="ws-panel-item-meta">18 projects &middot; 124 users</div></div>
+    </div>
+    <div class="ws-panel-item" onclick="selectSubsidiary('UAE Division','Navatech Group');toggleWorkspace()">
+      <div class="ws-panel-item-avatar">N</div>
+      <div class="ws-panel-item-info"><div class="ws-panel-item-name">UAE Division</div><div class="ws-panel-item-meta">14 projects &middot; 98 users</div></div>
+    </div>
+    <div class="ws-panel-item" onclick="selectSubsidiary('India Division','Navatech Group');toggleWorkspace()">
+      <div class="ws-panel-item-avatar">N</div>
+      <div class="ws-panel-item-info"><div class="ws-panel-item-name">India Division</div><div class="ws-panel-item-meta">10 projects &middot; 76 users</div></div>
+    </div>
+
+    <div class="ws-panel-org-label">BuildSafe International</div>
+    <div class="ws-panel-item" onclick="selectSubsidiary('Saudi Operations','BuildSafe International');toggleWorkspace()">
+      <div class="ws-panel-item-avatar">B</div>
+      <div class="ws-panel-item-info"><div class="ws-panel-item-name">Saudi Operations</div><div class="ws-panel-item-meta">8 projects &middot; 52 users</div></div>
+    </div>
+    <div class="ws-panel-item" onclick="selectSubsidiary('UK Operations','BuildSafe International');toggleWorkspace()">
+      <div class="ws-panel-item-avatar">B</div>
+      <div class="ws-panel-item-info"><div class="ws-panel-item-name">UK Operations</div><div class="ws-panel-item-meta">6 projects &middot; 41 users</div></div>
     </div>
   </div>
 </div>
 
-<!-- ═══════ PROTOTYPE CONTROLS ═══════ -->
-<div class="proto-controls">
-  <button class="proto-btn active" id="pb-login" onclick="nav('login')">Login</button>
-  <button class="proto-btn" id="pb-otp" onclick="nav('otp')">OTP</button>
-  <button class="proto-btn" id="pb-home" onclick="nav('app');navApp('home')">Home</button>
-  <button class="proto-btn" id="pb-tasks" onclick="nav('app');navApp('tasks')">Tasks</button>
-  <button class="proto-btn" id="pb-profile" onclick="nav('app');navApp('profile')">Profile</button>
-  <button class="proto-btn" id="pb-theme" onclick="toggleDarkMode()">Theme</button>
-  <button class="proto-btn" id="pb-loading" onclick="nav('app');navApp('home');setHomeState('loading')">Loading</button>
-  <button class="proto-btn" id="pb-empty" onclick="nav('app');navApp('home');setHomeState('empty')">Empty</button>
-  <button class="proto-btn" id="pb-error" onclick="nav('app');navApp('home');setHomeState('error')">Error</button>
-  <button class="proto-btn" id="pb-default" onclick="nav('app');navApp('home');setHomeState('default')">Default</button>
+<!-- FLOATING CONTROLS -->
+<div class="floating-controls">
+  <div class="floating-panel" id="floating-panel">
+    <div class="floating-panel-title">Screens</div>
+    <div class="floating-panel-grid">
+      <button class="fp-btn" onclick="nav('login')">Login</button>
+      <button class="fp-btn" onclick="nav('otp')">OTP</button>
+      <button class="fp-btn" onclick="nav('select-workspace')">Workspaces</button>
+      <button class="fp-btn" onclick="nav('app');exitProject();showPage('dashboard')">Dashboard</button>
+      <button class="fp-btn" onclick="nav('app');exitProject();showPage('projects')">Projects</button>
+      <button class="fp-btn" onclick="nav('app');enterProject('Marina Bay Tower');showPage('project-overview')">Project View</button>
+      <button class="fp-btn" onclick="nav('app');enterProject('Marina Bay Tower');showPage('observations')">Observations</button>
+      <button class="fp-btn" onclick="nav('app');enterProject('Marina Bay Tower');showPage('incidents')">Incidents</button>
+      <button class="fp-btn" onclick="nav('app');enterProject('Marina Bay Tower');showPage('walkthroughs')">Walkthroughs</button>
+      <button class="fp-btn" onclick="nav('app');enterProject('Marina Bay Tower');showPage('ai-hub')">AI Hub</button>
+      <button class="fp-btn" onclick="nav('app');enterProject('Marina Bay Tower');showPage('admin-users')">Admin</button>
+      <button class="fp-btn" onclick="nav('app');exitProject();showPage('quiz')">Quiz</button>
+      <button class="fp-btn" onclick="nav('app');exitProject();showPage('video-scripts')">Video Scripts</button>
+      <button class="fp-btn" onclick="nav('app');showPage('profile')">Profile</button>
+    </div>
+    <div class="floating-panel-title" style="margin-top:12px">Mode</div>
+    <div class="floating-panel-grid">
+      <button class="fp-btn" onclick="setTheme('light')">Light</button>
+      <button class="fp-btn" onclick="setTheme('dark')">Dark</button>
+    </div>
+    <div class="floating-panel-title" style="margin-top:12px">Theme Color</div>
+    <div class="floating-panel-grid">
+      <button class="fp-btn" onclick="setClientColor('#1a56db')" style="background:#1a56db;color:#fff;border-color:#1a56db">Blue</button>
+      <button class="fp-btn" onclick="setClientColor('#0f766e')" style="background:#0f766e;color:#fff;border-color:#0f766e">Teal</button>
+      <button class="fp-btn" onclick="setClientColor('#7c3aed')" style="background:#7c3aed;color:#fff;border-color:#7c3aed">Purple</button>
+      <button class="fp-btn" onclick="setClientColor('#1e3a5f')" style="background:#1e3a5f;color:#fff;border-color:#1e3a5f">Navy</button>
+      <button class="fp-btn" onclick="setClientColor('#b91c1c')" style="background:#b91c1c;color:#fff;border-color:#b91c1c">Red</button>
+      <button class="fp-btn" onclick="setClientColor('#15803d')" style="background:#15803d;color:#fff;border-color:#15803d">Green</button>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;margin-top:6px">
+      <input type="color" id="webColorPicker" value="#1a56db" oninput="setClientColor(this.value)" style="width:32px;height:28px;border:none;border-radius:4px;cursor:pointer;padding:0;background:none">
+      <span id="webColorHex" style="font-size:11px;color:#9ca3af;font-family:monospace">#1a56db</span>
+    </div>
+  </div>
+  <button class="floating-toggle" onclick="document.getElementById('floating-panel').classList.toggle('open')">&#9881; Controls</button>
 </div>
 
 <script>
 (function(){
+  /* STATE */
+  let currentScreen = 'login';
+  let currentPage = 'dashboard';
+  let currentOrg = 'Navatech Group';
+  let currentSub = 'Qatar Operations';
+  let currentProject = null;
+  let inProjectMode = false;
+  let otpTimerInterval = null;
 
-/* ── SCREEN NAVIGATION ── */
-let currentScreen = 'login';
-let currentPage = 'home';
+  /* NAV */
+  window.nav = function(screen){
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-'+screen).classList.add('active');
+    currentScreen = screen;
+    if(screen === 'otp') initOTP();
+  };
 
-window.nav = function(screen) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  const el = document.getElementById('screen-' + screen);
-  if (el) el.classList.add('active');
-  currentScreen = screen;
-  updateProtoButtons();
-  if (screen === 'otp') {
-    startResendTimer();
-    setTimeout(() => {
-      const first = document.querySelector('.otp-input');
-      if (first) first.focus();
-    }, 100);
-  }
-};
+  /* SHOW PAGE */
+  window.showPage = function(page){
+    if(currentScreen !== 'app') nav('app');
+    document.querySelectorAll('.page-content').forEach(p => p.style.display = 'none');
+    const el = document.getElementById('page-'+page);
+    if(el) el.style.display = 'block';
+    currentPage = page;
+    updateSidebarActive(page);
+    updateBreadcrumb();
+    closeProjectSwitcher();
+  };
 
-window.navApp = function(page) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  const el = document.getElementById('page-' + page);
-  if (el) el.classList.add('active');
-  currentPage = page;
-
-  document.querySelectorAll('.nav-item[data-page]').forEach(n => n.classList.remove('active'));
-  const navItem = document.querySelector('.nav-item[data-page="' + page + '"]');
-  if (navItem) navItem.classList.add('active');
-  updateProtoButtons();
-};
-
-function updateProtoButtons() {
-  document.querySelectorAll('.proto-btn').forEach(b => b.classList.remove('active'));
-  if (currentScreen === 'login') document.getElementById('pb-login').classList.add('active');
-  else if (currentScreen === 'otp') document.getElementById('pb-otp').classList.add('active');
-  else if (currentScreen === 'app' && currentPage === 'home') document.getElementById('pb-home').classList.add('active');
-  else if (currentScreen === 'app' && currentPage === 'tasks') document.getElementById('pb-tasks').classList.add('active');
-  else if (currentScreen === 'app' && currentPage === 'profile') document.getElementById('pb-profile').classList.add('active');
-}
-
-/* ── LOGIN ── */
-window.handleLogin = function(e) {
-  e.preventDefault();
-  const email = document.getElementById('login-email');
-  const notice = document.getElementById('login-notice');
-  const btn = document.getElementById('login-btn');
-  notice.className = 'notice';
-  notice.style.display = 'none';
-
-  const val = email.value.trim();
-  if (!val || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
-    email.classList.add('error');
-    notice.textContent = 'Please enter a valid email address.';
-    notice.className = 'notice error';
-    notice.style.display = 'flex';
-    return;
+  /* SIDEBAR ACTIVE */
+  function updateSidebarActive(page){
+    const mode = inProjectMode ? 'sidebar-proj-mode' : 'sidebar-sub-mode';
+    document.querySelectorAll('#'+mode+' .sidebar-item').forEach(i => i.classList.remove('active'));
+    const target = document.querySelector('#'+mode+' .sidebar-item[data-page="'+page+'"]');
+    if(target) target.classList.add('active');
   }
 
-  email.classList.remove('error');
-  btn.disabled = true;
-  btn.textContent = 'Sending...';
-
-  setTimeout(function() {
-    btn.disabled = false;
-    btn.textContent = 'Send Verification Code';
-    notice.textContent = 'Verification code sent successfully.';
-    notice.className = 'notice success';
-    notice.style.display = 'flex';
-    setTimeout(function() { nav('otp'); }, 800);
-  }, 1200);
-};
-
-/* ── OTP ── */
-const otpInputs = document.querySelectorAll('.otp-input');
-otpInputs.forEach(function(inp, idx) {
-  inp.addEventListener('input', function() {
-    this.value = this.value.replace(/\D/g, '');
-    if (this.value.length === 1 && idx < 5) {
-      otpInputs[idx + 1].focus();
-    }
-  });
-  inp.addEventListener('keydown', function(e) {
-    if (e.key === 'Backspace' && !this.value && idx > 0) {
-      otpInputs[idx - 1].focus();
-    }
-  });
-  inp.addEventListener('paste', function(e) {
-    e.preventDefault();
-    const paste = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '');
-    for (let i = 0; i < 6 && i < paste.length; i++) {
-      otpInputs[i].value = paste[i];
-    }
-    const focusIdx = Math.min(paste.length, 5);
-    otpInputs[focusIdx].focus();
-  });
-});
-
-window.handleVerify = function(e) {
-  e.preventDefault();
-  const notice = document.getElementById('otp-notice');
-  const btn = document.getElementById('otp-btn');
-  let code = '';
-  otpInputs.forEach(function(inp) { code += inp.value; });
-  if (code.length < 6) {
-    notice.textContent = 'Please enter all 6 digits.';
-    notice.className = 'notice error';
-    notice.style.display = 'flex';
-    return;
-  }
-  notice.style.display = 'none';
-  btn.disabled = true;
-  btn.textContent = 'Verifying...';
-  setTimeout(function() {
-    btn.disabled = false;
-    btn.textContent = 'Verify & Sign In';
-    otpInputs.forEach(function(inp) { inp.value = ''; });
-    nav('app');
-    navApp('home');
-    setHomeState('default');
-  }, 1200);
-};
-
-/* ── RESEND TIMER (120s / 2 minutes) ── */
-let resendInterval;
-window.startResendTimer = function() {
-  clearInterval(resendInterval);
-  const timerEl = document.getElementById('otp-timer');
-  const resendBtn = document.getElementById('otp-resend');
-  let sec = 120;
-  resendBtn.disabled = true;
-  timerEl.classList.remove('expired');
-
-  function formatTime(s) {
-    var m = Math.floor(s / 60);
-    var r = s % 60;
-    return String(m).padStart(2, '0') + ':' + String(r).padStart(2, '0');
-  }
-
-  sec--;
-  timerEl.textContent = 'Code expires in ' + formatTime(sec);
-
-  resendInterval = setInterval(function() {
-    sec--;
-    if (sec <= 0) {
-      clearInterval(resendInterval);
-      timerEl.textContent = 'Code expired. Request a new one.';
-      timerEl.classList.add('expired');
-      resendBtn.disabled = false;
+  /* BREADCRUMB */
+  function updateBreadcrumb(){
+    const bc = document.getElementById('breadcrumb');
+    const pageNames = {
+      'dashboard':'Dashboard','projects':'Projects','project-overview':'Overview',
+      'observations':'Observations','incidents':'Incidents','walkthroughs':'Site Walkthroughs',
+      'ai-hub':'AI Hub','training':'Training',
+      'inspections':'Inspections','quiz':'Quiz Assessment','video-scripts':'Video Scripts',
+      'user-mgmt':'User Management','profile':'Profile',
+      'admin-users':'Users & Access','admin-details':'Project Details',
+      'admin-rules':'Rules & Escalation','admin-integrations':'Integrations','admin-ai':'AI Setup'
+    };
+    let html = '<span class="breadcrumb-item">'+currentOrg+'</span><span class="breadcrumb-sep">&#8250;</span>';
+    if(inProjectMode){
+      html += '<span class="breadcrumb-item sub clickable" onclick="exitProject()">'+currentSub+'</span>';
+      html += '<span class="breadcrumb-sep">&#8250;</span>';
+      html += '<span class="breadcrumb-item project">'+currentProject+'</span>';
+      html += '<span class="breadcrumb-sep">&#8250;</span>';
     } else {
-      timerEl.textContent = 'Code expires in ' + formatTime(sec);
+      html += '<span class="breadcrumb-item sub">'+currentSub+'</span>';
+      html += '<span class="breadcrumb-sep">&#8250;</span>';
     }
-  }, 1000);
-};
-
-/* ── TASK TABS ── */
-window.switchTaskTab = function(tab) {
-  document.querySelectorAll('.task-tab').forEach(function(t) { t.classList.remove('active'); });
-  document.querySelectorAll('.task-tab-content').forEach(function(c) { c.classList.remove('active'); });
-  var tabBtn = document.querySelector('.task-tab[data-task-tab="' + tab + '"]');
-  if (tabBtn) tabBtn.classList.add('active');
-  var tabContent = document.getElementById('tab-' + tab);
-  if (tabContent) tabContent.classList.add('active');
-};
-
-/* ── WORKSPACE ── */
-window.toggleWorkspace = function() {
-  const overlay = document.getElementById('ws-overlay');
-  const panel = document.getElementById('ws-panel');
-  const isOpen = panel.classList.contains('open');
-  if (isOpen) {
-    panel.classList.remove('open');
-    overlay.classList.remove('open');
-  } else {
-    overlay.classList.add('open');
-    requestAnimationFrame(function() { panel.classList.add('open'); });
+    html += '<span class="breadcrumb-item current">'+(pageNames[currentPage]||currentPage)+'</span>';
+    bc.innerHTML = html;
   }
-};
 
-/* ── DARK MODE ── */
-window.toggleDarkMode = function() {
-  const html = document.documentElement;
-  const isDark = html.getAttribute('data-theme') === 'dark';
-  html.setAttribute('data-theme', isDark ? '' : 'dark');
-  const label = document.getElementById('theme-label');
-  if (label) label.textContent = isDark ? 'Light' : 'Dark';
-};
+  /* ENTER PROJECT */
+  window.enterProject = function(name){
+    if(currentScreen !== 'app') nav('app');
+    currentProject = name;
+    inProjectMode = true;
+    document.getElementById('sidebar-sub-mode').style.display = 'none';
+    document.getElementById('sidebar-proj-mode').style.display = 'block';
+    document.getElementById('ctx-org').textContent = currentOrg;
+    document.getElementById('ctx-sub').textContent = currentSub;
+    document.getElementById('ctx-back-sub').textContent = currentSub.replace(' Operations','').replace(' Division','') + ' Ops';
+    document.getElementById('ctx-project-name').textContent = name;
 
-/* ── HOME STATES ── */
-let savedDefault = null;
+    const items = document.querySelectorAll('#project-switcher .project-switcher-item');
+    items.forEach(i => {
+      i.classList.toggle('active', i.textContent.trim() === name);
+    });
 
-window.setHomeState = function(state) {
-  const states = ['default', 'loading', 'empty', 'error'];
-  states.forEach(function(s) {
-    const el = document.getElementById('home-' + s);
-    if (el) el.style.display = (s === state) ? '' : 'none';
+    const isLinked = (name === 'Expo City');
+    const banner = document.getElementById('view-only-banner');
+    if(banner) banner.style.display = isLinked ? 'block' : 'none';
+
+    document.getElementById('proj-overview-title').textContent = name;
+    showPage('project-overview');
+  };
+
+  /* EXIT PROJECT */
+  window.exitProject = function(){
+    inProjectMode = false;
+    currentProject = null;
+    document.getElementById('sidebar-sub-mode').style.display = 'block';
+    document.getElementById('sidebar-proj-mode').style.display = 'none';
+    document.getElementById('view-only-banner').style.display = 'none';
+    showPage('projects');
+  };
+
+  /* SWITCH PROJECT */
+  window.switchProject = function(name){
+    closeProjectSwitcher();
+    currentProject = name;
+    document.getElementById('ctx-project-name').textContent = name;
+    const items = document.querySelectorAll('#project-switcher .project-switcher-item');
+    items.forEach(i => i.classList.toggle('active', i.textContent.trim() === name));
+
+    const isLinked = (name === 'Expo City');
+    document.getElementById('view-only-banner').style.display = isLinked ? 'block' : 'none';
+    document.getElementById('proj-overview-title').textContent = name;
+    showPage('project-overview');
+  };
+
+  /* WORKSPACE PANEL */
+  window.toggleWorkspace = function(){
+    const panel = document.getElementById('ws-panel');
+    const overlay = document.getElementById('ws-overlay');
+    const isOpen = panel.classList.contains('open');
+    panel.classList.toggle('open');
+    overlay.classList.toggle('open');
+  };
+
+  /* PROJECT SWITCHER */
+  window.toggleProjectSwitcher = function(){
+    document.getElementById('project-switcher').classList.toggle('open');
+  };
+  function closeProjectSwitcher(){
+    document.getElementById('project-switcher').classList.remove('open');
+  }
+
+  /* SELECT SUBSIDIARY */
+  window.selectSubsidiary = function(sub, org){
+    currentSub = sub;
+    currentOrg = org || currentOrg;
+    document.getElementById('topbar-org').textContent = currentOrg;
+    document.getElementById('topbar-sub').textContent = currentSub;
+    document.getElementById('ws-panel-current-name').textContent = currentSub;
+    document.getElementById('ws-panel-current-org').textContent = currentOrg;
+    if(inProjectMode) exitProject();
+    nav('app');
+    showPage('dashboard');
+  };
+
+  /* COLOR UTILS */
+  function hexToHsl(hex){
+    var r=parseInt(hex.slice(1,3),16)/255,g=parseInt(hex.slice(3,5),16)/255,b=parseInt(hex.slice(5,7),16)/255;
+    var max=Math.max(r,g,b),min=Math.min(r,g,b),h,s,l=(max+min)/2;
+    if(max===min){h=s=0}else{
+      var d=max-min;s=l>0.5?d/(2-max-min):d/(max+min);
+      switch(max){case r:h=(g-b)/d+(g<b?6:0);break;case g:h=(b-r)/d+2;break;case b:h=(r-g)/d+4;break}
+      h/=6;
+    }
+    return[h*360,s*100,l*100];
+  }
+  function hslToHex(h,s,l){
+    h/=360;s/=100;l/=100;var r,g,b;
+    if(s===0){r=g=b=l}else{
+      function hue2rgb(p,q,t){if(t<0)t+=1;if(t>1)t-=1;if(t<1/6)return p+(q-p)*6*t;if(t<1/2)return q;if(t<2/3)return p+(q-p)*(2/3-t)*6;return p}
+      var q=l<0.5?l*(1+s):l+s-l*s,p=2*l-q;
+      r=hue2rgb(p,q,h+1/3);g=hue2rgb(p,q,h);b=hue2rgb(p,q,h-1/3);
+    }
+    return'#'+[r,g,b].map(function(x){var hex=Math.round(x*255).toString(16);return hex.length===1?'0'+hex:hex}).join('');
+  }
+
+  var currentClientColor = '#1a56db';
+
+  /* SET CLIENT COLOR — generates full tonal palette */
+  window.setClientColor = function(color){
+    currentClientColor = color;
+    var hsl = hexToHsl(color);
+    var h=hsl[0],s=hsl[1];
+    var isDark = document.documentElement.getAttribute('data-theme')==='dark';
+    var root = document.documentElement;
+
+    if(!isDark){
+      root.style.setProperty('--primary', hslToHex(h,Math.min(s,75),42));
+      root.style.setProperty('--primary-light', hslToHex(h,Math.min(s,40),94));
+      root.style.setProperty('--primary-hover', hslToHex(h,Math.min(s,75),34));
+      root.style.setProperty('--primary-10', 'rgba('+
+        parseInt(hslToHex(h,Math.min(s,75),42).slice(1,3),16)+','+
+        parseInt(hslToHex(h,Math.min(s,75),42).slice(3,5),16)+','+
+        parseInt(hslToHex(h,Math.min(s,75),42).slice(5,7),16)+',0.08)');
+      root.style.setProperty('--surface-secondary', hslToHex(h,Math.max(s*0.12,4),97));
+      root.style.setProperty('--bg', hslToHex(h,Math.max(s*0.08,3),98));
+    } else {
+      root.style.setProperty('--primary', hslToHex(h,Math.min(s,50),72));
+      root.style.setProperty('--primary-light', hslToHex(h,Math.min(s,40),18));
+      root.style.setProperty('--primary-hover', hslToHex(h,Math.min(s,50),80));
+      root.style.setProperty('--primary-10', 'rgba('+
+        parseInt(hslToHex(h,Math.min(s,50),72).slice(1,3),16)+','+
+        parseInt(hslToHex(h,Math.min(s,50),72).slice(3,5),16)+','+
+        parseInt(hslToHex(h,Math.min(s,50),72).slice(5,7),16)+',0.12)');
+      root.style.setProperty('--surface-secondary', hslToHex(h,Math.max(s*0.08,3),13));
+      root.style.setProperty('--bg', hslToHex(h,Math.max(s*0.06,2),6));
+    }
+
+    var picker = document.getElementById('webColorPicker');
+    if(picker) picker.value = color;
+    var hex = document.getElementById('webColorHex');
+    if(hex) hex.textContent = color;
+  };
+
+  /* THEME */
+  window.setTheme = function(theme){
+    if(theme === 'dark') document.documentElement.setAttribute('data-theme','dark');
+    else document.documentElement.removeAttribute('data-theme');
+    setClientColor(currentClientColor);
+  };
+
+  /* OVERVIEW SUB-TABS */
+  window.setOverviewSubtab = function(tab, btn){
+    document.querySelectorAll('.overview-subtab').forEach(function(b){
+      b.style.background = 'var(--surface)';
+      b.style.color = 'var(--text-secondary)';
+      b.classList.remove('active');
+    });
+    btn.style.background = 'var(--primary)';
+    btn.style.color = '#fff';
+    btn.classList.add('active');
+    document.getElementById('overview-safety').style.display = tab==='safety' ? '' : 'none';
+    document.getElementById('overview-env').style.display = tab==='env' ? '' : 'none';
+  };
+
+  /* PROJECT FILTERS */
+  var currentProjectFilter = 'all';
+  window.setProjectFilter = function(type, btn){
+    currentProjectFilter = type;
+    document.querySelectorAll('#project-segments .segmented-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    filterProjects();
+  };
+  window.filterProjects = function(){
+    var search = (document.getElementById('project-search').value || '').toLowerCase();
+    document.querySelectorAll('.project-card').forEach(function(card){
+      var name = (card.querySelector('.project-card-name')||{}).textContent||'';
+      var type = card.getAttribute('data-type')||'regular';
+      var matchType = currentProjectFilter==='all' || type===currentProjectFilter;
+      var matchSearch = !search || name.toLowerCase().indexOf(search)!==-1;
+      card.style.display = (matchType && matchSearch) ? '' : 'none';
+    });
+  };
+
+  /* DASHBOARD TABS */
+  window.setDashTab = function(el, tabId){
+    document.querySelectorAll('#dash-tabs .dash-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    ['dash-overview','dash-observations','dash-incidents','dash-training','dash-sitewalks'].forEach(id => {
+      const tab = document.getElementById(id);
+      if(tab) tab.style.display = (id === tabId) ? 'block' : 'none';
+    });
+  };
+
+  /* LOGIN */
+  window.handleLogin = function(){
+    const email = document.getElementById('login-email').value;
+    if(!email) return;
+    const parts = email.split('@');
+    const masked = parts[0][0] + '&#8226;&#8226;&#8226;@' + parts[1];
+    document.getElementById('otp-email-display').innerHTML = masked;
+    nav('otp');
+  };
+
+  /* VERIFY */
+  window.handleVerify = function(){
+    nav('select-workspace');
+  };
+
+  /* OTP */
+  window.initOTP = function(){
+    const inputs = document.querySelectorAll('#otp-inputs .otp-input');
+    inputs.forEach((inp, idx) => {
+      inp.value = '';
+      inp.addEventListener('input', function(e){
+        if(this.value.length === 1 && idx < inputs.length - 1){
+          inputs[idx+1].focus();
+        }
+      });
+      inp.addEventListener('keydown', function(e){
+        if(e.key === 'Backspace' && !this.value && idx > 0){
+          inputs[idx-1].focus();
+        }
+      });
+      inp.addEventListener('paste', function(e){
+        e.preventDefault();
+        const data = (e.clipboardData || window.clipboardData).getData('text').trim();
+        for(let i = 0; i < Math.min(data.length, inputs.length); i++){
+          inputs[i].value = data[i];
+        }
+        const last = Math.min(data.length, inputs.length) - 1;
+        if(last >= 0) inputs[last].focus();
+      });
+    });
+    if(inputs[0]) inputs[0].focus();
+    startResendTimer();
+  };
+
+  window.startResendTimer = function(){
+    if(otpTimerInterval) clearInterval(otpTimerInterval);
+    let seconds = 120;
+    const timerEl = document.getElementById('otp-timer');
+    const resendBtn = document.getElementById('otp-resend');
+    resendBtn.disabled = true;
+    timerEl.classList.remove('expired');
+
+    function update(){
+      const m = Math.floor(seconds / 60);
+      const s = seconds % 60;
+      timerEl.textContent = 'Code expires in ' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+      if(seconds <= 0){
+        clearInterval(otpTimerInterval);
+        timerEl.textContent = 'Code expired. Request a new one.';
+        timerEl.classList.add('expired');
+        resendBtn.disabled = false;
+      }
+      seconds--;
+    }
+    update();
+    otpTimerInterval = setInterval(update, 1000);
+  };
+
+  /* CLICK OUTSIDE PROJECT SWITCHER */
+  document.addEventListener('click', function(e){
+    const switcher = document.getElementById('project-switcher');
+    const toggle = document.getElementById('project-switcher-toggle');
+    if(switcher && switcher.classList.contains('open') && !switcher.contains(e.target) && e.target !== toggle){
+      closeProjectSwitcher();
+    }
   });
-  updateProtoButtons();
-};
 
-document.addEventListener('DOMContentLoaded', function() {
-  setHomeState('default');
-});
+  /* SEGMENTED CONTROL */
+  document.addEventListener('click', function(e){
+    if(e.target.classList.contains('segmented-btn')){
+      const parent = e.target.closest('.segmented');
+      parent.querySelectorAll('.segmented-btn').forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+    }
+  });
 
 })();
 </script>
