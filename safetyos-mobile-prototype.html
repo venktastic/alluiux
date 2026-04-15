@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>nAI Mobile Prototype</title>
+<title>nAI Mobile &mdash; AI-Powered Construction Operations</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Text:wght@400;500;700&family=Roboto:wght@400;500;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -208,11 +208,19 @@ body{font-family:'Google Sans Text','Roboto','Inter',sans-serif;background:#1113
   display:flex;flex-direction:column;align-items:center;
 }
 .auth-top .auth-logo{width:90px;height:auto;display:block}
+.auth-tagline-stack{display:flex;flex-direction:column;align-items:center;gap:6px;width:100%;padding:0 16px;}
 .auth-top .auth-tagline{
   font-size:11px;font-weight:500;color:var(--md-outline);
   text-transform:uppercase;letter-spacing:1.5px;
-  margin-top:12px;
+  margin-top:12px;text-align:center;line-height:1.35;
 }
+.auth-tagline-toggle{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:9px;font-weight:500;color:var(--md-outline);
+  letter-spacing:0.35px;text-transform:none;line-height:1.2;
+  cursor:pointer;margin:0;padding:0 4px;
+}
+.auth-tagline-toggle input{accent-color:var(--md-primary);width:13px;height:13px;margin:0;cursor:pointer;flex-shrink:0;}
 .auth-card{
   background:var(--md-surface-container-lowest);
   border:none;
@@ -872,7 +880,7 @@ a{color:var(--md-primary);text-decoration:none}
 <div class="controls">
   <div class="ctrl-header">
     <h2>nAI Mobile &#8212; M3</h2>
-    <p>Enterprise HSE App Prototype</p>
+    <p>AI-Powered Construction Operations &mdash; app prototype</p>
   </div>
 
   <div class="ctrl-card">
@@ -1015,7 +1023,13 @@ a{color:var(--md-primary);text-decoration:none}
         <div class="logo-asset-slot auth-logo" style="width:90px">
           <img src="nai-logo.png" alt="nAI">
         </div>
-        <div class="auth-tagline">Construction Safety Platform</div>
+        <div class="auth-tagline-stack">
+          <div class="auth-tagline construction-tagline-text">AI-POWERED CONSTRUCTION OPERATIONS</div>
+          <label class="auth-tagline-toggle">
+            <input type="checkbox" class="construction-platform-cb" onchange="syncConstructionTaglines(event)">
+            <span>Show PLATFORM wording</span>
+          </label>
+        </div>
       </div>
 
       <div class="auth-card">
@@ -1023,7 +1037,7 @@ a{color:var(--md-primary);text-decoration:none}
         <p class="auth-sub">Enter your email to receive a one-time verification code.</p>
         <div class="field-group">
           <label>Email address</label>
-          <input type="email" id="loginEmail" placeholder="you@company.com">
+          <input type="email" id="loginEmail" placeholder="you@company.com" value="venky@navatech.ai">
         </div>
         <button class="primary-btn" onclick="handleLogin()">Send Verification Code</button>
       </div>
@@ -1040,7 +1054,13 @@ a{color:var(--md-primary);text-decoration:none}
           <div class="logo-asset-slot auth-logo" style="width:90px">
             <img src="nai-logo.png" alt="nAI">
           </div>
-          <div class="auth-tagline">Construction Safety Platform</div>
+          <div class="auth-tagline-stack">
+            <div class="auth-tagline construction-tagline-text">AI-POWERED CONSTRUCTION OPERATIONS</div>
+            <label class="auth-tagline-toggle">
+              <input type="checkbox" class="construction-platform-cb" onchange="syncConstructionTaglines(event)">
+              <span>Show PLATFORM wording</span>
+            </label>
+          </div>
         </div>
 
         <div class="auth-card">
@@ -1057,16 +1077,16 @@ a{color:var(--md-primary);text-decoration:none}
           <div class="field-row">
             <div class="field-group">
               <label>First Name</label>
-              <input type="text" id="regFirstName" placeholder="First name">
+              <input type="text" id="regFirstName" placeholder="First name" value="Venkatesh">
             </div>
             <div class="field-group">
               <label>Last Name</label>
-              <input type="text" id="regLastName" placeholder="Last name">
+              <input type="text" id="regLastName" placeholder="Last name" value="Murthy">
             </div>
           </div>
           <div class="field-group">
             <label>Email Address</label>
-            <input type="email" id="regEmail" placeholder="you@company.com">
+            <input type="email" id="regEmail" placeholder="you@company.com" value="venky@navatech.ai">
           </div>
           <div class="field-group">
             <label>Mobile Number</label>
@@ -1094,7 +1114,13 @@ a{color:var(--md-primary);text-decoration:none}
         <div class="logo-asset-slot auth-logo" style="width:90px">
           <img src="nai-logo.png" alt="nAI">
         </div>
-        <div class="auth-tagline">Construction Safety Platform</div>
+        <div class="auth-tagline-stack">
+          <div class="auth-tagline construction-tagline-text">AI-POWERED CONSTRUCTION OPERATIONS</div>
+          <label class="auth-tagline-toggle">
+            <input type="checkbox" class="construction-platform-cb" onchange="syncConstructionTaglines(event)">
+            <span>Show PLATFORM wording</span>
+          </label>
+        </div>
       </div>
 
       <div class="auth-card">
@@ -1106,7 +1132,7 @@ a{color:var(--md-primary);text-decoration:none}
         </div>
 
         <div class="otp-email-wrap">
-          <span class="otp-email-pill">&#9993; r****@navatech.com</span>
+          <span class="otp-email-pill">&#9993; v****@navatech.ai</span>
         </div>
 
         <div class="otp-digits" id="otpDigits">
@@ -1238,7 +1264,7 @@ a{color:var(--md-primary);text-decoration:none}
           <button class="hh-proj-dropdown" onclick="showScreen('screen-select-proj')">Marina Bay Tower <span class="hh-chevron">&#9662;</span></button>
           <p>Navatech Group &#183; UAE Division</p>
         </div>
-        <div class="hh-avatar" onclick="showScreen('screen-profile')">RK</div>
+        <div class="hh-avatar" onclick="showScreen('screen-profile')">VM</div>
       </div>
 
       <div class="home-body">
@@ -1642,7 +1668,7 @@ a{color:var(--md-primary);text-decoration:none}
           <h2>Dashboard</h2>
           <p>Marina Bay Tower</p>
         </div>
-        <div class="hh-avatar" onclick="showScreen('screen-profile')">RK</div>
+        <div class="hh-avatar" onclick="showScreen('screen-profile')">VM</div>
       </div>
 
       <div class="dash-tabs">
@@ -1716,10 +1742,10 @@ a{color:var(--md-primary);text-decoration:none}
 
       <div class="profile-scroll-area">
       <div class="profile-user-card">
-        <div class="pu-avatar">RK</div>
-        <h3>Rajesh Kumar</h3>
+        <div class="pu-avatar">VM</div>
+        <h3>Venkatesh Murthy</h3>
         <div class="pu-role">HSE Manager</div>
-        <div class="pu-email">rajesh.k@navatech.com</div>
+        <div class="pu-email">venky@navatech.ai</div>
       </div>
 
       <div class="profile-section">
@@ -2231,6 +2257,25 @@ function startResendTimer(){
 window.startResendTimer = startResendTimer;
 
 splashTimer = setTimeout(function(){ window.showScreen('screen-lang'); }, 2500);
+
+var TAGLINE_OPS = 'AI-POWERED CONSTRUCTION OPERATIONS';
+var TAGLINE_PLAT = 'AI-POWERED CONSTRUCTION PLATFORM';
+function syncConstructionTaglines(ev){
+  var checked = ev && ev.target ? ev.target.checked : false;
+  document.querySelectorAll('.construction-platform-cb').forEach(function(cb){ cb.checked = checked; });
+  var txt = checked ? TAGLINE_PLAT : TAGLINE_OPS;
+  document.querySelectorAll('.construction-tagline-text').forEach(function(el){ el.textContent = txt; });
+  try { localStorage.setItem('nai-constr-tagline-plat-pref', checked ? '1' : '0'); } catch(e){}
+}
+function initConstructionTagline(){
+  var checked = false;
+  try { checked = localStorage.getItem('nai-constr-tagline-plat-pref') === '1'; } catch(e){}
+  document.querySelectorAll('.construction-platform-cb').forEach(function(cb){ cb.checked = checked; });
+  var txt = checked ? TAGLINE_PLAT : TAGLINE_OPS;
+  document.querySelectorAll('.construction-tagline-text').forEach(function(el){ el.textContent = txt; });
+}
+initConstructionTagline();
+window.syncConstructionTaglines = syncConstructionTaglines;
 
 })();
 </script>

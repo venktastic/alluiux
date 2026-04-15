@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>nAI Admin Portal</title>
+<title>nAI — AI-Powered Construction Operations</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -58,6 +58,11 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;}
 .btn-primary:active{transform:scale(0.985);}
 .auth-terms{font-size:12px;color:var(--text-tertiary);text-align:center;margin-top:20px;line-height:1.5;}
 .auth-footer{font-size:11px;color:var(--text-tertiary);text-align:center;margin-top:24px;letter-spacing:0.02em;}
+.auth-tagline-block{width:100%;display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:24px;}
+.auth-footer-tagline{font-size:11px;color:var(--text-tertiary);text-align:center;letter-spacing:0.02em;line-height:1.45;max-width:340px;}
+.tagline-toggle-row{display:inline-flex;align-items:center;gap:8px;font-size:11px;color:var(--text-secondary);cursor:pointer;user-select:none;}
+.tagline-toggle-row input{accent-color:var(--primary);width:15px;height:15px;margin:0;cursor:pointer;flex-shrink:0;}
+.tagline-toggle-hint{font-size:10px;color:var(--text-tertiary);letter-spacing:0.03em;}
 
 /* OTP */
 .otp-email-badge{display:inline-flex;align-items:center;background:var(--primary-light);color:var(--primary);border-radius:var(--radius-full);padding:6px 16px;font-size:14px;font-weight:600;margin-bottom:24px;}
@@ -409,12 +414,18 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;}
     <p class="auth-subtitle">Enter your email to receive a verification code.</p>
     <div class="auth-form">
       <label class="form-label">Email address</label>
-      <input type="email" id="login-email" class="form-input" placeholder="you@company.com" value="rk@navatech.ai">
+      <input type="email" id="login-email" class="form-input" placeholder="you@company.com" value="venky@navatech.ai">
       <div style="height:10px"></div>
       <button class="btn-primary" onclick="handleLogin()">Send Verification Code</button>
     </div>
     <p class="auth-terms">By signing in, you agree to our Terms &amp; Conditions</p>
-    <p class="auth-footer">Enterprise Construction Safety Platform</p>
+    <div class="auth-tagline-block">
+      <p class="auth-footer-tagline"><span>Enterprise </span><span id="construction-tagline-text">AI-POWERED CONSTRUCTION OPERATIONS</span></p>
+      <label class="tagline-toggle-row">
+        <input type="checkbox" id="construction-tagline-platform-toggle" onchange="applyConstructionTaglineToggle()" aria-label="Show AI-POWERED CONSTRUCTION PLATFORM wording">
+        <span class="tagline-toggle-hint">Show AI-POWERED CONSTRUCTION PLATFORM</span>
+      </label>
+    </div>
   </div>
 </div>
 
@@ -423,7 +434,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;}
   <div class="auth-card">
     <img src="nai-logo.png" alt="nAI" class="auth-logo">
     <h1 class="auth-title">Verify your identity</h1>
-    <div class="otp-email-badge" id="otp-email-display">r&#8226;&#8226;&#8226;@navatech.ai</div>
+    <div class="otp-email-badge" id="otp-email-display">v&#8226;&#8226;&#8226;@navatech.ai</div>
     <div class="otp-inputs" id="otp-inputs">
       <input type="text" maxlength="1" class="otp-input" data-idx="0" inputmode="numeric">
       <input type="text" maxlength="1" class="otp-input" data-idx="1" inputmode="numeric">
@@ -1902,6 +1913,25 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;}
       if(tab) tab.style.display = (id === tabId) ? 'block' : 'none';
     });
   };
+
+  const TAGLINE_OPS = 'AI-POWERED CONSTRUCTION OPERATIONS';
+  const TAGLINE_PLAT = 'AI-POWERED CONSTRUCTION PLATFORM';
+  window.applyConstructionTaglineToggle = function(){
+    const cb = document.getElementById('construction-tagline-platform-toggle');
+    const span = document.getElementById('construction-tagline-text');
+    if(!cb || !span) return;
+    span.textContent = cb.checked ? TAGLINE_PLAT : TAGLINE_OPS;
+    try { localStorage.setItem('nai-constr-tagline-plat-pref', cb.checked ? '1' : '0'); } catch(e){}
+  };
+  (function initConstructionTagline(){
+    const cb = document.getElementById('construction-tagline-platform-toggle');
+    const span = document.getElementById('construction-tagline-text');
+    if(!cb || !span) return;
+    try {
+      if(localStorage.getItem('nai-constr-tagline-plat-pref') === '1') cb.checked = true;
+    } catch(e){}
+    span.textContent = cb.checked ? TAGLINE_PLAT : TAGLINE_OPS;
+  })();
 
   /* LOGIN */
   window.handleLogin = function(){
