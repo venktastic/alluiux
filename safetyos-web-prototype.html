@@ -864,6 +864,37 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;}
 .dsh-mlabel{font-size:13px;font-weight:600;color:var(--text-primary);min-width:90px;text-align:center}
 .dsh-g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
 .dsh-g2 .dsh-card{margin-bottom:0}
+
+/* DETAIL PAGES */
+.detail-page-layout{display:flex;gap:24px;align-items:flex-start;}
+.detail-form-pane{flex:0 0 75%;max-width:75%;min-width:0;}
+.detail-timeline-pane{flex:1;position:sticky;top:calc(var(--topbar-h) + 24px);max-height:calc(100vh - var(--topbar-h) - 48px);overflow-y:auto;}
+.det-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:20px;}
+.det-card-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.det-card-title{font-size:14px;font-weight:700;color:var(--text-primary);}
+.det-export-btn{padding:6px 14px;border:1px solid var(--primary);border-radius:var(--radius-sm);background:var(--surface);color:var(--primary);font-size:12px;font-weight:600;cursor:pointer;transition:background .15s;}
+.det-export-btn:hover{background:var(--primary-light);}
+.det-field-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px 24px;}
+.det-field{display:flex;flex-direction:column;gap:4px;}
+.det-field.span2{grid-column:span 2;}
+.det-field.span3{grid-column:span 3;}
+.det-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-tertiary);}
+.det-val{font-size:13px;font-weight:500;color:var(--text-primary);line-height:1.5;}
+.det-textarea-val{font-size:13px;color:var(--text-primary);line-height:1.6;background:var(--surface-secondary);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;min-height:76px;}
+.det-ph{background:var(--surface-secondary);border:1.5px dashed var(--border);border-radius:var(--radius-sm);padding:20px;text-align:center;font-size:12px;color:var(--text-tertiary);}
+.det-tl-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;}
+.det-tl-head{font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:14px;}
+.det-tl-badge{display:inline-flex;align-items:center;gap:5px;background:#ECFDF5;color:#16A34A;font-size:12px;font-weight:500;padding:4px 12px;border-radius:var(--radius-full);margin-bottom:20px;}
+.det-tl-row{display:flex;gap:12px;}
+.det-tl-left{display:flex;flex-direction:column;align-items:center;width:36px;flex-shrink:0;}
+.det-tl-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.det-tl-connector{flex:1;display:flex;flex-direction:column;align-items:center;min-height:16px;}
+.det-tl-line{width:1px;background:#E5E7EB;flex:1;min-height:8px;}
+.det-tl-dur{background:var(--surface);border:1px solid #E5E7EB;font-size:10px;color:#9CA3AF;padding:2px 8px;border-radius:var(--radius-full);white-space:nowrap;margin:2px 0;}
+.det-tl-body{flex:1;padding-bottom:18px;}
+.det-tl-action{font-size:14px;font-weight:600;color:#1A1F36;}
+.det-tl-meta{font-size:12px;color:#6B7280;margin-top:2px;}
+.det-tl-reason{font-size:12px;color:#9CA3AF;font-style:italic;margin-top:4px;}
 </style>
 </head>
 <body>
@@ -2094,7 +2125,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;}
                 </tr>
               </thead>
               <tbody>
-                <tr>
+                <tr style="cursor:pointer" onclick="showPage('observation-detail')">
                   <td class="sticky-left" style="font-weight:600;color:var(--primary)">OBS-318</td>
                   <td style="color:var(--primary)">SW-45</td>
                   <td class="cell-detail">Scaffolding safety concern in Zone C</td>
@@ -2268,7 +2299,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;}
                 </tr>
               </thead>
               <tbody>
-                <tr>
+                <tr style="cursor:pointer" onclick="showPage('incident-detail')">
                   <td class="sticky-left" style="font-weight:600;color:var(--primary)">INC-047</td>
                   <td class="cell-detail">Worker fall from scaffolding &mdash; Zone C</td>
                   <td><span class="chip critical">S5. Catastrophic</span></td>
@@ -2796,7 +2827,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;}
                 </tr>
               </thead>
               <tbody>
-                <tr>
+                <tr style="cursor:pointer" onclick="showPage('training-detail')">
                   <td class="sticky-left" style="font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:600;color:var(--primary)">TRN-082</td>
                   <td class="cell-detail">Working at Height &mdash; Refresher</td>
                   <td>Safety Induction</td><td>Ahmed K.</td><td>24</td>
@@ -3283,8 +3314,10 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;}
       'workflow-builder':'Workflow Builder','masters':'Masters',
       'user-mgmt':'User Management','profile':'Profile',
       'admin-users':'Users & Access',
-      'admin-rules':'Rules & Escalation','admin-integrations':'Integrations','admin-ai':'AI Setup'
+      'admin-rules':'Rules & Escalation','admin-integrations':'Integrations','admin-ai':'AI Setup',
+      'observation-detail':'OBS-318','incident-detail':'INC-047','training-detail':'TRN-082'
     };
+    const detailParent = {'observation-detail':'observations','incident-detail':'incidents','training-detail':'training'};
     let html = '<span class="breadcrumb-item">'+currentOrg+'</span><span class="breadcrumb-sep">&#8250;</span>';
     if(inProjectMode){
       html += '<span class="breadcrumb-item sub clickable" onclick="exitProject()">'+currentSub+'</span>';
@@ -3293,6 +3326,11 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;}
       html += '<span class="breadcrumb-sep">&#8250;</span>';
     } else {
       html += '<span class="breadcrumb-item sub">'+currentSub+'</span>';
+      html += '<span class="breadcrumb-sep">&#8250;</span>';
+    }
+    if(detailParent[currentPage]){
+      const par = detailParent[currentPage];
+      html += '<span class="breadcrumb-item clickable" onclick="showPage(\''+par+'\')" style="cursor:pointer">'+pageNames[par]+'</span>';
       html += '<span class="breadcrumb-sep">&#8250;</span>';
     }
     html += '<span class="breadcrumb-item current">'+(pageNames[currentPage]||currentPage)+'</span>';
@@ -3791,5 +3829,293 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;}
   };
 })();
 </script>
+
+<!-- ===== OBSERVATION DETAIL ===== -->
+<div id="page-observation-detail" class="page-content" style="display:none">
+  <div class="page-header" style="margin-bottom:24px">
+    <div class="page-title-row">
+      <h1 class="page-title">OBS-318</h1>
+      <span class="chip warning" style="margin-left:12px">Open</span>
+    </div>
+  </div>
+  <div class="detail-page-layout">
+    <div class="detail-form-pane">
+      <div class="det-card">
+        <div class="det-card-hdr"><span class="det-card-title">Observation Details</span></div>
+        <div class="det-field-grid">
+          <div class="det-field span3">
+            <span class="det-label">Observation Details</span>
+            <div class="det-textarea-val">Scaffolding safety concern in Zone C Level 12. Guardrails found missing on east side of scaffold frame. Worker observed without harness attachment during inspection. Immediate stop-work issued pending rectification.</div>
+          </div>
+          <div class="det-field"><span class="det-label">Hazard Type</span><span class="det-val">Structural</span></div>
+          <div class="det-field"><span class="det-label">Severity</span><span class="det-val"><span class="chip warning">High</span></span></div>
+          <div class="det-field"><span class="det-label">Root Cause</span><span class="det-val">Procedural</span></div>
+          <div class="det-field"><span class="det-label">Secondary Root Cause</span><span class="det-val">Supervision Lapse</span></div>
+          <div class="det-field"><span class="det-label">Location</span><span class="det-val">Zone C Level 12</span></div>
+          <div class="det-field"><span class="det-label">Record Type</span><span class="det-val">Observation</span></div>
+          <div class="det-field"><span class="det-label">Logged On</span><span class="det-val">03 Apr 2026 09:15</span></div>
+          <div class="det-field"><span class="det-label">Logged By</span><span class="det-val">Ahmed K.</span></div>
+          <div class="det-field"><span class="det-label">Occurrence Time</span><span class="det-val">03 Apr 2026 08:45</span></div>
+          <div class="det-field"><span class="det-label">Finding Type</span><span class="det-val">Unsafe Condition</span></div>
+          <div class="det-field"><span class="det-label">Status</span><span class="det-val"><span class="chip warning">Open</span></span></div>
+          <div class="det-field"><span class="det-label">Reviewer</span><span class="det-val">Pending Assignment</span></div>
+          <div class="det-field span3">
+            <span class="det-label">Suggested Mitigation</span>
+            <div class="det-textarea-val">Install missing guardrails before resuming work. Mandatory harness inspection for all workers on scaffold. Re-brief Zone C crew on fall protection procedures. Safety officer sign-off required before work restart.</div>
+          </div>
+        </div>
+      </div>
+      <div class="det-card">
+        <div class="det-card-hdr"><span class="det-card-title">Images</span></div>
+        <div class="det-ph">No images attached</div>
+      </div>
+      <div class="det-card">
+        <div class="det-card-hdr"><span class="det-card-title">Location Map</span></div>
+        <div class="det-ph" style="min-height:140px;display:flex;align-items:center;justify-content:center">Map placeholder &mdash; Zone C Level 12</div>
+      </div>
+    </div>
+    <div class="detail-timeline-pane">
+      <div class="det-tl-card">
+        <div class="det-tl-head">Activity Timeline</div>
+        <div class="det-tl-badge"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>Resolved in &lt; 1 hour</div>
+        <div class="det-tl-row">
+          <div class="det-tl-left">
+            <div class="det-tl-icon" style="background:#ECFDF5;color:#16A34A"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg></div>
+            <div class="det-tl-connector"><div class="det-tl-line"></div></div>
+          </div>
+          <div class="det-tl-body"><div class="det-tl-action">Opened</div><div class="det-tl-meta">Ahmed K. &middot; 03 Apr 2026 09:15</div></div>
+        </div>
+        <div class="det-tl-row">
+          <div class="det-tl-left">
+            <div class="det-tl-icon" style="background:#EFF6FF;color:#2563EB"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+            <div class="det-tl-connector"><div class="det-tl-line"></div></div>
+          </div>
+          <div class="det-tl-body"><div class="det-tl-action">Assigned to Reviewer</div><div class="det-tl-meta">System &middot; 03 Apr 2026 09:18</div></div>
+        </div>
+        <div class="det-tl-row">
+          <div class="det-tl-left">
+            <div class="det-tl-icon" style="background:#FFF7ED;color:#D97706"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+            <div class="det-tl-connector"><div class="det-tl-line"></div></div>
+          </div>
+          <div class="det-tl-body"><div class="det-tl-action">Rectified</div><div class="det-tl-meta">Khalid A. &middot; 03 Apr 2026 09:42</div></div>
+        </div>
+        <div class="det-tl-row">
+          <div class="det-tl-left">
+            <div class="det-tl-icon" style="background:#F5F3FF;color:#7C3AED"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg></div>
+            <div class="det-tl-connector"><div class="det-tl-line"></div></div>
+          </div>
+          <div class="det-tl-body"><div class="det-tl-action">Submitted for HSE Review</div><div class="det-tl-meta">Khalid A. &middot; 03 Apr 2026 09:55</div></div>
+        </div>
+        <div class="det-tl-row">
+          <div class="det-tl-left">
+            <div class="det-tl-icon" style="background:#ECFDF5;color:#16A34A"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg></div>
+          </div>
+          <div class="det-tl-body"><div class="det-tl-action">Closed</div><div class="det-tl-meta">HSE Manager &middot; 03 Apr 2026 10:08</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== INCIDENT DETAIL ===== -->
+<div id="page-incident-detail" class="page-content" style="display:none">
+  <div class="page-header" style="margin-bottom:24px">
+    <div class="page-title-row">
+      <h1 class="page-title">INC-047</h1>
+      <div style="display:flex;align-items:center;gap:10px;margin-left:12px">
+        <span class="chip critical">S5. Catastrophic</span>
+        <span class="chip warning">Open</span>
+        <button class="det-export-btn">Export</button>
+      </div>
+    </div>
+  </div>
+  <div class="detail-page-layout">
+    <div class="detail-form-pane">
+      <div class="det-card">
+        <div class="det-card-hdr"><span class="det-card-title">Incident Details</span></div>
+        <div class="det-field-grid">
+          <div class="det-field"><span class="det-label">Created By</span><span class="det-val">Ahmed K.</span></div>
+          <div class="det-field span2">
+            <span class="det-label">Incident Details</span>
+            <div class="det-textarea-val">Worker fall from scaffolding in Zone C Level 12. Worker was found on the ground floor without harness attached. Emergency services called immediately. Worker transported to hospital. Stop-work order issued for Zone C scaffolding.</div>
+          </div>
+          <div class="det-field"><span class="det-label">Category</span><span class="det-val">Lost Time Injury</span></div>
+          <div class="det-field"><span class="det-label">Hazard Type</span><span class="det-val">Working at Height</span></div>
+          <div class="det-field"><span class="det-label">Root Cause</span><span class="det-val">Procedural Violation</span></div>
+          <div class="det-field"><span class="det-label">Secondary Root Cause</span><span class="det-val">Supervision Lapse</span></div>
+          <div class="det-field"><span class="det-label">Severity</span><span class="det-val"><span class="chip critical">S5. Catastrophic</span></span></div>
+          <div class="det-field"><span class="det-label">Image Analysis</span><span class="det-val"><span class="chip primary">2 images reviewed</span></span></div>
+          <div class="det-field"><span class="det-label">Incident Time</span><span class="det-val">02 Apr 2026 07:15</span></div>
+          <div class="det-field"><span class="det-label">Location</span><span class="det-val">Zone C Level 12</span></div>
+          <div class="det-field"><span class="det-label">Map</span><div class="det-ph" style="margin-top:4px;padding:10px;font-size:11px">Zone C &mdash; L12</div></div>
+          <div class="det-field"><span class="det-label">Involved Parties</span><span class="det-val">Worker: Ali Hassan<br>Supervisor: Khalid A.</span></div>
+          <div class="det-field"><span class="det-label">Investigator</span><span class="det-val">Safety Team<br>Sr. Investigator: Fatima R.</span></div>
+          <div class="det-field"></div>
+          <div class="det-field span3">
+            <span class="det-label">Images</span>
+            <div class="det-ph">2 images attached</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="detail-timeline-pane">
+      <div class="det-tl-card">
+        <div class="det-tl-head">Activity Timeline</div>
+        <div class="det-tl-badge"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>Resolved in 6 days</div>
+        <div class="det-tl-row">
+          <div class="det-tl-left">
+            <div class="det-tl-icon" style="background:#ECFDF5;color:#16A34A"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg></div>
+            <div class="det-tl-connector"><div class="det-tl-line"></div></div>
+          </div>
+          <div class="det-tl-body"><div class="det-tl-action">Raised</div><div class="det-tl-meta">Ahmed K. &middot; 02 Apr 2026 07:30</div></div>
+        </div>
+        <div class="det-tl-row">
+          <div class="det-tl-left">
+            <div class="det-tl-icon" style="background:#EFF6FF;color:#2563EB"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+            <div class="det-tl-connector"><div class="det-tl-line"></div></div>
+          </div>
+          <div class="det-tl-body"><div class="det-tl-action">Assigned</div><div class="det-tl-meta">Safety Team &middot; 02 Apr 2026 08:00</div></div>
+        </div>
+        <div class="det-tl-row">
+          <div class="det-tl-left">
+            <div class="det-tl-icon" style="background:#F5F3FF;color:#7C3AED"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg></div>
+            <div class="det-tl-connector"><div class="det-tl-line"></div></div>
+          </div>
+          <div class="det-tl-body"><div class="det-tl-action">Preliminary Investigation</div><div class="det-tl-meta">Investigation Team &middot; 02 Apr 2026 10:00</div></div>
+        </div>
+        <div class="det-tl-row">
+          <div class="det-tl-left">
+            <div class="det-tl-icon" style="background:#FFF7ED;color:#D97706"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+            <div class="det-tl-connector"><div class="det-tl-line"></div></div>
+          </div>
+          <div class="det-tl-body">
+            <div class="det-tl-action">Escalated</div>
+            <div class="det-tl-meta">HSE Manager &middot; 02 Apr 2026 14:00</div>
+            <div class="det-tl-reason">Severity upgraded to S5 following witness statements</div>
+          </div>
+        </div>
+        <div class="det-tl-row">
+          <div class="det-tl-left">
+            <div class="det-tl-icon" style="background:#EFF6FF;color:#2563EB"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+            <div class="det-tl-connector"><div class="det-tl-line"></div></div>
+          </div>
+          <div class="det-tl-body"><div class="det-tl-action">Assigned to Senior Investigator</div><div class="det-tl-meta">Director HSE &middot; 03 Apr 2026 09:00</div></div>
+        </div>
+        <div class="det-tl-row">
+          <div class="det-tl-left">
+            <div class="det-tl-icon" style="background:#F5F3FF;color:#7C3AED"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg></div>
+            <div class="det-tl-connector">
+              <div class="det-tl-line"></div>
+              <div class="det-tl-dur">1d 20h</div>
+              <div class="det-tl-line"></div>
+            </div>
+          </div>
+          <div class="det-tl-body"><div class="det-tl-action">Detailed Investigation</div><div class="det-tl-meta">Senior Investigator &middot; 03 Apr 2026 11:00</div></div>
+        </div>
+        <div class="det-tl-row">
+          <div class="det-tl-left">
+            <div class="det-tl-icon" style="background:#ECFDF5;color:#16A34A"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg></div>
+          </div>
+          <div class="det-tl-body"><div class="det-tl-action">Approved by HSE</div><div class="det-tl-meta">HSE Director &middot; 05 Apr 2026 07:00</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TRAINING DETAIL ===== -->
+<div id="page-training-detail" class="page-content" style="display:none">
+  <div class="page-header" style="margin-bottom:24px">
+    <div class="page-title-row">
+      <h1 class="page-title">TRN-082</h1>
+      <span class="chip warning" style="margin-left:12px">Scheduled</span>
+    </div>
+  </div>
+  <div class="detail-page-layout">
+    <div class="detail-form-pane">
+      <div class="det-card">
+        <div class="det-card-hdr"><span class="det-card-title">Training Details</span></div>
+        <div class="det-field-grid">
+          <div class="det-field span3"><span class="det-label">Training Title</span><span class="det-val" style="font-size:15px;font-weight:600">Working at Height &mdash; Refresher</span></div>
+          <div class="det-field"><span class="det-label">Type</span><span class="det-val">Refresher</span></div>
+          <div class="det-field"><span class="det-label">Category</span><span class="det-val">Safety Induction</span></div>
+          <div class="det-field"><span class="det-label">Topic</span><span class="det-val">Working at Height</span></div>
+          <div class="det-field"><span class="det-label">Scheduled Date</span><span class="det-val">04 Apr 2026</span></div>
+          <div class="det-field"><span class="det-label">Scheduled Time</span><span class="det-val">09:00 &ndash; 11:00</span></div>
+          <div class="det-field"><span class="det-label">Duration</span><span class="det-val">2 hours</span></div>
+          <div class="det-field"><span class="det-label">Trainer</span><span class="det-val">Ahmed K.</span></div>
+          <div class="det-field"><span class="det-label">Location</span><span class="det-val">Site Canteen</span></div>
+          <div class="det-field"><span class="det-label">Max Attendees</span><span class="det-val">30</span></div>
+          <div class="det-field"><span class="det-label">Actual Date</span><span class="det-val">04 Apr 2026</span></div>
+          <div class="det-field"><span class="det-label">Actual Time</span><span class="det-val">09:10 &ndash; 11:15</span></div>
+          <div class="det-field"><span class="det-label">Attendance Count</span><span class="det-val">24 / 30</span></div>
+          <div class="det-field"><span class="det-label">Status</span><span class="det-val"><span class="chip warning">Scheduled</span></span></div>
+          <div class="det-field"><span class="det-label">Created By</span><span class="det-val">Training Manager</span></div>
+          <div class="det-field"><span class="det-label">Created On</span><span class="det-val">01 Apr 2026 10:00</span></div>
+          <div class="det-field span3">
+            <span class="det-label">Training Materials</span>
+            <div class="det-ph">No files attached</div>
+          </div>
+          <div class="det-field span3">
+            <span class="det-label">Notes</span>
+            <div class="det-textarea-val">All Zone C workers are required to attend. Hard hats and safety boots mandatory. Practical demonstration included &mdash; participants should come prepared for outdoor session component.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="detail-timeline-pane">
+      <div class="det-tl-card">
+        <div class="det-tl-head">Activity Timeline</div>
+        <div class="det-tl-badge"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>Completed in 5 days</div>
+        <div class="det-tl-row">
+          <div class="det-tl-left">
+            <div class="det-tl-icon" style="background:#F3F4F6;color:#6B7280"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+            <div class="det-tl-connector"><div class="det-tl-line"></div></div>
+          </div>
+          <div class="det-tl-body"><div class="det-tl-action">Scheduled</div><div class="det-tl-meta">System &middot; 01 Apr 2026 10:00</div></div>
+        </div>
+        <div class="det-tl-row">
+          <div class="det-tl-left">
+            <div class="det-tl-icon" style="background:#EFF6FF;color:#2563EB"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+            <div class="det-tl-connector"><div class="det-tl-line"></div></div>
+          </div>
+          <div class="det-tl-body"><div class="det-tl-action">Trainer Assigned</div><div class="det-tl-meta">Training Manager &middot; 01 Apr 2026 11:30</div></div>
+        </div>
+        <div class="det-tl-row">
+          <div class="det-tl-left">
+            <div class="det-tl-icon" style="background:#FFF7ED;color:#D97706"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+            <div class="det-tl-connector"><div class="det-tl-line"></div></div>
+          </div>
+          <div class="det-tl-body">
+            <div class="det-tl-action">Rescheduled</div>
+            <div class="det-tl-meta">Training Manager &middot; 02 Apr 2026 14:00</div>
+            <div class="det-tl-reason">Trainer unavailable due to site emergency</div>
+          </div>
+        </div>
+        <div class="det-tl-row">
+          <div class="det-tl-left">
+            <div class="det-tl-icon" style="background:#ECFDF5;color:#16A34A"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg></div>
+            <div class="det-tl-connector"><div class="det-tl-line"></div></div>
+          </div>
+          <div class="det-tl-body"><div class="det-tl-action">Training Conducted</div><div class="det-tl-meta">Ahmed K. &middot; 04 Apr 2026 09:10</div></div>
+        </div>
+        <div class="det-tl-row">
+          <div class="det-tl-left">
+            <div class="det-tl-icon" style="background:#EFF6FF;color:#2563EB"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+            <div class="det-tl-connector"><div class="det-tl-line"></div></div>
+          </div>
+          <div class="det-tl-body"><div class="det-tl-action">Attendance Marked</div><div class="det-tl-meta">Ahmed K. &middot; 04 Apr 2026 11:00</div></div>
+        </div>
+        <div class="det-tl-row">
+          <div class="det-tl-left">
+            <div class="det-tl-icon" style="background:#ECFDF5;color:#16A34A"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg></div>
+          </div>
+          <div class="det-tl-body"><div class="det-tl-action">Completed</div><div class="det-tl-meta">Training Manager &middot; 06 Apr 2026 09:00</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
