@@ -899,6 +899,77 @@ body{font-family:'Google Sans Text','Roboto','Inter',sans-serif;background:#1113
 /* ── Misc ── */
 a{color:var(--md-primary);text-decoration:none}
 .hidden{display:none!important}
+
+/* ── HSE Dashboard chart classes ── */
+.dsh-hdr{background:#1B2A4A;padding:var(--safe-top) 18px 10px;flex-shrink:0}
+.dsh-hdr-row{display:flex;align-items:center;justify-content:space-between}
+.dsh-proj-title{font-size:15px;font-weight:700;color:#fff;margin-top:2px}
+.dsh-proj-sub{font-size:10px;color:#94A3B8;letter-spacing:.4px}
+.dsh-month-nav{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:8px}
+.dsh-marrow{background:rgba(255,255,255,.12);border:none;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;color:#fff;cursor:pointer;flex-shrink:0}
+.dsh-mlabel{font-size:12px;font-weight:600;color:#fff;min-width:80px;text-align:center}
+.dsh-tabbar2{display:flex;gap:0;overflow-x:auto;-webkit-overflow-scrolling:touch;border-bottom:1px solid #e2e8f0;background:#fff;flex-shrink:0}
+.dsh-tabbar2::-webkit-scrollbar{display:none}
+.dsh-pill2{background:none;border:none;border-bottom:2px solid transparent;color:#64748B;font-size:11px;font-weight:500;padding:10px 13px;cursor:pointer;white-space:nowrap;font-family:inherit;flex-shrink:0}
+.dsh-pill2.active{color:#1B2A4A;border-bottom-color:#1B2A4A;font-weight:700}
+.dsh-panel{display:none}.dsh-panel.active{display:block}
+.dsh-sum-row{display:flex;gap:8px;margin-bottom:12px}
+.dsh-scard{flex:1;background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:10px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.dsh-sval{font-size:20px;font-weight:800;color:#1E293B;line-height:1.1}
+.dsh-slbl{font-size:9px;color:#94A3B8;margin-top:2px;text-transform:uppercase;letter-spacing:.5px;line-height:1.3}
+.dsh-card{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:13px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.dsh-ctitle{font-size:12px;font-weight:600;color:#1E293B;margin-bottom:2px}
+.dsh-ctag{font-size:8px;font-weight:600;color:#94A3B8;letter-spacing:.7px;text-transform:uppercase;margin-bottom:9px}
+.dsh-donut{position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.dsh-donut-circle{border-radius:50%}
+.dsh-donut-hole{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.dsh-donut-hole-inner{background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#1E293B;text-align:center;line-height:1.2}
+.dsh-lollipop{display:flex;flex-direction:column;gap:7px}
+.dsh-lpop-row{display:flex;align-items:center;gap:6px}
+.dsh-lpop-lbl{font-size:9px;color:#64748B;width:90px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dsh-lpop-track{flex:1;height:2px;background:#F1F5F9;position:relative;border-radius:1px;display:flex;align-items:center}
+.dsh-lpop-val{font-size:9px;font-weight:700;color:#1E293B;width:18px;text-align:right;flex-shrink:0}
+.dsh-hbar{display:flex;flex-direction:column;gap:7px}
+.dsh-hbar-row{display:flex;align-items:center;gap:6px}
+.dsh-hbar-lbl{font-size:9px;color:#64748B;width:100px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dsh-hbar-track{flex:1;height:8px;background:#F1F5F9;border-radius:4px;overflow:hidden}
+.dsh-hbar-fill{height:100%;border-radius:4px}
+.dsh-hbar-val{font-size:9px;font-weight:700;color:#1E293B;width:24px;text-align:right;flex-shrink:0}
+.dsh-sbar{display:flex;height:22px;border-radius:4px;overflow:hidden;gap:1px}
+.dsh-sbar-seg{display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff;min-width:16px}
+.dsh-vbars{display:flex;align-items:flex-end;gap:4px}
+.dsh-vcol{display:flex;flex-direction:column;align-items:center;flex:1}
+.dsh-vb{width:100%;border-radius:3px 3px 0 0}
+.dsh-butterfly{display:flex;flex-direction:column;gap:6px}
+.dsh-bf-row{display:flex;align-items:center;gap:4px}
+.dsh-bf-lbl{font-size:8px;color:#64748B;text-align:center;flex-shrink:0;line-height:1.2}
+.dsh-bf-left{flex:1;display:flex;justify-content:flex-end;align-items:center;height:12px}
+.dsh-bf-right{flex:1;display:flex;justify-content:flex-start;align-items:center;height:12px}
+.dsh-bf-bar{height:10px}
+.dsh-waffle{display:grid;gap:2px}
+.dsh-wf-cell{width:100%;padding-bottom:100%;border-radius:2px}
+.dsh-swim{display:flex;flex-direction:column;gap:5px;margin-bottom:8px}
+.dsh-swim-row{display:flex;align-items:center;gap:6px}
+.dsh-swim-id{font-size:8px;color:#64748B;width:54px;flex-shrink:0;font-family:monospace}
+.dsh-swim-bar{flex:1;height:12px;border-radius:3px;overflow:hidden;display:flex}
+.dsh-dotstrip{position:relative;margin-bottom:4px}
+.dsh-ds-axis{height:2px;background:#E2E8F0;position:relative;margin:14px 0 6px}
+.dsh-ds-dot{position:absolute;width:10px;height:10px;border-radius:50%;top:-4px;transform:translateX(-50%)}
+.dsh-ds-lblrow{display:flex;justify-content:space-between;font-size:8px;color:#94A3B8}
+.dsh-legend{display:flex;flex-wrap:wrap;gap:6px 10px;margin-top:8px}
+.dsh-legend-item{display:flex;align-items:center;gap:4px;font-size:9px;color:#64748B}
+.dsh-legend-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.dsh-ov-row{display:flex;align-items:center;gap:4px;padding:4px 4px;border-radius:4px;margin-bottom:2px}
+.dsh-ov-lbl{display:flex;align-items:center;gap:4px;flex:1;min-width:0}
+.dsh-ov-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.dsh-ov-lbl-text{font-size:9px;color:#64748B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dsh-ov-cell{font-size:10px;font-weight:700;color:#1E293B;width:30px;text-align:right}
+.dsh-lti{background:#1B2A4A;border-radius:10px;padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:12px}
+.dsh-audit-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid #F1F5F9}
+.dsh-audit-row:last-child{border-bottom:none}
+.dsh-pie-row{display:flex;align-items:center;gap:5px;font-size:9px;color:#64748B;margin-bottom:4px}
+.dsh-pie-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.dsh-pie-val{margin-left:auto;font-weight:700;color:#1E293B;font-size:9px}
 </style>
 </head>
 <body>
@@ -1710,70 +1781,435 @@ a{color:var(--md-primary);text-decoration:none}
       </div>
     </div>
 
-    <!-- ═══ SCREEN: Dashboard ═══ -->
+    <!-- ═══ SCREEN: HSE Dashboard ═══ -->
     <div class="screen dash-screen" id="screen-dashboard">
-      <div class="dash-header">
-        <div class="dh-info">
-          <h2>Dashboard</h2>
-          <p>Marina Bay Tower</p>
+
+      <!-- Dark navy header -->
+      <div class="dsh-hdr">
+        <div class="dsh-hdr-row">
+          <div>
+            <div class="dsh-proj-sub">HSE Dashboard</div>
+            <div class="dsh-proj-title">DLR Singapore DC — Phase 2</div>
+          </div>
+          <div class="hh-avatar" onclick="showScreen('screen-profile')">VM</div>
         </div>
-        <div class="hh-avatar" onclick="showScreen('screen-profile')">VM</div>
+        <div class="dsh-month-nav">
+          <button class="dsh-marrow" onclick="dshPrevMonth()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+          <span class="dsh-mlabel" id="dsh-month-label">June 2026</span>
+          <button class="dsh-marrow" onclick="dshNextMonth()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+        </div>
       </div>
 
-      <div class="dash-tabs">
-        <button class="dash-tab active" onclick="setDashTab(this)">Overview</button>
-        <button class="dash-tab" onclick="setDashTab(this)">Observations <span class="tab-count">5</span></button>
-        <button class="dash-tab" onclick="setDashTab(this)">Incidents</button>
-        <button class="dash-tab" onclick="setDashTab(this)">Inspections</button>
-        <button class="dash-tab" onclick="setDashTab(this)">Trainings <span class="tab-count">3</span></button>
+      <!-- Tab bar -->
+      <div class="dsh-tabbar2">
+        <button class="dsh-pill2 active" onclick="dshTab('overview',this)">Overview</button>
+        <button class="dsh-pill2" onclick="dshTab('observations',this)">Observations</button>
+        <button class="dsh-pill2" onclick="dshTab('incidents',this)">Incidents</button>
+        <button class="dsh-pill2" onclick="dshTab('training',this)">Training</button>
+        <button class="dsh-pill2" onclick="dshTab('sitewalks',this)">Site Walks</button>
+        <button class="dsh-pill2" onclick="dshTab('inspections',this)">Inspections</button>
       </div>
 
-      <div class="dash-body">
-        <div class="dash-metrics-row">
-          <div class="dash-metric"><div class="dm-count" style="color:var(--md-critical)">3</div><div class="dm-label">Overdue</div></div>
-          <div class="dash-metric"><div class="dm-count" style="color:var(--md-warning)">5</div><div class="dm-label">Due Today</div></div>
-          <div class="dash-metric"><div class="dm-count" style="color:var(--md-success)">12</div><div class="dm-label">Closed</div></div>
-          <div class="dash-metric"><div class="dm-count" style="color:var(--md-primary)">4</div><div class="dm-label">Pending</div></div>
-        </div>
+      <!-- Scrollable content -->
+      <div class="dash-body" style="background:#F5F6FA">
 
-        <div class="dash-card">
-          <h3>Severity / Risk Level</h3>
-          <div class="dash-chart">
-            <svg class="dash-donut-ring" viewBox="0 0 36 36">
-              <circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--md-outline-variant)" stroke-width="3.5"/>
-              <circle cx="18" cy="18" r="15.9" fill="none" stroke="#d97706" stroke-width="3.5" stroke-dasharray="30 70" stroke-dashoffset="25" stroke-linecap="round"/>
-              <circle cx="18" cy="18" r="15.9" fill="none" stroke="#dc2626" stroke-width="3.5" stroke-dasharray="20 80" stroke-dashoffset="-5" stroke-linecap="round"/>
-              <circle cx="18" cy="18" r="15.9" fill="none" stroke="#059669" stroke-width="3.5" stroke-dasharray="10 90" stroke-dashoffset="-25" stroke-linecap="round"/>
-            </svg>
-            <div class="dash-legend">
-              <div class="dash-legend-row"><span class="dl-dot" style="background:#059669"></span><span class="dl-label">Good Practice</span><span class="dl-count">0</span></div>
-              <div class="dash-legend-row"><span class="dl-dot" style="background:#3b82f6"></span><span class="dl-label">Low</span><span class="dl-count">0</span></div>
-              <div class="dash-legend-row"><span class="dl-dot" style="background:#d97706"></span><span class="dl-label">Moderate</span><span class="dl-count">3</span></div>
-              <div class="dash-legend-row"><span class="dl-dot" style="background:#dc2626"></span><span class="dl-label">High</span><span class="dl-count">2</span></div>
-              <div class="dash-legend-row"><span class="dl-dot" style="background:#7f1d1d"></span><span class="dl-label">Critical</span><span class="dl-count">0</span></div>
+        <!-- ── OVERVIEW ── -->
+        <div class="dsh-panel active" id="dsh-tab-overview">
+
+          <div class="dsh-card">
+            <div class="dsh-ctitle">HSE Data</div>
+            <div class="dsh-ctag">DONUT</div>
+            <div style="display:flex;gap:12px;align-items:flex-start">
+              <div class="dsh-donut" style="width:80px;height:80px;flex-shrink:0">
+                <div class="dsh-donut-circle" style="width:80px;height:80px;background:conic-gradient(#3B82F6 0% 55.41%,#F59E0B 55.41% 86.49%,#EF4444 86.49% 100%)"></div>
+                <div class="dsh-donut-hole"><div class="dsh-donut-hole-inner" style="width:50px;height:50px;font-size:7px;font-weight:700;color:#94A3B8;line-height:1.4;text-align:center">Cumu<br>lative</div></div>
+              </div>
+              <div style="flex:1;min-width:0">
+                <div style="display:grid;grid-template-columns:1fr 28px 28px 28px;margin-bottom:4px">
+                  <span></span>
+                  <span style="font-size:8px;color:#94A3B8;font-weight:600;text-align:right">Mo</span>
+                  <span style="font-size:8px;color:#94A3B8;font-weight:600;text-align:right">YTD</span>
+                  <span style="font-size:8px;color:#94A3B8;font-weight:600;text-align:right">All</span>
+                </div>
+                <div class="dsh-ov-row" style="background:rgba(59,130,246,.07)"><div class="dsh-ov-lbl"><div class="dsh-ov-dot" style="background:#3B82F6"></div><span class="dsh-ov-lbl-text">Avg Manpower</span></div><div class="dsh-ov-cell" style="color:#3B82F6">82</div><div class="dsh-ov-cell" style="color:#3B82F6">82</div><div class="dsh-ov-cell" style="color:#3B82F6">82</div></div>
+                <div class="dsh-ov-row" style="background:rgba(245,158,11,.07)"><div class="dsh-ov-lbl"><div class="dsh-ov-dot" style="background:#F59E0B"></div><span class="dsh-ov-lbl-text">Manhours Worked</span></div><div class="dsh-ov-cell" style="color:#F59E0B">46</div><div class="dsh-ov-cell" style="color:#F59E0B">46</div><div class="dsh-ov-cell" style="color:#F59E0B">46</div></div>
+                <div class="dsh-ov-row" style="background:rgba(239,68,68,.07)"><div class="dsh-ov-lbl"><div class="dsh-ov-dot" style="background:#EF4444"></div><span class="dsh-ov-lbl-text">Safe Manhours</span></div><div class="dsh-ov-cell" style="color:#EF4444">20</div><div class="dsh-ov-cell" style="color:#EF4444">20</div><div class="dsh-ov-cell" style="color:#EF4444">20</div></div>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="dash-card">
-          <h3>Status</h3>
-          <div class="dash-chart">
-            <svg class="dash-donut-ring" viewBox="0 0 36 36">
-              <circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--md-outline-variant)" stroke-width="3.5"/>
-              <circle cx="18" cy="18" r="15.9" fill="none" stroke="#d97706" stroke-width="3.5" stroke-dasharray="50 50" stroke-dashoffset="25" stroke-linecap="round"/>
-              <circle cx="18" cy="18" r="15.9" fill="none" stroke="#059669" stroke-width="3.5" stroke-dasharray="15 85" stroke-dashoffset="-25" stroke-linecap="round"/>
-            </svg>
-            <div class="dash-legend">
-              <div class="dash-legend-row"><span class="dl-dot" style="background:#d97706"></span><span class="dl-label">Open</span><span class="dl-count">4</span></div>
-              <div class="dash-legend-row"><span class="dl-dot" style="background:#6b7280"></span><span class="dl-label">Rectified</span><span class="dl-count">0</span></div>
-              <div class="dash-legend-row"><span class="dl-dot" style="background:#059669"></span><span class="dl-label">Closed</span><span class="dl-count">1</span></div>
-              <div class="dash-legend-row"><span class="dl-dot" style="background:#dc2626"></span><span class="dl-label">HSE Rejected</span><span class="dl-count">0</span></div>
-              <div class="dash-legend-row"><span class="dl-dot" style="background:#3b82f6"></span><span class="dl-label">Draft</span><span class="dl-count">0</span></div>
-              <div class="dash-legend-row"><span class="dl-dot" style="background:#9ca3af"></span><span class="dl-label">HSE Review Pending</span><span class="dl-count">0</span></div>
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Recordable Incidents</div>
+            <div class="dsh-ctag">DONUT</div>
+            <div style="display:flex;gap:12px;align-items:flex-start">
+              <div class="dsh-donut" style="width:80px;height:80px;flex-shrink:0">
+                <div class="dsh-donut-circle" style="width:80px;height:80px;background:conic-gradient(#3B82F6 0% 35.65%,#F59E0B 35.65% 55.65%,#A3882A 55.65% 64.35%,#8B5CF6 64.35% 100%)"></div>
+                <div class="dsh-donut-hole"><div class="dsh-donut-hole-inner" style="width:50px;height:50px;font-size:7px;font-weight:700;color:#94A3B8;line-height:1.4;text-align:center">Cumu<br>lative</div></div>
+              </div>
+              <div style="flex:1;min-width:0">
+                <div style="display:grid;grid-template-columns:1fr 28px 28px 28px;margin-bottom:4px">
+                  <span></span>
+                  <span style="font-size:8px;color:#94A3B8;font-weight:600;text-align:right">Mo</span>
+                  <span style="font-size:8px;color:#94A3B8;font-weight:600;text-align:right">YTD</span>
+                  <span style="font-size:8px;color:#94A3B8;font-weight:600;text-align:right">All</span>
+                </div>
+                <div class="dsh-ov-row" style="background:rgba(59,130,246,.07)"><div class="dsh-ov-lbl"><div class="dsh-ov-dot" style="background:#3B82F6"></div><span class="dsh-ov-lbl-text">Fatality</span></div><div class="dsh-ov-cell" style="color:#3B82F6">82</div><div class="dsh-ov-cell" style="color:#3B82F6">82</div><div class="dsh-ov-cell" style="color:#3B82F6">82</div></div>
+                <div class="dsh-ov-row" style="background:rgba(245,158,11,.07)"><div class="dsh-ov-lbl"><div class="dsh-ov-dot" style="background:#F59E0B"></div><span class="dsh-ov-lbl-text">Lost Time Incident</span></div><div class="dsh-ov-cell" style="color:#F59E0B">46</div><div class="dsh-ov-cell" style="color:#F59E0B">46</div><div class="dsh-ov-cell" style="color:#F59E0B">46</div></div>
+                <div class="dsh-ov-row" style="background:rgba(163,136,42,.07)"><div class="dsh-ov-lbl"><div class="dsh-ov-dot" style="background:#A3882A"></div><span class="dsh-ov-lbl-text">Restricted Work Case</span></div><div class="dsh-ov-cell" style="color:#A3882A">20</div><div class="dsh-ov-cell" style="color:#A3882A">20</div><div class="dsh-ov-cell" style="color:#A3882A">20</div></div>
+                <div class="dsh-ov-row" style="background:rgba(139,92,246,.07)"><div class="dsh-ov-lbl"><div class="dsh-ov-dot" style="background:#8B5CF6"></div><span class="dsh-ov-lbl-text">Medical Treatment</span></div><div class="dsh-ov-cell" style="color:#8B5CF6">82</div><div class="dsh-ov-cell" style="color:#8B5CF6">82</div><div class="dsh-ov-cell" style="color:#8B5CF6">82</div></div>
+              </div>
             </div>
           </div>
+
         </div>
-      </div>
+
+        <!-- ── OBSERVATIONS ── -->
+        <div class="dsh-panel" id="dsh-tab-observations">
+          <div class="dsh-sum-row">
+            <div class="dsh-scard"><div class="dsh-sval">142</div><div class="dsh-slbl">Total</div></div>
+            <div class="dsh-scard"><div class="dsh-sval" style="color:#22C55E">89</div><div class="dsh-slbl">Good</div></div>
+            <div class="dsh-scard"><div class="dsh-sval" style="color:#F59E0B">53</div><div class="dsh-slbl">Improvement</div></div>
+          </div>
+
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Observations per day — June</div><div class="dsh-ctag">VERTICAL BAR</div>
+            <div id="dsh-obs-vbar30" class="dsh-vbars" style="height:52px"></div>
+            <div style="display:flex;justify-content:space-between;margin-top:3px;font-size:7px;color:#94A3B8"><span>1</span><span>10</span><span>20</span><span>30</span></div>
+          </div>
+
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Top hazard categories</div><div class="dsh-ctag">LOLLIPOP</div>
+            <div id="dsh-obs-haz-lp" class="dsh-lollipop"></div>
+          </div>
+
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Top hazard categories</div><div class="dsh-ctag">BAR</div>
+            <div class="dsh-hbar">
+              <div class="dsh-hbar-row"><span class="dsh-hbar-lbl">Housekeeping</span><div class="dsh-hbar-track"><div class="dsh-hbar-fill" style="width:100%;background:#3B82F6"></div></div><span class="dsh-hbar-val">34</span></div>
+              <div class="dsh-hbar-row"><span class="dsh-hbar-lbl">PPE Non-compliance</span><div class="dsh-hbar-track"><div class="dsh-hbar-fill" style="width:82.4%;background:#3B82F6"></div></div><span class="dsh-hbar-val">28</span></div>
+              <div class="dsh-hbar-row"><span class="dsh-hbar-lbl">Working at Height</span><div class="dsh-hbar-track"><div class="dsh-hbar-fill" style="width:64.7%;background:#8B5CF6"></div></div><span class="dsh-hbar-val">22</span></div>
+              <div class="dsh-hbar-row"><span class="dsh-hbar-lbl">Electrical Safety</span><div class="dsh-hbar-track"><div class="dsh-hbar-fill" style="width:52.9%;background:#F59E0B"></div></div><span class="dsh-hbar-val">18</span></div>
+              <div class="dsh-hbar-row"><span class="dsh-hbar-lbl">Manual Handling</span><div class="dsh-hbar-track"><div class="dsh-hbar-fill" style="width:41.2%;background:#F59E0B"></div></div><span class="dsh-hbar-val">14</span></div>
+              <div class="dsh-hbar-row"><span class="dsh-hbar-lbl">Access/Egress</span><div class="dsh-hbar-track"><div class="dsh-hbar-fill" style="width:35.3%;background:#94A3B8"></div></div><span class="dsh-hbar-val">12</span></div>
+            </div>
+          </div>
+
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Top hazard categories</div><div class="dsh-ctag">PIE</div>
+            <div style="display:flex;gap:12px;align-items:center">
+              <div style="width:90px;height:90px;border-radius:50%;flex-shrink:0;background:conic-gradient(#3B82F6 0% 26.56%,#F59E0B 26.56% 48.44%,#EF4444 48.44% 65.63%,#8B5CF6 65.63% 79.69%,#14B8A6 79.69% 90.63%,#22C55E 90.63% 100%)"></div>
+              <div style="flex:1"><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#3B82F6"></div>Housekeeping<div class="dsh-pie-val">34</div></div><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#F59E0B"></div>PPE Non-compliance<div class="dsh-pie-val">28</div></div><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#EF4444"></div>Working at Height<div class="dsh-pie-val">22</div></div><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#8B5CF6"></div>Electrical Safety<div class="dsh-pie-val">18</div></div><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#14B8A6"></div>Manual Handling<div class="dsh-pie-val">14</div></div><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#22C55E"></div>Access/Egress<div class="dsh-pie-val">12</div></div></div>
+            </div>
+          </div>
+
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Severity distribution</div><div class="dsh-ctag">STACKED BAR</div>
+            <div class="dsh-sbar"><div class="dsh-sbar-seg" style="flex:62;background:#94A3B8">62</div><div class="dsh-sbar-seg" style="flex:48;background:#F59E0B">48</div><div class="dsh-sbar-seg" style="flex:24;background:#EF4444">24</div><div class="dsh-sbar-seg" style="flex:8;background:#991B1B">8</div></div>
+            <div class="dsh-legend"><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#94A3B8"></div>Low</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#F59E0B"></div>Medium</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#EF4444"></div>High</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#991B1B"></div>Critical</div></div>
+          </div>
+
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Severity distribution</div><div class="dsh-ctag">DONUT</div>
+            <div style="display:flex;align-items:center;gap:12px">
+              <div class="dsh-donut" style="width:72px;height:72px;flex-shrink:0"><div class="dsh-donut-circle" style="width:72px;height:72px;background:conic-gradient(#94A3B8 0% 43.66%,#F59E0B 43.66% 77.46%,#EF4444 77.46% 94.37%,#991B1B 94.37% 100%)"></div><div class="dsh-donut-hole"><div class="dsh-donut-hole-inner" style="width:44px;height:44px;font-size:11px;font-weight:800;color:#1E293B">142</div></div></div>
+              <div style="flex:1"><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#94A3B8"></div>Low<div class="dsh-pie-val">62</div></div><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#F59E0B"></div>Medium<div class="dsh-pie-val">48</div></div><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#EF4444"></div>High<div class="dsh-pie-val">24</div></div><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#991B1B"></div>Critical<div class="dsh-pie-val">8</div></div></div>
+            </div>
+          </div>
+
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Observation closure timeline</div><div class="dsh-ctag">SWIM LANE</div>
+            <div class="dsh-swim">
+              <div class="dsh-swim-row"><div class="dsh-swim-id">OBS-1204</div><div class="dsh-swim-bar"><div style="flex:2;background:#3B82F6"></div><div style="flex:3;background:#F59E0B"></div><div style="flex:1;background:#22C55E"></div><div style="flex:8;background:#F1F5F9"></div></div></div>
+              <div class="dsh-swim-row"><div class="dsh-swim-id">OBS-1198</div><div class="dsh-swim-bar"><div style="flex:4;background:#3B82F6"></div><div style="flex:2;background:#F59E0B"></div><div style="flex:1;background:#22C55E"></div><div style="flex:7;background:#F1F5F9"></div></div></div>
+              <div class="dsh-swim-row"><div class="dsh-swim-id">OBS-1187</div><div class="dsh-swim-bar"><div style="flex:1;background:#3B82F6"></div><div style="flex:1;background:#F59E0B"></div><div style="flex:1;background:#22C55E"></div><div style="flex:11;background:#F1F5F9"></div></div></div>
+              <div class="dsh-swim-row"><div class="dsh-swim-id">OBS-1176</div><div class="dsh-swim-bar" style="border:1.5px dashed #EF4444;background:rgba(239,68,68,.04)"><div style="flex:12;background:rgba(239,68,68,.2)"></div><div style="flex:2;background:transparent"></div></div></div>
+              <div class="dsh-swim-row"><div class="dsh-swim-id">OBS-1171</div><div class="dsh-swim-bar"><div style="flex:8;background:#3B82F6"></div><div style="flex:5;background:#F59E0B"></div><div style="flex:1;background:#F1F5F9"></div></div></div>
+            </div>
+            <div class="dsh-legend"><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#3B82F6"></div>Open</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#F59E0B"></div>Rectified</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#22C55E"></div>Closed</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#EF4444;opacity:.6"></div>Stuck</div></div>
+          </div>
+
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Good vs Improvement by location</div><div class="dsh-ctag">BUTTERFLY</div>
+            <div style="display:flex;justify-content:space-between;font-size:8px;color:#94A3B8;font-weight:600;margin-bottom:5px"><span>Good</span><span>Improvement</span></div>
+            <div class="dsh-butterfly">
+              <div class="dsh-bf-row"><div class="dsh-bf-left"><div class="dsh-bf-bar" style="width:75%;background:#22C55E;border-radius:3px 0 0 3px"></div></div><div class="dsh-bf-lbl" style="width:72px">Zone A</div><div class="dsh-bf-right"><div class="dsh-bf-bar" style="width:75%;background:#F59E0B;border-radius:0 3px 3px 0"></div></div></div>
+              <div class="dsh-bf-row"><div class="dsh-bf-left"><div class="dsh-bf-bar" style="width:100%;background:#22C55E;border-radius:3px 0 0 3px"></div></div><div class="dsh-bf-lbl" style="width:72px">Zone B</div><div class="dsh-bf-right"><div class="dsh-bf-bar" style="width:50%;background:#F59E0B;border-radius:0 3px 3px 0"></div></div></div>
+              <div class="dsh-bf-row"><div class="dsh-bf-left"><div class="dsh-bf-bar" style="width:50%;background:#22C55E;border-radius:3px 0 0 3px"></div></div><div class="dsh-bf-lbl" style="width:72px">Zone C</div><div class="dsh-bf-right"><div class="dsh-bf-bar" style="width:100%;background:#F59E0B;border-radius:0 3px 3px 0"></div></div></div>
+              <div class="dsh-bf-row"><div class="dsh-bf-left"><div class="dsh-bf-bar" style="width:91.7%;background:#22C55E;border-radius:3px 0 0 3px"></div></div><div class="dsh-bf-lbl" style="width:72px">Zone D</div><div class="dsh-bf-right"><div class="dsh-bf-bar" style="width:37.5%;background:#F59E0B;border-radius:0 3px 3px 0"></div></div></div>
+              <div class="dsh-bf-row"><div class="dsh-bf-left"><div class="dsh-bf-bar" style="width:54.2%;background:#22C55E;border-radius:3px 0 0 3px"></div></div><div class="dsh-bf-lbl" style="width:72px">Zone E</div><div class="dsh-bf-right"><div class="dsh-bf-bar" style="width:68.75%;background:#F59E0B;border-radius:0 3px 3px 0"></div></div></div>
+            </div>
+          </div>
+
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Root cause distribution</div><div class="dsh-ctag">WAFFLE</div>
+            <div id="dsh-waffle-obs-rc" class="dsh-waffle" style="grid-template-columns:repeat(10,1fr);gap:2px;margin-bottom:8px"></div>
+            <div class="dsh-legend"><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#3B82F6"></div>People (40)</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#F59E0B"></div>Procedure (25)</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#94A3B8"></div>Plant (20)</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#22C55E"></div>Premises (10)</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#14B8A6"></div>Env (5)</div></div>
+          </div>
+
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Root cause distribution</div><div class="dsh-ctag">DONUT</div>
+            <div style="display:flex;gap:12px;align-items:center">
+              <div class="dsh-donut" style="width:72px;height:72px;flex-shrink:0"><div class="dsh-donut-circle" style="width:72px;height:72px;background:conic-gradient(#3B82F6 0% 40%,#F59E0B 40% 65%,#94A3B8 65% 85%,#22C55E 85% 95%,#14B8A6 95% 100%)"></div><div class="dsh-donut-hole"><div class="dsh-donut-hole-inner" style="width:44px;height:44px;font-size:11px;font-weight:800;color:#1E293B">100</div></div></div>
+              <div style="flex:1"><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#3B82F6"></div>People<div class="dsh-pie-val">40</div></div><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#F59E0B"></div>Procedure<div class="dsh-pie-val">25</div></div><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#94A3B8"></div>Plant/Equipment<div class="dsh-pie-val">20</div></div><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#22C55E"></div>Premises<div class="dsh-pie-val">10</div></div><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#14B8A6"></div>Environmental<div class="dsh-pie-val">5</div></div></div>
+            </div>
+          </div>
+
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Status distribution</div><div class="dsh-ctag">STACKED BAR</div>
+            <div class="dsh-sbar"><div class="dsh-sbar-seg" style="flex:28;background:#3B82F6">28</div><div class="dsh-sbar-seg" style="flex:15;background:#F59E0B">15</div><div class="dsh-sbar-seg" style="flex:89;background:#22C55E">89</div><div class="dsh-sbar-seg" style="flex:10;background:#8B5CF6">10</div></div>
+            <div class="dsh-legend"><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#3B82F6"></div>Open</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#F59E0B"></div>Rectified</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#22C55E"></div>Closed</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#8B5CF6"></div>HSE Review</div></div>
+          </div>
+
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Incident timeline — June</div><div class="dsh-ctag">DOT STRIP</div>
+            <div class="dsh-dotstrip">
+              <div class="dsh-ds-axis">
+                <div class="dsh-ds-dot" style="left:10%;background:#94A3B8"></div>
+                <div class="dsh-ds-dot" style="left:26.7%;background:#F59E0B"></div>
+                <div class="dsh-ds-dot" style="left:43.3%;background:#94A3B8"></div>
+                <div class="dsh-ds-dot" style="left:60%;background:#EF4444;width:13px;height:13px;top:-5px"></div>
+                <div class="dsh-ds-dot" style="left:80%;background:#F59E0B"></div>
+              </div>
+              <div class="dsh-ds-lblrow"><span>Jun 1</span><span>Jun 8</span><span>Jun 15</span><span>Jun 22</span><span>Jun 30</span></div>
+            </div>
+            <div class="dsh-legend"><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#94A3B8"></div>Near Miss</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#F59E0B"></div>First Aid</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#EF4444"></div>LTI</div></div>
+          </div>
+
+        </div>
+
+        <!-- ── INCIDENTS ── -->
+        <div class="dsh-panel" id="dsh-tab-incidents">
+
+          <div class="dsh-lti">
+            <div><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+            <div style="flex:1"><div style="font-size:13px;font-weight:700;color:#fff">Days Without LTI</div><div style="font-size:9px;color:#94A3B8;margin-top:2px">Last LTI: 13 May 2026</div></div>
+            <div style="font-size:38px;font-weight:800;color:#22C55E;line-height:1">47</div>
+          </div>
+
+          <div class="dsh-sum-row">
+            <div class="dsh-scard"><div class="dsh-sval">5</div><div class="dsh-slbl">Total</div></div>
+            <div class="dsh-scard"><div class="dsh-sval" style="color:#EF4444">1</div><div class="dsh-slbl">Recordable</div></div>
+            <div class="dsh-scard"><div class="dsh-sval" style="color:#94A3B8">2</div><div class="dsh-slbl">Near Miss</div></div>
+          </div>
+
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Monthly incident trend</div><div class="dsh-ctag">VERTICAL BAR</div>
+            <div id="dsh-inc-vbar" class="dsh-vbars" style="height:56px;gap:6px"></div>
+            <div style="display:flex;justify-content:space-between;margin-top:3px;font-size:7px;color:#94A3B8;padding:0 2px"><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span></div>
+          </div>
+
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Incident type</div><div class="dsh-ctag">PIE</div>
+            <div style="display:flex;gap:12px;align-items:center">
+              <div style="width:80px;height:80px;border-radius:50%;flex-shrink:0;background:conic-gradient(#94A3B8 0% 40%,#F59E0B 40% 80%,#EF4444 80% 100%)"></div>
+              <div style="flex:1"><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#94A3B8"></div>Near Miss<div class="dsh-pie-val">2</div></div><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#F59E0B"></div>First Aid<div class="dsh-pie-val">2</div></div><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#EF4444"></div>LTI<div class="dsh-pie-val">1</div></div></div>
+            </div>
+          </div>
+
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Incident type</div><div class="dsh-ctag">BAR</div>
+            <div class="dsh-hbar">
+              <div class="dsh-hbar-row"><span class="dsh-hbar-lbl">Near Miss</span><div class="dsh-hbar-track"><div class="dsh-hbar-fill" style="width:40%;background:#94A3B8"></div></div><span class="dsh-hbar-val">2</span></div>
+              <div class="dsh-hbar-row"><span class="dsh-hbar-lbl">First Aid</span><div class="dsh-hbar-track"><div class="dsh-hbar-fill" style="width:40%;background:#F59E0B"></div></div><span class="dsh-hbar-val">2</span></div>
+              <div class="dsh-hbar-row"><span class="dsh-hbar-lbl">LTI</span><div class="dsh-hbar-track"><div class="dsh-hbar-fill" style="width:20%;background:#EF4444"></div></div><span class="dsh-hbar-val">1</span></div>
+            </div>
+          </div>
+
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Root cause breakdown</div><div class="dsh-ctag">WAFFLE</div>
+            <div id="dsh-waffle-inc-rc" class="dsh-waffle" style="grid-template-columns:repeat(10,1fr);gap:2px;margin-bottom:8px"></div>
+            <div class="dsh-legend"><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#3B82F6"></div>People (40)</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#F59E0B"></div>Procedure (25)</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#94A3B8"></div>Plant (20)</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#22C55E"></div>Premises (10)</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#14B8A6"></div>Env (5)</div></div>
+          </div>
+
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Body part affected</div><div class="dsh-ctag">LOLLIPOP</div>
+            <div id="dsh-inc-bodypart-lp" class="dsh-lollipop"></div>
+          </div>
+
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Incidents by location</div><div class="dsh-ctag">LOLLIPOP</div>
+            <div id="dsh-inc-location-lp" class="dsh-lollipop"></div>
+          </div>
+
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Severity distribution</div><div class="dsh-ctag">STACKED BAR</div>
+            <div class="dsh-sbar"><div class="dsh-sbar-seg" style="flex:2;background:#94A3B8">2</div><div class="dsh-sbar-seg" style="flex:1;background:#F59E0B">1</div><div class="dsh-sbar-seg" style="flex:1;background:#EF4444">1</div><div class="dsh-sbar-seg" style="flex:1;background:#991B1B">1</div></div>
+            <div class="dsh-legend"><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#94A3B8"></div>Low</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#F59E0B"></div>Medium</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#EF4444"></div>High</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#991B1B"></div>Critical</div></div>
+          </div>
+
+        </div>
+
+        <!-- ── TRAINING ── -->
+        <div class="dsh-panel" id="dsh-tab-training">
+          <div class="dsh-sum-row">
+            <div class="dsh-scard"><div class="dsh-sval">243</div><div class="dsh-slbl">Sessions</div></div>
+            <div class="dsh-scard"><div class="dsh-sval" style="color:#22C55E">87%</div><div class="dsh-slbl">Compliance</div></div>
+            <div class="dsh-scard"><div class="dsh-sval" style="color:#EF4444">8</div><div class="dsh-slbl">Overdue</div></div>
+          </div>
+
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Training compliance</div><div class="dsh-ctag">DONUT</div>
+            <div style="display:flex;gap:12px;align-items:center">
+              <div class="dsh-donut" style="width:80px;height:80px;flex-shrink:0"><div class="dsh-donut-circle" style="width:80px;height:80px;background:conic-gradient(#22C55E 0% 87%,#F59E0B 87% 92%,#EF4444 92% 100%)"></div><div class="dsh-donut-hole"><div class="dsh-donut-hole-inner" style="width:50px;height:50px;font-size:14px;font-weight:800;color:#22C55E">87%</div></div></div>
+              <div style="flex:1"><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#22C55E"></div>Compliant<div class="dsh-pie-val">87</div></div><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#F59E0B"></div>Partial<div class="dsh-pie-val">5</div></div><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#EF4444"></div>Overdue<div class="dsh-pie-val">8</div></div></div>
+            </div>
+          </div>
+
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Training compliance</div><div class="dsh-ctag">WAFFLE</div>
+            <div id="dsh-waffle-trn" class="dsh-waffle" style="grid-template-columns:repeat(10,1fr);gap:2px;margin-bottom:8px"></div>
+            <div class="dsh-legend"><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#22C55E"></div>Compliant (87)</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#F59E0B"></div>Partial (5)</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#EF4444"></div>Overdue (8)</div></div>
+          </div>
+
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Compliance by trade</div><div class="dsh-ctag">BUTTERFLY</div>
+            <div style="display:flex;justify-content:space-between;font-size:8px;color:#94A3B8;font-weight:600;margin-bottom:5px"><span>Compliant</span><span>Gap</span></div>
+            <div class="dsh-butterfly">
+              <div class="dsh-bf-row"><div class="dsh-bf-left"><div class="dsh-bf-bar" style="width:94%;background:#22C55E;border-radius:3px 0 0 3px"></div></div><div class="dsh-bf-lbl" style="width:64px">Electrical</div><div class="dsh-bf-right"><div class="dsh-bf-bar" style="width:25%;background:#EF4444;border-radius:0 3px 3px 0"></div></div></div>
+              <div class="dsh-bf-row"><div class="dsh-bf-left"><div class="dsh-bf-bar" style="width:91%;background:#22C55E;border-radius:3px 0 0 3px"></div></div><div class="dsh-bf-lbl" style="width:64px">Civil</div><div class="dsh-bf-right"><div class="dsh-bf-bar" style="width:37.5%;background:#EF4444;border-radius:0 3px 3px 0"></div></div></div>
+              <div class="dsh-bf-row"><div class="dsh-bf-left"><div class="dsh-bf-bar" style="width:88%;background:#22C55E;border-radius:3px 0 0 3px"></div></div><div class="dsh-bf-lbl" style="width:64px">Structural</div><div class="dsh-bf-right"><div class="dsh-bf-bar" style="width:50%;background:#EF4444;border-radius:0 3px 3px 0"></div></div></div>
+              <div class="dsh-bf-row"><div class="dsh-bf-left"><div class="dsh-bf-bar" style="width:82%;background:#F59E0B;border-radius:3px 0 0 3px"></div></div><div class="dsh-bf-lbl" style="width:64px">MEP</div><div class="dsh-bf-right"><div class="dsh-bf-bar" style="width:75%;background:#EF4444;border-radius:0 3px 3px 0"></div></div></div>
+              <div class="dsh-bf-row"><div class="dsh-bf-left"><div class="dsh-bf-bar" style="width:76%;background:#EF4444;border-radius:3px 0 0 3px"></div></div><div class="dsh-bf-lbl" style="width:64px">Scaffolding</div><div class="dsh-bf-right"><div class="dsh-bf-bar" style="width:100%;background:#EF4444;border-radius:0 3px 3px 0"></div></div></div>
+            </div>
+          </div>
+
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Training type distribution</div><div class="dsh-ctag">LOLLIPOP</div>
+            <div id="dsh-trn-type-lp" class="dsh-lollipop"></div>
+          </div>
+
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Top training topics</div><div class="dsh-ctag">BAR</div>
+            <div class="dsh-hbar">
+              <div class="dsh-hbar-row"><span class="dsh-hbar-lbl">Working at Height</span><div class="dsh-hbar-track"><div class="dsh-hbar-fill" style="width:100%;background:#3B82F6"></div></div><span class="dsh-hbar-val">38</span></div>
+              <div class="dsh-hbar-row"><span class="dsh-hbar-lbl">Fire Safety</span><div class="dsh-hbar-track"><div class="dsh-hbar-fill" style="width:84.2%;background:#3B82F6"></div></div><span class="dsh-hbar-val">32</span></div>
+              <div class="dsh-hbar-row"><span class="dsh-hbar-lbl">First Aid</span><div class="dsh-hbar-track"><div class="dsh-hbar-fill" style="width:73.7%;background:#8B5CF6"></div></div><span class="dsh-hbar-val">28</span></div>
+              <div class="dsh-hbar-row"><span class="dsh-hbar-lbl">Confined Space</span><div class="dsh-hbar-track"><div class="dsh-hbar-fill" style="width:57.9%;background:#F59E0B"></div></div><span class="dsh-hbar-val">22</span></div>
+              <div class="dsh-hbar-row"><span class="dsh-hbar-lbl">Electrical Safety</span><div class="dsh-hbar-track"><div class="dsh-hbar-fill" style="width:47.4%;background:#F59E0B"></div></div><span class="dsh-hbar-val">18</span></div>
+            </div>
+          </div>
+
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Monthly training volume</div><div class="dsh-ctag">VERTICAL BAR</div>
+            <div id="dsh-trn-vbar" class="dsh-vbars" style="height:56px;gap:6px"></div>
+            <div style="display:flex;justify-content:space-between;margin-top:3px;font-size:7px;color:#94A3B8;padding:0 2px"><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span></div>
+          </div>
+
+        </div>
+
+        <!-- ── SITE WALKS ── -->
+        <div class="dsh-panel" id="dsh-tab-sitewalks">
+          <div class="dsh-sum-row">
+            <div class="dsh-scard"><div class="dsh-sval">18</div><div class="dsh-slbl">Total Walks</div></div>
+            <div class="dsh-scard"><div class="dsh-sval" style="color:#3B82F6">34</div><div class="dsh-slbl">Findings</div></div>
+          </div>
+
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Walks per week</div><div class="dsh-ctag">VERTICAL BAR</div>
+            <div id="dsh-sw-vbar" class="dsh-vbars" style="height:56px;gap:8px"></div>
+            <div style="display:flex;justify-content:space-between;margin-top:3px;font-size:7px;color:#94A3B8;padding:0 2px"><span>W1</span><span>W2</span><span>W3</span><span>W4</span><span>W5</span></div>
+          </div>
+
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Walks by role</div><div class="dsh-ctag">PIE</div>
+            <div style="display:flex;gap:12px;align-items:center">
+              <div style="width:80px;height:80px;border-radius:50%;flex-shrink:0;background:conic-gradient(#3B82F6 0% 44.44%,#F59E0B 44.44% 77.78%,#22C55E 77.78% 100%)"></div>
+              <div style="flex:1"><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#3B82F6"></div>HSE Officer<div class="dsh-pie-val">8</div></div><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#F59E0B"></div>Leadership<div class="dsh-pie-val">6</div></div><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#22C55E"></div>Supervisor<div class="dsh-pie-val">4</div></div></div>
+            </div>
+          </div>
+
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Walks by role</div><div class="dsh-ctag">LOLLIPOP</div>
+            <div id="dsh-sw-role-lp" class="dsh-lollipop"></div>
+          </div>
+
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Findings by category</div><div class="dsh-ctag">LOLLIPOP</div>
+            <div id="dsh-sw-findings-lp" class="dsh-lollipop"></div>
+          </div>
+
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Findings severity</div><div class="dsh-ctag">WAFFLE</div>
+            <div id="dsh-waffle-sw" class="dsh-waffle" style="grid-template-columns:repeat(6,1fr);gap:3px;margin-bottom:8px"></div>
+            <div class="dsh-legend"><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#22C55E"></div>Low (18)</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#F59E0B"></div>Medium (10)</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#EF4444"></div>High (5)</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#991B1B"></div>Critical (1)</div></div>
+          </div>
+
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Findings severity</div><div class="dsh-ctag">DONUT</div>
+            <div style="display:flex;gap:12px;align-items:center">
+              <div class="dsh-donut" style="width:72px;height:72px;flex-shrink:0"><div class="dsh-donut-circle" style="width:72px;height:72px;background:conic-gradient(#22C55E 0% 52.94%,#F59E0B 52.94% 82.35%,#EF4444 82.35% 97.06%,#991B1B 97.06% 100%)"></div><div class="dsh-donut-hole"><div class="dsh-donut-hole-inner" style="width:44px;height:44px;font-size:11px;font-weight:800;color:#1E293B">34</div></div></div>
+              <div style="flex:1"><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#22C55E"></div>Low<div class="dsh-pie-val">18</div></div><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#F59E0B"></div>Medium<div class="dsh-pie-val">10</div></div><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#EF4444"></div>High<div class="dsh-pie-val">5</div></div><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#991B1B"></div>Critical<div class="dsh-pie-val">1</div></div></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ── INSPECTIONS ── -->
+        <div class="dsh-panel" id="dsh-tab-inspections">
+          <div class="dsh-sum-row">
+            <div class="dsh-scard"><div class="dsh-sval">24<span style="font-size:11px;font-weight:600;color:#94A3B8">/28</span></div><div class="dsh-slbl">Inspections</div></div>
+            <div class="dsh-scard"><div class="dsh-sval" style="color:#22C55E">83%</div><div class="dsh-slbl">Pass Rate</div></div>
+            <div class="dsh-scard"><div class="dsh-sval">3</div><div class="dsh-slbl">Audits Done</div></div>
+          </div>
+
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Pass rate trend</div><div class="dsh-ctag">VERTICAL BAR</div>
+            <div style="position:relative">
+              <div id="dsh-insp-vbar" class="dsh-vbars" style="height:56px;gap:6px"></div>
+              <div id="dsh-target-line" style="position:absolute;left:0;right:0;border-top:1.5px dashed #F59E0B;pointer-events:none"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:3px;font-size:7px;color:#94A3B8;padding:0 2px"><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span></div>
+            <div style="font-size:8px;color:#F59E0B;margin-top:4px">— Target: 85%</div>
+          </div>
+
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Contractor pass rate</div><div class="dsh-ctag">BAR</div>
+            <div class="dsh-hbar">
+              <div class="dsh-hbar-row"><span class="dsh-hbar-lbl">ABC Electrical</span><div class="dsh-hbar-track"><div class="dsh-hbar-fill" style="width:92%;background:#22C55E"></div></div><span class="dsh-hbar-val">92%</span></div>
+              <div class="dsh-hbar-row"><span class="dsh-hbar-lbl">XYZ Structural</span><div class="dsh-hbar-track"><div class="dsh-hbar-fill" style="width:85%;background:#F59E0B"></div></div><span class="dsh-hbar-val">85%</span></div>
+              <div class="dsh-hbar-row"><span class="dsh-hbar-lbl">DEF MEP</span><div class="dsh-hbar-track"><div class="dsh-hbar-fill" style="width:78%;background:#EF4444"></div></div><span class="dsh-hbar-val">78%</span></div>
+            </div>
+          </div>
+
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Contractor pass rate</div><div class="dsh-ctag">WAFFLE</div>
+            <div style="display:flex;gap:10px;align-items:flex-start">
+              <div style="flex:1;text-align:center"><div id="dsh-waffle-abc" class="dsh-waffle" style="grid-template-columns:repeat(5,1fr);gap:2px;margin-bottom:4px"></div><div style="font-size:9px;font-weight:700;color:#22C55E">92%</div><div style="font-size:8px;color:#94A3B8">ABC Electrical</div></div>
+              <div style="flex:1;text-align:center"><div id="dsh-waffle-xyz" class="dsh-waffle" style="grid-template-columns:repeat(5,1fr);gap:2px;margin-bottom:4px"></div><div style="font-size:9px;font-weight:700;color:#F59E0B">85%</div><div style="font-size:8px;color:#94A3B8">XYZ Structural</div></div>
+              <div style="flex:1;text-align:center"><div id="dsh-waffle-def" class="dsh-waffle" style="grid-template-columns:repeat(5,1fr);gap:2px;margin-bottom:4px"></div><div style="font-size:9px;font-weight:700;color:#EF4444">78%</div><div style="font-size:8px;color:#94A3B8">DEF MEP</div></div>
+            </div>
+          </div>
+
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Issues found</div><div class="dsh-ctag">LOLLIPOP</div>
+            <div id="dsh-insp-issues-lp" class="dsh-lollipop"></div>
+          </div>
+
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Planned vs completed</div><div class="dsh-ctag">BUTTERFLY</div>
+            <div style="display:flex;justify-content:space-between;font-size:8px;color:#94A3B8;font-weight:600;margin-bottom:5px"><span>Completed</span><span>Missed</span></div>
+            <div class="dsh-butterfly">
+              <div class="dsh-bf-row"><div class="dsh-bf-left"><div class="dsh-bf-bar" style="width:100%;background:#22C55E;border-radius:3px 0 0 3px"></div></div><div class="dsh-bf-lbl" style="width:68px">Scaffold</div><div class="dsh-bf-right"><div class="dsh-bf-bar" style="width:0%;background:#EF4444"></div></div></div>
+              <div class="dsh-bf-row"><div class="dsh-bf-left"><div class="dsh-bf-bar" style="width:62.5%;background:#22C55E;border-radius:3px 0 0 3px"></div></div><div class="dsh-bf-lbl" style="width:68px">Electrical</div><div class="dsh-bf-right"><div class="dsh-bf-bar" style="width:100%;background:#EF4444;border-radius:0 3px 3px 0"></div></div></div>
+              <div class="dsh-bf-row"><div class="dsh-bf-left"><div class="dsh-bf-bar" style="width:50%;background:#22C55E;border-radius:3px 0 0 3px"></div></div><div class="dsh-bf-lbl" style="width:68px">Fire Safety</div><div class="dsh-bf-right"><div class="dsh-bf-bar" style="width:100%;background:#EF4444;border-radius:0 3px 3px 0"></div></div></div>
+              <div class="dsh-bf-row"><div class="dsh-bf-left"><div class="dsh-bf-bar" style="width:50%;background:#22C55E;border-radius:3px 0 0 3px"></div></div><div class="dsh-bf-lbl" style="width:68px">Excavation</div><div class="dsh-bf-right"><div class="dsh-bf-bar" style="width:0%;background:#EF4444"></div></div></div>
+              <div class="dsh-bf-row"><div class="dsh-bf-left"><div class="dsh-bf-bar" style="width:25%;background:#F59E0B;border-radius:3px 0 0 3px"></div></div><div class="dsh-bf-lbl" style="width:68px">Crane/Lifting</div><div class="dsh-bf-right"><div class="dsh-bf-bar" style="width:100%;background:#EF4444;border-radius:0 3px 3px 0"></div></div></div>
+            </div>
+          </div>
+
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Audit status</div>
+            <div class="dsh-audit-row"><div style="flex:1;font-size:10px;color:#1E293B">Electrical Systems Audit</div><span style="padding:2px 7px;border-radius:10px;font-size:8px;font-weight:700;background:#F0FDF4;color:#22C55E;flex-shrink:0">Completed</span><div style="font-size:8px;color:#94A3B8;width:40px;text-align:right;flex-shrink:0">12 Jun</div></div>
+            <div class="dsh-audit-row"><div style="flex:1;font-size:10px;color:#1E293B">Fire Safety Audit</div><span style="padding:2px 7px;border-radius:10px;font-size:8px;font-weight:700;background:#F0FDF4;color:#22C55E;flex-shrink:0">Completed</span><div style="font-size:8px;color:#94A3B8;width:40px;text-align:right;flex-shrink:0">18 Jun</div></div>
+            <div class="dsh-audit-row"><div style="flex:1;font-size:10px;color:#1E293B">Structural Integrity Audit</div><span style="padding:2px 7px;border-radius:10px;font-size:8px;font-weight:700;background:#F0FDF4;color:#22C55E;flex-shrink:0">Completed</span><div style="font-size:8px;color:#94A3B8;width:40px;text-align:right;flex-shrink:0">22 Jun</div></div>
+            <div class="dsh-audit-row"><div style="flex:1;font-size:10px;color:#1E293B">MEP Services Audit</div><span style="padding:2px 7px;border-radius:10px;font-size:8px;font-weight:700;background:#EFF6FF;color:#3B82F6;flex-shrink:0">In Progress</span><div style="font-size:8px;color:#94A3B8;width:40px;text-align:right;flex-shrink:0">25 Jun</div></div>
+            <div class="dsh-audit-row"><div style="flex:1;font-size:10px;color:#1E293B">Environmental Compliance</div><span style="padding:2px 7px;border-radius:10px;font-size:8px;font-weight:700;background:#F8FAFC;color:#94A3B8;flex-shrink:0">Scheduled</span><div style="font-size:8px;color:#94A3B8;width:40px;text-align:right;flex-shrink:0">08 Jul</div></div>
+            <div class="dsh-audit-row"><div style="flex:1;font-size:10px;color:#1E293B">Scaffolding Audit</div><span style="padding:2px 7px;border-radius:10px;font-size:8px;font-weight:700;background:#F8FAFC;color:#94A3B8;flex-shrink:0">Scheduled</span><div style="font-size:8px;color:#94A3B8;width:40px;text-align:right;flex-shrink:0">15 Jul</div></div>
+          </div>
+
+        </div>
+
+      </div><!-- /dash-body -->
 
       <div class="bottom-nav">
         <div class="nav-item" onclick="showScreen('screen-tasks')"><div class="nav-indicator"><span class="nav-icon">&#9744;</span></div><span class="nav-label">Tasks</span></div>
@@ -2326,6 +2762,116 @@ function initConstructionTagline(){
 initConstructionTagline();
 window.syncConstructionTaglines = syncConstructionTaglines;
 
+})();
+
+/* ─── HSE Dashboard JS ─── */
+(function(){
+  var DSH_MONTHS=['Jan 2026','Feb 2026','Mar 2026','Apr 2026','May 2026','Jun 2026','Jul 2026'];
+  var dshMIdx=5;
+
+  window.dshPrevMonth=function(){if(dshMIdx>0){dshMIdx--;document.getElementById('dsh-month-label').textContent=DSH_MONTHS[dshMIdx];}};
+  window.dshNextMonth=function(){if(dshMIdx<DSH_MONTHS.length-1){dshMIdx++;document.getElementById('dsh-month-label').textContent=DSH_MONTHS[dshMIdx];}};
+
+  window.dshTab=function(id,btn){
+    document.querySelectorAll('#screen-dashboard .dsh-panel').forEach(function(p){p.classList.remove('active');});
+    document.querySelectorAll('#screen-dashboard .dsh-pill2').forEach(function(b){b.classList.remove('active');});
+    document.getElementById('dsh-tab-'+id).classList.add('active');
+    btn.classList.add('active');
+  };
+
+  function buildWaffle(id,segs,cols){
+    var el=document.getElementById(id); if(!el||el.dataset.built)return;
+    el.style.gridTemplateColumns='repeat('+cols+',1fr)';
+    var cells=[];
+    segs.forEach(function(s){for(var i=0;i<s.count;i++)cells.push(s.color);});
+    cells.forEach(function(c){var d=document.createElement('div');d.className='dsh-wf-cell';d.style.background=c;el.appendChild(d);});
+    el.dataset.built='1';
+  }
+
+  function buildLollipop(id,rows,color){
+    var el=document.getElementById(id); if(!el||el.dataset.built)return;
+    var max=Math.max.apply(null,rows.map(function(r){return r[1];}));
+    rows.forEach(function(r){
+      var row=document.createElement('div');row.className='dsh-lpop-row';
+      var lbl=document.createElement('div');lbl.className='dsh-lpop-lbl';lbl.textContent=r[0];
+      var track=document.createElement('div');track.className='dsh-lpop-track';
+      var fill=document.createElement('div');fill.style.cssText='height:2px;background:'+color+';width:'+Math.round(r[1]/max*100)+'%;position:relative;';
+      var dot=document.createElement('div');dot.style.cssText='width:7px;height:7px;border-radius:50%;background:'+color+';position:absolute;right:-3px;top:-2px;';
+      fill.appendChild(dot);track.appendChild(fill);
+      var val=document.createElement('div');val.className='dsh-lpop-val';val.textContent=r[1];
+      row.appendChild(lbl);row.appendChild(track);row.appendChild(val);el.appendChild(row);
+    });
+    el.dataset.built='1';
+  }
+
+  function buildVBar(id,data,hlIdx,hlColor,baseColor){
+    var el=document.getElementById(id); if(!el||el.dataset.built)return;
+    var max=Math.max.apply(null,data.map(function(v){return v||0;}));
+    var elH=el.offsetHeight||56;
+    data.forEach(function(v,i){
+      var col=document.createElement('div');col.className='dsh-vcol';
+      var bar=document.createElement('div');bar.className='dsh-vb';
+      bar.style.height=(v===0?2:Math.round((v/max)*elH))+'px';
+      bar.style.background=(i===hlIdx?hlColor:baseColor);
+      col.appendChild(bar);el.appendChild(col);
+    });
+    el.dataset.built='1';
+  }
+
+  function buildVBarRange(id,data,minV,maxV,hlIdx,hlColor,baseColor){
+    var el=document.getElementById(id); if(!el||el.dataset.built)return;
+    var range=maxV-minV; var elH=el.offsetHeight||56;
+    data.forEach(function(v,i){
+      var col=document.createElement('div');col.className='dsh-vcol';
+      var bar=document.createElement('div');bar.className='dsh-vb';
+      bar.style.height=Math.round((v-minV)/range*elH)+'px';
+      bar.style.background=(i===hlIdx?hlColor:baseColor);
+      col.appendChild(bar);el.appendChild(col);
+    });
+    el.dataset.built='1';
+  }
+
+  function buildVBar30(id,data){
+    var el=document.getElementById(id); if(!el||el.dataset.built)return;
+    var max=Math.max.apply(null,data);
+    var elH=el.offsetHeight||52;
+    data.forEach(function(v){
+      var col=document.createElement('div');col.style.cssText='flex:1;display:flex;align-items:flex-end;';
+      var bar=document.createElement('div');bar.style.cssText='width:100%;background:#3B82F6;border-radius:1px 1px 0 0;height:'+Math.round(v/max*elH)+'px;';
+      col.appendChild(bar);el.appendChild(col);
+    });
+    el.dataset.built='1';
+  }
+
+  var dshDone=false;
+  function dshInit(){
+    if(dshDone)return; dshDone=true;
+    buildVBar30('dsh-obs-vbar30',[4,6,3,5,7,4,2,8,5,4,6,3,7,5,4,3,8,6,4,5,3,7,4,6,3,5,4,6,2,3]);
+    buildLollipop('dsh-obs-haz-lp',[['Housekeeping',34],['PPE Non-compliance',28],['Working at Height',22],['Electrical Safety',18],['Manual Handling',14],['Access/Egress',12]],'#3B82F6');
+    buildWaffle('dsh-waffle-obs-rc',[{count:40,color:'#3B82F6'},{count:25,color:'#F59E0B'},{count:20,color:'#94A3B8'},{count:10,color:'#22C55E'},{count:5,color:'#14B8A6'}],10);
+    buildVBar('dsh-inc-vbar',[3,2,4,1,3,5],5,'#3B82F6','#CBD5E1');
+    buildWaffle('dsh-waffle-inc-rc',[{count:40,color:'#3B82F6'},{count:25,color:'#F59E0B'},{count:20,color:'#94A3B8'},{count:10,color:'#22C55E'},{count:5,color:'#14B8A6'}],10);
+    buildLollipop('dsh-inc-bodypart-lp',[['Hand/Fingers',2],['Head/Face',1],['Back/Spine',1],['Foot/Ankle',1]],'#EF4444');
+    buildLollipop('dsh-inc-location-lp',[['Zone C MEP',2],['Zone A Basement',1],['Zone B Structure',1],['Zone E Roof',1]],'#F59E0B');
+    buildWaffle('dsh-waffle-trn',[{count:87,color:'#22C55E'},{count:5,color:'#F59E0B'},{count:8,color:'#EF4444'}],10);
+    buildLollipop('dsh-trn-type-lp',[['Toolbox Talk',68],['Induction',45],['Competency',42],['Refresher',35],['Emergency',14],['Confined Space',12]],'#3B82F6');
+    buildVBar('dsh-trn-vbar',[180,195,210,225,230,243],5,'#22C55E','#CBD5E1');
+    buildVBar('dsh-sw-vbar',[5,0,6,4,3],null,'#3B82F6','#3B82F6');
+    buildLollipop('dsh-sw-role-lp',[['HSE Officer',8],['Leadership',6],['Supervisor',4]],'#3B82F6');
+    buildLollipop('dsh-sw-findings-lp',[['Housekeeping',9],['PPE',8],['Working at Height',7],['Access/Egress',6],['Signage',4]],'#F59E0B');
+    buildWaffle('dsh-waffle-sw',[{count:18,color:'#22C55E'},{count:10,color:'#F59E0B'},{count:5,color:'#EF4444'},{count:1,color:'#991B1B'}],6);
+    buildVBarRange('dsh-insp-vbar',[78,82,80,85,81,83],60,90,5,'#3B82F6','#CBD5E1');
+    buildWaffle('dsh-waffle-abc',[{count:23,color:'#22C55E'},{count:2,color:'#EF4444'}],5);
+    buildWaffle('dsh-waffle-xyz',[{count:21,color:'#22C55E'},{count:4,color:'#F59E0B'}],5);
+    buildWaffle('dsh-waffle-def',[{count:19,color:'#22C55E'},{count:6,color:'#EF4444'}],5);
+    buildLollipop('dsh-insp-issues-lp',[['Fire Exits Blocked',4],['Scaffold Incomplete',3],['Electrical Exposed',3],['PPE Missing',2],['Signage Missing',2]],'#EF4444');
+    var tl=document.getElementById('dsh-target-line');
+    if(tl){tl.style.bottom=Math.round((85-60)/(90-60)*56)+'px';}
+  }
+
+  /* hook into showScreen */
+  var _orig=window.showScreen;
+  window.showScreen=function(s){_orig(s);if(s==='screen-dashboard')dshInit();};
 })();
 </script>
 
