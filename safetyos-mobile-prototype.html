@@ -1817,46 +1817,92 @@ a{color:var(--md-primary);text-decoration:none}
 
           <div class="dsh-card">
             <div class="dsh-ctitle">HSE Data</div>
-            <div class="dsh-ctag">DONUT</div>
-            <div style="display:flex;gap:12px;align-items:flex-start">
-              <div class="dsh-donut" style="width:80px;height:80px;flex-shrink:0">
-                <div class="dsh-donut-circle" style="width:80px;height:80px;background:conic-gradient(#3B82F6 0% 55.41%,#F59E0B 55.41% 86.49%,#EF4444 86.49% 100%)"></div>
-                <div class="dsh-donut-hole"><div class="dsh-donut-hole-inner" style="width:50px;height:50px;font-size:7px;font-weight:700;color:#94A3B8;line-height:1.4;text-align:center">Cumu<br>lative</div></div>
-              </div>
-              <div style="flex:1;min-width:0">
-                <div style="display:grid;grid-template-columns:1fr 28px 28px 28px;margin-bottom:4px">
-                  <span></span>
-                  <span style="font-size:8px;color:#94A3B8;font-weight:600;text-align:right">Mo</span>
-                  <span style="font-size:8px;color:#94A3B8;font-weight:600;text-align:right">YTD</span>
-                  <span style="font-size:8px;color:#94A3B8;font-weight:600;text-align:right">All</span>
-                </div>
-                <div class="dsh-ov-row" style="background:rgba(59,130,246,.07)"><div class="dsh-ov-lbl"><div class="dsh-ov-dot" style="background:#3B82F6"></div><span class="dsh-ov-lbl-text">Avg Manpower</span></div><div class="dsh-ov-cell" style="color:#3B82F6">82</div><div class="dsh-ov-cell" style="color:#3B82F6">82</div><div class="dsh-ov-cell" style="color:#3B82F6">82</div></div>
-                <div class="dsh-ov-row" style="background:rgba(245,158,11,.07)"><div class="dsh-ov-lbl"><div class="dsh-ov-dot" style="background:#F59E0B"></div><span class="dsh-ov-lbl-text">Manhours Worked</span></div><div class="dsh-ov-cell" style="color:#F59E0B">46</div><div class="dsh-ov-cell" style="color:#F59E0B">46</div><div class="dsh-ov-cell" style="color:#F59E0B">46</div></div>
-                <div class="dsh-ov-row" style="background:rgba(239,68,68,.07)"><div class="dsh-ov-lbl"><div class="dsh-ov-dot" style="background:#EF4444"></div><span class="dsh-ov-lbl-text">Safe Manhours</span></div><div class="dsh-ov-cell" style="color:#EF4444">20</div><div class="dsh-ov-cell" style="color:#EF4444">20</div><div class="dsh-ov-cell" style="color:#EF4444">20</div></div>
-              </div>
+            <div class="dsh-ctag">TABLE + INLINE BAR</div>
+            <!-- header -->
+            <div style="display:flex;align-items:center;gap:5px;padding-bottom:5px;border-bottom:1px solid #F1F5F9;margin-bottom:2px">
+              <div style="width:7px;flex-shrink:0"></div>
+              <div style="flex:1"></div>
+              <div style="width:80px;flex-shrink:0"></div>
+              <div style="width:24px;text-align:right;font-size:8px;color:#94A3B8;font-weight:600;flex-shrink:0">Mo</div>
+              <div style="width:24px;text-align:right;font-size:8px;color:#94A3B8;font-weight:600;flex-shrink:0">YTD</div>
+              <div style="width:24px;text-align:right;font-size:8px;color:#94A3B8;font-weight:600;flex-shrink:0">All</div>
+            </div>
+            <!-- row: Avg Manpower (Mo=82, max=82 → 100%) -->
+            <div style="display:flex;align-items:center;gap:5px;padding:5px 0;border-bottom:1px solid #F8FAFC">
+              <div style="width:7px;height:7px;border-radius:50%;background:#3B82F6;flex-shrink:0"></div>
+              <div style="flex:1;font-size:9px;color:#64748B;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Avg Manpower</div>
+              <div style="width:80px;height:8px;background:#F1F5F9;border-radius:4px;flex-shrink:0;overflow:hidden"><div style="height:100%;width:100%;background:#3B82F6;border-radius:4px"></div></div>
+              <div style="width:24px;text-align:right;font-size:10px;font-weight:700;color:#3B82F6;flex-shrink:0">82</div>
+              <div style="width:24px;text-align:right;font-size:10px;font-weight:700;color:#3B82F6;flex-shrink:0">82</div>
+              <div style="width:24px;text-align:right;font-size:10px;font-weight:700;color:#3B82F6;flex-shrink:0">82</div>
+            </div>
+            <!-- row: Manhours Worked (Mo=46 → 56%) -->
+            <div style="display:flex;align-items:center;gap:5px;padding:5px 0;border-bottom:1px solid #F8FAFC">
+              <div style="width:7px;height:7px;border-radius:50%;background:#F59E0B;flex-shrink:0"></div>
+              <div style="flex:1;font-size:9px;color:#64748B;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Manhours Worked</div>
+              <div style="width:80px;height:8px;background:#F1F5F9;border-radius:4px;flex-shrink:0;overflow:hidden"><div style="height:100%;width:56%;background:#F59E0B;border-radius:4px"></div></div>
+              <div style="width:24px;text-align:right;font-size:10px;font-weight:700;color:#F59E0B;flex-shrink:0">46</div>
+              <div style="width:24px;text-align:right;font-size:10px;font-weight:700;color:#F59E0B;flex-shrink:0">46</div>
+              <div style="width:24px;text-align:right;font-size:10px;font-weight:700;color:#F59E0B;flex-shrink:0">46</div>
+            </div>
+            <!-- row: Safe Manhours (Mo=20 → 24%) -->
+            <div style="display:flex;align-items:center;gap:5px;padding:5px 0">
+              <div style="width:7px;height:7px;border-radius:50%;background:#EF4444;flex-shrink:0"></div>
+              <div style="flex:1;font-size:9px;color:#64748B;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Safe Manhours</div>
+              <div style="width:80px;height:8px;background:#F1F5F9;border-radius:4px;flex-shrink:0;overflow:hidden"><div style="height:100%;width:24%;background:#EF4444;border-radius:4px"></div></div>
+              <div style="width:24px;text-align:right;font-size:10px;font-weight:700;color:#EF4444;flex-shrink:0">20</div>
+              <div style="width:24px;text-align:right;font-size:10px;font-weight:700;color:#EF4444;flex-shrink:0">20</div>
+              <div style="width:24px;text-align:right;font-size:10px;font-weight:700;color:#EF4444;flex-shrink:0">20</div>
             </div>
           </div>
 
           <div class="dsh-card">
             <div class="dsh-ctitle">Recordable Incidents</div>
-            <div class="dsh-ctag">DONUT</div>
-            <div style="display:flex;gap:12px;align-items:flex-start">
-              <div class="dsh-donut" style="width:80px;height:80px;flex-shrink:0">
-                <div class="dsh-donut-circle" style="width:80px;height:80px;background:conic-gradient(#3B82F6 0% 35.65%,#F59E0B 35.65% 55.65%,#A3882A 55.65% 64.35%,#8B5CF6 64.35% 100%)"></div>
-                <div class="dsh-donut-hole"><div class="dsh-donut-hole-inner" style="width:50px;height:50px;font-size:7px;font-weight:700;color:#94A3B8;line-height:1.4;text-align:center">Cumu<br>lative</div></div>
-              </div>
-              <div style="flex:1;min-width:0">
-                <div style="display:grid;grid-template-columns:1fr 28px 28px 28px;margin-bottom:4px">
-                  <span></span>
-                  <span style="font-size:8px;color:#94A3B8;font-weight:600;text-align:right">Mo</span>
-                  <span style="font-size:8px;color:#94A3B8;font-weight:600;text-align:right">YTD</span>
-                  <span style="font-size:8px;color:#94A3B8;font-weight:600;text-align:right">All</span>
-                </div>
-                <div class="dsh-ov-row" style="background:rgba(59,130,246,.07)"><div class="dsh-ov-lbl"><div class="dsh-ov-dot" style="background:#3B82F6"></div><span class="dsh-ov-lbl-text">Fatality</span></div><div class="dsh-ov-cell" style="color:#3B82F6">82</div><div class="dsh-ov-cell" style="color:#3B82F6">82</div><div class="dsh-ov-cell" style="color:#3B82F6">82</div></div>
-                <div class="dsh-ov-row" style="background:rgba(245,158,11,.07)"><div class="dsh-ov-lbl"><div class="dsh-ov-dot" style="background:#F59E0B"></div><span class="dsh-ov-lbl-text">Lost Time Incident</span></div><div class="dsh-ov-cell" style="color:#F59E0B">46</div><div class="dsh-ov-cell" style="color:#F59E0B">46</div><div class="dsh-ov-cell" style="color:#F59E0B">46</div></div>
-                <div class="dsh-ov-row" style="background:rgba(163,136,42,.07)"><div class="dsh-ov-lbl"><div class="dsh-ov-dot" style="background:#A3882A"></div><span class="dsh-ov-lbl-text">Restricted Work Case</span></div><div class="dsh-ov-cell" style="color:#A3882A">20</div><div class="dsh-ov-cell" style="color:#A3882A">20</div><div class="dsh-ov-cell" style="color:#A3882A">20</div></div>
-                <div class="dsh-ov-row" style="background:rgba(139,92,246,.07)"><div class="dsh-ov-lbl"><div class="dsh-ov-dot" style="background:#8B5CF6"></div><span class="dsh-ov-lbl-text">Medical Treatment</span></div><div class="dsh-ov-cell" style="color:#8B5CF6">82</div><div class="dsh-ov-cell" style="color:#8B5CF6">82</div><div class="dsh-ov-cell" style="color:#8B5CF6">82</div></div>
-              </div>
+            <div class="dsh-ctag">TABLE + INLINE BAR</div>
+            <!-- header -->
+            <div style="display:flex;align-items:center;gap:5px;padding-bottom:5px;border-bottom:1px solid #F1F5F9;margin-bottom:2px">
+              <div style="width:7px;flex-shrink:0"></div>
+              <div style="flex:1"></div>
+              <div style="width:80px;flex-shrink:0"></div>
+              <div style="width:24px;text-align:right;font-size:8px;color:#94A3B8;font-weight:600;flex-shrink:0">Mo</div>
+              <div style="width:24px;text-align:right;font-size:8px;color:#94A3B8;font-weight:600;flex-shrink:0">YTD</div>
+              <div style="width:24px;text-align:right;font-size:8px;color:#94A3B8;font-weight:600;flex-shrink:0">All</div>
+            </div>
+            <!-- row: Fatality (Mo=82 → 100%) -->
+            <div style="display:flex;align-items:center;gap:5px;padding:5px 0;border-bottom:1px solid #F8FAFC">
+              <div style="width:7px;height:7px;border-radius:50%;background:#3B82F6;flex-shrink:0"></div>
+              <div style="flex:1;font-size:9px;color:#64748B;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Fatality</div>
+              <div style="width:80px;height:8px;background:#F1F5F9;border-radius:4px;flex-shrink:0;overflow:hidden"><div style="height:100%;width:100%;background:#3B82F6;border-radius:4px"></div></div>
+              <div style="width:24px;text-align:right;font-size:10px;font-weight:700;color:#3B82F6;flex-shrink:0">82</div>
+              <div style="width:24px;text-align:right;font-size:10px;font-weight:700;color:#3B82F6;flex-shrink:0">82</div>
+              <div style="width:24px;text-align:right;font-size:10px;font-weight:700;color:#3B82F6;flex-shrink:0">82</div>
+            </div>
+            <!-- row: Lost Time Incident (Mo=46 → 56%) -->
+            <div style="display:flex;align-items:center;gap:5px;padding:5px 0;border-bottom:1px solid #F8FAFC">
+              <div style="width:7px;height:7px;border-radius:50%;background:#F59E0B;flex-shrink:0"></div>
+              <div style="flex:1;font-size:9px;color:#64748B;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Lost Time Incident</div>
+              <div style="width:80px;height:8px;background:#F1F5F9;border-radius:4px;flex-shrink:0;overflow:hidden"><div style="height:100%;width:56%;background:#F59E0B;border-radius:4px"></div></div>
+              <div style="width:24px;text-align:right;font-size:10px;font-weight:700;color:#F59E0B;flex-shrink:0">46</div>
+              <div style="width:24px;text-align:right;font-size:10px;font-weight:700;color:#F59E0B;flex-shrink:0">46</div>
+              <div style="width:24px;text-align:right;font-size:10px;font-weight:700;color:#F59E0B;flex-shrink:0">46</div>
+            </div>
+            <!-- row: Restricted Work Case (Mo=20 → 24%) -->
+            <div style="display:flex;align-items:center;gap:5px;padding:5px 0;border-bottom:1px solid #F8FAFC">
+              <div style="width:7px;height:7px;border-radius:50%;background:#A3882A;flex-shrink:0"></div>
+              <div style="flex:1;font-size:9px;color:#64748B;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Restricted Work Case</div>
+              <div style="width:80px;height:8px;background:#F1F5F9;border-radius:4px;flex-shrink:0;overflow:hidden"><div style="height:100%;width:24%;background:#A3882A;border-radius:4px"></div></div>
+              <div style="width:24px;text-align:right;font-size:10px;font-weight:700;color:#A3882A;flex-shrink:0">20</div>
+              <div style="width:24px;text-align:right;font-size:10px;font-weight:700;color:#A3882A;flex-shrink:0">20</div>
+              <div style="width:24px;text-align:right;font-size:10px;font-weight:700;color:#A3882A;flex-shrink:0">20</div>
+            </div>
+            <!-- row: Medical Treatment (Mo=82 → 100%) -->
+            <div style="display:flex;align-items:center;gap:5px;padding:5px 0">
+              <div style="width:7px;height:7px;border-radius:50%;background:#8B5CF6;flex-shrink:0"></div>
+              <div style="flex:1;font-size:9px;color:#64748B;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Medical Treatment</div>
+              <div style="width:80px;height:8px;background:#F1F5F9;border-radius:4px;flex-shrink:0;overflow:hidden"><div style="height:100%;width:100%;background:#8B5CF6;border-radius:4px"></div></div>
+              <div style="width:24px;text-align:right;font-size:10px;font-weight:700;color:#8B5CF6;flex-shrink:0">82</div>
+              <div style="width:24px;text-align:right;font-size:10px;font-weight:700;color:#8B5CF6;flex-shrink:0">82</div>
+              <div style="width:24px;text-align:right;font-size:10px;font-weight:700;color:#8B5CF6;flex-shrink:0">82</div>
             </div>
           </div>
 
