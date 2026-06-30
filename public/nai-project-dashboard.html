@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>nAI — Project Dashboard</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0f172a;min-height:100vh;display:flex;justify-content:center;align-items:flex-start;padding:24px 16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+.phone{width:390px;background:#F5F6FA;border-radius:40px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 0 0 10px #1e293b,0 0 0 11px #334155,0 30px 80px rgba(0,0,0,.6)}
+/* Header */
+.hdr{background:#1B2A4A;padding:14px 14px 0;flex-shrink:0}
+.hdr-top{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.hdr-btn{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:6px;color:rgba(255,255,255,.7)}
+.hdr-btn:hover{background:rgba(255,255,255,.1)}
+.hdr-title{flex:1;text-align:center;font-size:12.5px;font-weight:700;color:#fff}
+.month-row{display:flex;align-items:center;justify-content:center;gap:10px;padding-bottom:12px}
+.marrow{width:24px;height:24px;border-radius:5px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.7);background:rgba(255,255,255,.08)}
+.mlabel{font-size:13px;font-weight:600;color:rgba(255,255,255,.9);min-width:86px;text-align:center}
+/* Tabs */
+.tabbar{display:flex;overflow-x:auto;background:#fff;padding:8px 10px;gap:5px;flex-shrink:0;border-bottom:1px solid #E2E8F0;-webkit-overflow-scrolling:touch}
+.tabbar::-webkit-scrollbar{display:none}
+.tab-pill{flex-shrink:0;padding:5px 12px;border-radius:20px;font-size:11.5px;font-weight:600;border:1.5px solid #E2E8F0;color:#64748B;background:#fff;white-space:nowrap;transition:all .15s}
+.tab-pill.active{background:#1E293B;color:#fff;border-color:#1E293B}
+/* Content */
+.content{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;min-height:0}
+.content::-webkit-scrollbar{display:none}
+.panel{display:none;padding:12px}
+.panel.active{display:block}
+/* Cards */
+.card{background:#fff;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.08);margin-bottom:10px;padding:14px;position:relative}
+.ctitle{font-size:13px;font-weight:700;color:#1E293B;margin-bottom:11px}
+.ctag{position:absolute;top:10px;right:10px;font-size:7.5px;font-weight:700;letter-spacing:.06em;color:#94A3B8;background:#F8FAFC;padding:2px 5px;border-radius:3px;border:1px solid #E2E8F0}
+/* Summary row */
+.sum-row{display:flex;gap:8px;margin-bottom:10px}
+.scard{flex:1;background:#fff;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.08);padding:10px;text-align:center}
+.sval{font-size:20px;font-weight:800;color:#1E293B;line-height:1}
+.slbl{font-size:9px;color:#94A3B8;font-weight:500;margin-top:3px}
+/* Overview legend table */
+.ov-row{display:grid;grid-template-columns:1fr 36px 36px 36px;align-items:center;padding:4px 5px;border-radius:5px;margin-bottom:3px}
+.ov-cell{font-size:11px;font-weight:700;text-align:right}
+.ov-lbl{display:flex;align-items:center;gap:5px;font-size:9px;color:#1E293B;min-width:0}
+.ov-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.ov-lbl-text{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* Donut */
+.donut-wrap{position:relative;flex-shrink:0}
+.donut-circle{border-radius:50%}
+.donut-hole{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.donut-hole-inner{background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-align:center}
+/* Lollipop */
+.lollipop{display:flex;flex-direction:column;gap:8px}
+.lpop-row{display:flex;align-items:center;gap:7px}
+.lpop-lbl{font-size:9.5px;color:#64748B;width:106px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lpop-track{flex:1;position:relative;height:2px;background:#F1F5F9;border-radius:1px}
+.lpop-val{font-size:11px;font-weight:700;color:#1E293B;width:22px;text-align:right;flex-shrink:0}
+/* H-bar */
+.hbar{display:flex;flex-direction:column;gap:7px}
+.hbar-row{display:flex;align-items:center;gap:7px}
+.hbar-lbl{font-size:9.5px;color:#64748B;width:106px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hbar-track{flex:1;height:10px;background:#F1F5F9;border-radius:5px;overflow:hidden}
+.hbar-fill{height:100%;border-radius:5px}
+.hbar-val{font-size:11px;font-weight:700;color:#1E293B;width:22px;text-align:right;flex-shrink:0}
+/* Stacked bar */
+.sbar{height:26px;border-radius:6px;overflow:hidden;display:flex}
+.sbar-seg{height:100%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;min-width:14px;flex-shrink:0}
+/* V-bar chart */
+.vbar-outer{display:flex;flex-direction:column;gap:0}
+.vbar-bars{display:flex;align-items:flex-end;gap:3px}
+.vbar-col{display:flex;flex-direction:column;align-items:center;flex:1;gap:2px}
+.vbar-b{width:100%;border-radius:2px 2px 0 0;min-height:2px}
+.vbar-lbl{font-size:8px;color:#94A3B8;white-space:nowrap}
+/* Pie */
+.pie-legend{display:flex;flex-direction:column;gap:5px;margin-top:10px}
+.pie-row{display:flex;align-items:center;gap:6px;font-size:10px;color:#475569}
+.pie-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.pie-val{margin-left:auto;font-weight:700;color:#1E293B;font-size:10px}
+/* Butterfly */
+.butterfly{display:flex;flex-direction:column;gap:5px}
+.bf-row{display:flex;align-items:center;gap:3px}
+.bf-lbl{font-size:9px;color:#64748B;flex-shrink:0;text-align:center}
+.bf-left{flex:1;display:flex;justify-content:flex-end}
+.bf-right{flex:1;display:flex;justify-content:flex-start}
+.bf-bar{height:12px;border-radius:2px}
+/* Waffle */
+.waffle{display:grid;gap:2px}
+.wf-cell{border-radius:1.5px;aspect-ratio:1}
+/* Status timeline */
+.swim{display:flex;flex-direction:column;gap:5px}
+.swim-row{display:flex;align-items:center;gap:7px}
+.swim-id{font-size:9px;font-weight:700;color:#475569;width:58px;flex-shrink:0}
+.swim-bar{flex:1;height:14px;border-radius:3px;overflow:hidden;display:flex}
+/* Dot strip */
+.dotstrip{position:relative}
+.ds-axis{height:2px;background:#E2E8F0;border-radius:1px;position:relative;margin:16px 0 6px}
+.ds-dot{position:absolute;width:11px;height:11px;border-radius:50%;top:-4.5px;transform:translateX(-50%);border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.ds-lblrow{display:flex;justify-content:space-between;font-size:8px;color:#94A3B8;margin-top:2px}
+/* LTI banner */
+.lti-banner{background:#1B2A4A;border-radius:8px;padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:14px}
+.lti-num{font-size:40px;font-weight:800;color:#22C55E;line-height:1;flex-shrink:0}
+.lti-body{flex:1}
+.lti-title{font-size:14px;font-weight:700;color:#fff}
+.lti-sub{font-size:10px;color:#94A3B8;margin-top:3px}
+/* Audit list */
+.audit-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid #F8FAFC}
+.audit-row:last-child{border-bottom:none}
+.audit-name{flex:1;font-size:11px;color:#1E293B;min-width:0}
+.apill{padding:2px 8px;border-radius:10px;font-size:9px;font-weight:700;flex-shrink:0}
+.apill-g{background:#F0FDF4;color:#22C55E}
+.apill-b{background:#EFF6FF;color:#3B82F6}
+.apill-gray{background:#F8FAFC;color:#94A3B8}
+.audit-date{font-size:9px;color:#94A3B8;flex-shrink:0;width:46px;text-align:right}
+/* Misc */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.g2 .card{margin-bottom:0}
+.chart-legend{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+.cl-item{display:flex;align-items:center;gap:4px;font-size:9px;color:#64748B}
+.cl-dot{width:9px;height:9px;border-radius:2px;flex-shrink:0}
+</style>
+</head>
+<body>
+<div class="phone">
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-top">
+    <button class="hdr-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+    <div class="hdr-title">DLR Singapore DC — Phase 2</div>
+    <button class="hdr-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg></button>
+  </div>
+  <div class="month-row">
+    <button class="marrow" onclick="prevMonth()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+    <span class="mlabel" id="mlabel">June 2026</span>
+    <button class="marrow" onclick="nextMonth()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+  </div>
+</div>
+
+<!-- TAB BAR -->
+<div class="tabbar">
+  <button class="tab-pill active" onclick="switchTab('overview',this)">Overview</button>
+  <button class="tab-pill" onclick="switchTab('observations',this)">Observations</button>
+  <button class="tab-pill" onclick="switchTab('incidents',this)">Incidents</button>
+  <button class="tab-pill" onclick="switchTab('training',this)">Training</button>
+  <button class="tab-pill" onclick="switchTab('sitewalks',this)">Site Walks</button>
+  <button class="tab-pill" onclick="switchTab('inspections',this)">Inspections</button>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+<!-- ══════════ OVERVIEW ══════════ -->
+<div class="panel active" id="panel-overview">
+
+  <!-- Card 1: HSE Data -->
+  <div class="card" style="margin-top:4px">
+    <div class="ctitle">HSE Data</div>
+    <div style="display:flex;gap:12px;align-items:flex-start">
+      <!-- Donut: blue=82(55.4%), orange=46(31.1%), red=20(13.5%) -->
+      <div class="donut-wrap" style="width:80px;height:80px">
+        <div class="donut-circle" style="width:80px;height:80px;background:conic-gradient(#3B82F6 0% 55.41%,#F59E0B 55.41% 86.49%,#EF4444 86.49% 100%)"></div>
+        <div class="donut-hole"><div class="donut-hole-inner" style="width:50px;height:50px;font-size:7.5px;font-weight:700;color:#94A3B8;line-height:1.3">Cumu<br>lative</div></div>
+      </div>
+      <!-- Legend table -->
+      <div style="flex:1;min-width:0">
+        <div style="display:grid;grid-template-columns:1fr 36px 36px 36px;margin-bottom:5px">
+          <span></span>
+          <span style="font-size:8px;color:#94A3B8;font-weight:600;text-align:right">Mo</span>
+          <span style="font-size:8px;color:#94A3B8;font-weight:600;text-align:right">YTD</span>
+          <span style="font-size:8px;color:#94A3B8;font-weight:600;text-align:right">All</span>
+        </div>
+        <div class="ov-row" style="background:rgba(59,130,246,.07)">
+          <div class="ov-lbl"><div class="ov-dot" style="background:#3B82F6"></div><span class="ov-lbl-text">Avg Manpower</span></div>
+          <div class="ov-cell" style="color:#3B82F6">82</div><div class="ov-cell" style="color:#3B82F6">82</div><div class="ov-cell" style="color:#3B82F6">82</div>
+        </div>
+        <div class="ov-row" style="background:rgba(245,158,11,.07)">
+          <div class="ov-lbl"><div class="ov-dot" style="background:#F59E0B"></div><span class="ov-lbl-text">Manhours Worked</span></div>
+          <div class="ov-cell" style="color:#F59E0B">46</div><div class="ov-cell" style="color:#F59E0B">46</div><div class="ov-cell" style="color:#F59E0B">46</div>
+        </div>
+        <div class="ov-row" style="background:rgba(239,68,68,.07)">
+          <div class="ov-lbl"><div class="ov-dot" style="background:#EF4444"></div><span class="ov-lbl-text">Safe Manhours</span></div>
+          <div class="ov-cell" style="color:#EF4444">20</div><div class="ov-cell" style="color:#EF4444">20</div><div class="ov-cell" style="color:#EF4444">20</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 2: Recordable Incidents -->
+  <!-- blue=82(35.65%), orange=46(20%), olive=20(8.7%), purple=82(35.65%) -->
+  <div class="card">
+    <div class="ctitle">Recordable Incidents</div>
+    <div style="display:flex;gap:12px;align-items:flex-start">
+      <div class="donut-wrap" style="width:80px;height:80px">
+        <div class="donut-circle" style="width:80px;height:80px;background:conic-gradient(#3B82F6 0% 35.65%,#F59E0B 35.65% 55.65%,#A3882A 55.65% 64.35%,#8B5CF6 64.35% 100%)"></div>
+        <div class="donut-hole"><div class="donut-hole-inner" style="width:50px;height:50px;font-size:7.5px;font-weight:700;color:#94A3B8;line-height:1.3">Cumu<br>lative</div></div>
+      </div>
+      <div style="flex:1;min-width:0">
+        <div style="display:grid;grid-template-columns:1fr 36px 36px 36px;margin-bottom:5px">
+          <span></span>
+          <span style="font-size:8px;color:#94A3B8;font-weight:600;text-align:right">Mo</span>
+          <span style="font-size:8px;color:#94A3B8;font-weight:600;text-align:right">YTD</span>
+          <span style="font-size:8px;color:#94A3B8;font-weight:600;text-align:right">All</span>
+        </div>
+        <div class="ov-row" style="background:rgba(59,130,246,.07)">
+          <div class="ov-lbl"><div class="ov-dot" style="background:#3B82F6"></div><span class="ov-lbl-text">Fatality</span></div>
+          <div class="ov-cell" style="color:#3B82F6">82</div><div class="ov-cell" style="color:#3B82F6">82</div><div class="ov-cell" style="color:#3B82F6">82</div>
+        </div>
+        <div class="ov-row" style="background:rgba(245,158,11,.07)">
+          <div class="ov-lbl"><div class="ov-dot" style="background:#F59E0B"></div><span class="ov-lbl-text">Lost Time Incident</span></div>
+          <div class="ov-cell" style="color:#F59E0B">46</div><div class="ov-cell" style="color:#F59E0B">46</div><div class="ov-cell" style="color:#F59E0B">46</div>
+        </div>
+        <div class="ov-row" style="background:rgba(163,136,42,.07)">
+          <div class="ov-lbl"><div class="ov-dot" style="background:#A3882A"></div><span class="ov-lbl-text">Restricted Work Case</span></div>
+          <div class="ov-cell" style="color:#A3882A">20</div><div class="ov-cell" style="color:#A3882A">20</div><div class="ov-cell" style="color:#A3882A">20</div>
+        </div>
+        <div class="ov-row" style="background:rgba(139,92,246,.07)">
+          <div class="ov-lbl"><div class="ov-dot" style="background:#8B5CF6"></div><span class="ov-lbl-text">Medical Treatment</span></div>
+          <div class="ov-cell" style="color:#8B5CF6">82</div><div class="ov-cell" style="color:#8B5CF6">82</div><div class="ov-cell" style="color:#8B5CF6">82</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ OBSERVATIONS ══════════ -->
+<div class="panel" id="panel-observations">
+
+  <!-- Summary -->
+  <div class="sum-row" style="margin-top:4px">
+    <div class="scard">
+      <div class="sval">142</div>
+      <div class="slbl">Total</div>
+      <div style="margin-top:5px;display:flex;justify-content:center">
+        <svg width="56" height="22"><polyline points="0,20 11.2,14.4 22.4,17.2 33.6,11.2 44.8,6.7 56,2" fill="none" stroke="#3B82F6" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></svg>
+      </div>
+    </div>
+    <div class="scard"><div class="sval" style="color:#22C55E">89</div><div class="slbl">Good</div></div>
+    <div class="scard"><div class="sval" style="color:#F59E0B">53</div><div class="slbl">Improvement</div></div>
+  </div>
+
+  <!-- W1: Observations per day — VERTICAL BAR -->
+  <div class="card">
+    <div class="ctitle">Observations per day</div>
+    <div class="ctag">VERTICAL BAR</div>
+    <div id="obs-vbar30" style="display:flex;align-items:flex-end;gap:1px;height:56px"></div>
+    <div style="display:flex;justify-content:space-between;margin-top:3px;font-size:8px;color:#94A3B8;padding:0 0">
+      <span>1</span><span>5</span><span>10</span><span>15</span><span>20</span><span>25</span><span>30</span>
+    </div>
+  </div>
+
+  <!-- W2a: Top hazard categories — LOLLIPOP -->
+  <div class="card">
+    <div class="ctitle">Top hazard categories</div>
+    <div class="ctag">LOLLIPOP</div>
+    <div class="lollipop" id="obs-haz-lollipop"></div>
+  </div>
+
+  <!-- W2b: Top hazard categories — HORIZONTAL BAR -->
+  <div class="card">
+    <div class="ctitle">Top hazard categories</div>
+    <div class="ctag">BAR</div>
+    <div class="hbar">
+      <div class="hbar-row"><span class="hbar-lbl">Housekeeping</span><div class="hbar-track"><div class="hbar-fill" style="width:100%;background:#3B82F6"></div></div><span class="hbar-val">34</span></div>
+      <div class="hbar-row"><span class="hbar-lbl">PPE Non-compliance</span><div class="hbar-track"><div class="hbar-fill" style="width:82.4%;background:#3B82F6"></div></div><span class="hbar-val">28</span></div>
+      <div class="hbar-row"><span class="hbar-lbl">Working at Height</span><div class="hbar-track"><div class="hbar-fill" style="width:64.7%;background:#8B5CF6"></div></div><span class="hbar-val">22</span></div>
+      <div class="hbar-row"><span class="hbar-lbl">Electrical Safety</span><div class="hbar-track"><div class="hbar-fill" style="width:52.9%;background:#F59E0B"></div></div><span class="hbar-val">18</span></div>
+      <div class="hbar-row"><span class="hbar-lbl">Manual Handling</span><div class="hbar-track"><div class="hbar-fill" style="width:41.2%;background:#F59E0B"></div></div><span class="hbar-val">14</span></div>
+      <div class="hbar-row"><span class="hbar-lbl">Access/Egress</span><div class="hbar-track"><div class="hbar-fill" style="width:35.3%;background:#94A3B8"></div></div><span class="hbar-val">12</span></div>
+    </div>
+  </div>
+
+  <!-- W2c: Top hazard categories — PIE -->
+  <div class="card">
+    <div class="ctitle">Top hazard categories</div>
+    <div class="ctag">PIE</div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div style="width:90px;height:90px;border-radius:50%;flex-shrink:0;background:conic-gradient(#3B82F6 0% 26.56%,#F59E0B 26.56% 48.44%,#EF4444 48.44% 65.63%,#8B5CF6 65.63% 79.69%,#14B8A6 79.69% 90.63%,#22C55E 90.63% 100%)"></div>
+      <div class="pie-legend" style="flex:1;margin-top:0">
+        <div class="pie-row"><div class="pie-dot" style="background:#3B82F6"></div>Housekeeping<div class="pie-val">34</div></div>
+        <div class="pie-row"><div class="pie-dot" style="background:#F59E0B"></div>PPE Non-compliance<div class="pie-val">28</div></div>
+        <div class="pie-row"><div class="pie-dot" style="background:#EF4444"></div>Working at Height<div class="pie-val">22</div></div>
+        <div class="pie-row"><div class="pie-dot" style="background:#8B5CF6"></div>Electrical Safety<div class="pie-val">18</div></div>
+        <div class="pie-row"><div class="pie-dot" style="background:#14B8A6"></div>Manual Handling<div class="pie-val">14</div></div>
+        <div class="pie-row"><div class="pie-dot" style="background:#22C55E"></div>Access/Egress<div class="pie-val">12</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- W3a: Severity distribution — STACKED BAR -->
+  <div class="card">
+    <div class="ctitle">Severity distribution</div>
+    <div class="ctag">STACKED BAR</div>
+    <!-- Low:62(43.66%) Med:48(33.8%) High:24(16.9%) Crit:8(5.6%) -->
+    <div class="sbar">
+      <div class="sbar-seg" style="flex:62;background:#94A3B8">62</div>
+      <div class="sbar-seg" style="flex:48;background:#F59E0B">48</div>
+      <div class="sbar-seg" style="flex:24;background:#EF4444">24</div>
+      <div class="sbar-seg" style="flex:8;background:#991B1B">8</div>
+    </div>
+    <div class="chart-legend">
+      <div class="cl-item"><div class="cl-dot" style="background:#94A3B8"></div>Low</div>
+      <div class="cl-item"><div class="cl-dot" style="background:#F59E0B"></div>Medium</div>
+      <div class="cl-item"><div class="cl-dot" style="background:#EF4444"></div>High</div>
+      <div class="cl-item"><div class="cl-dot" style="background:#991B1B"></div>Critical</div>
+    </div>
+  </div>
+
+  <!-- W3b: Severity distribution — DONUT -->
+  <div class="card">
+    <div class="ctitle">Severity distribution</div>
+    <div class="ctag">DONUT</div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="donut-wrap" style="width:80px;height:80px;flex-shrink:0">
+        <div class="donut-circle" style="width:80px;height:80px;background:conic-gradient(#94A3B8 0% 43.66%,#F59E0B 43.66% 77.46%,#EF4444 77.46% 94.37%,#991B1B 94.37% 100%)"></div>
+        <div class="donut-hole"><div class="donut-hole-inner" style="width:48px;height:48px;font-size:8.5px;font-weight:800;color:#1E293B;flex-direction:column;gap:0"><div>142</div><div style="font-size:7px;font-weight:500;color:#94A3B8">Total</div></div></div>
+      </div>
+      <div class="pie-legend" style="flex:1;margin-top:0">
+        <div class="pie-row"><div class="pie-dot" style="background:#94A3B8"></div>Low<div class="pie-val">62</div></div>
+        <div class="pie-row"><div class="pie-dot" style="background:#F59E0B"></div>Medium<div class="pie-val">48</div></div>
+        <div class="pie-row"><div class="pie-dot" style="background:#EF4444"></div>High<div class="pie-val">24</div></div>
+        <div class="pie-row"><div class="pie-dot" style="background:#991B1B"></div>Critical<div class="pie-val">8</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- W4: Observation closure — TIMELINE -->
+  <div class="card">
+    <div class="ctitle">Observation closure</div>
+    <div class="ctag">TIMELINE</div>
+    <div class="swim">
+      <!-- OBS-1204: Open 2/14, Rect 3/14, Closed 1/14, blank 8/14 -->
+      <div class="swim-row">
+        <div class="swim-id">OBS-1204</div>
+        <div class="swim-bar">
+          <div style="flex:2;background:#3B82F6"></div>
+          <div style="flex:3;background:#F59E0B"></div>
+          <div style="flex:1;background:#22C55E"></div>
+          <div style="flex:8;background:#F1F5F9"></div>
+        </div>
+      </div>
+      <!-- OBS-1198: Open 4/14, Rect 2/14, Closed 1/14, blank 7/14 -->
+      <div class="swim-row">
+        <div class="swim-id">OBS-1198</div>
+        <div class="swim-bar">
+          <div style="flex:4;background:#3B82F6"></div>
+          <div style="flex:2;background:#F59E0B"></div>
+          <div style="flex:1;background:#22C55E"></div>
+          <div style="flex:7;background:#F1F5F9"></div>
+        </div>
+      </div>
+      <!-- OBS-1187: Open 1, Rect 1, Closed 1, blank 11 -->
+      <div class="swim-row">
+        <div class="swim-id">OBS-1187</div>
+        <div class="swim-bar">
+          <div style="flex:1;background:#3B82F6"></div>
+          <div style="flex:1;background:#F59E0B"></div>
+          <div style="flex:1;background:#22C55E"></div>
+          <div style="flex:11;background:#F1F5F9"></div>
+        </div>
+      </div>
+      <!-- OBS-1176: Open 12/14, blank 2/14 — red dashed border -->
+      <div class="swim-row">
+        <div class="swim-id">OBS-1176</div>
+        <div class="swim-bar" style="border:1.5px dashed #EF4444;background:rgba(239,68,68,.04)">
+          <div style="flex:12;background:rgba(239,68,68,.25)"></div>
+          <div style="flex:2;background:transparent"></div>
+        </div>
+      </div>
+      <!-- OBS-1171: Open 8/14, Rect 5/14, blank 1/14 -->
+      <div class="swim-row">
+        <div class="swim-id">OBS-1171</div>
+        <div class="swim-bar">
+          <div style="flex:8;background:#3B82F6"></div>
+          <div style="flex:5;background:#F59E0B"></div>
+          <div style="flex:1;background:#F1F5F9"></div>
+        </div>
+      </div>
+    </div>
+    <div class="chart-legend" style="margin-top:8px">
+      <div class="cl-item"><div class="cl-dot" style="background:#3B82F6"></div>Open</div>
+      <div class="cl-item"><div class="cl-dot" style="background:#F59E0B"></div>Rectified</div>
+      <div class="cl-item"><div class="cl-dot" style="background:#22C55E"></div>Closed</div>
+      <div class="cl-item"><div class="cl-dot" style="background:#EF4444;opacity:.5"></div>Stuck</div>
+    </div>
+  </div>
+
+  <!-- W5a: Good vs Improvement by location — BUTTERFLY -->
+  <div class="card">
+    <div class="ctitle">Good vs Improvement by location</div>
+    <div class="ctag">BUTTERFLY</div>
+    <div style="display:flex;justify-content:space-between;font-size:8.5px;color:#94A3B8;font-weight:600;margin-bottom:6px">
+      <span>Good</span><span></span><span>Improvement</span>
+    </div>
+    <!-- max good=24, max improv=16 -->
+    <div class="butterfly">
+      <div class="bf-row">
+        <div class="bf-left"><div class="bf-bar" style="width:75%;background:#22C55E;border-radius:3px 0 0 3px"></div></div>
+        <div class="bf-lbl" style="width:76px;font-size:8.5px">Zone A Basement</div>
+        <div class="bf-right"><div class="bf-bar" style="width:75%;background:#F59E0B;border-radius:0 3px 3px 0"></div></div>
+      </div>
+      <div class="bf-row">
+        <div class="bf-left"><div class="bf-bar" style="width:100%;background:#22C55E;border-radius:3px 0 0 3px"></div></div>
+        <div class="bf-lbl" style="width:76px;font-size:8.5px">Zone B Structure</div>
+        <div class="bf-right"><div class="bf-bar" style="width:50%;background:#F59E0B;border-radius:0 3px 3px 0"></div></div>
+      </div>
+      <div class="bf-row">
+        <div class="bf-left"><div class="bf-bar" style="width:50%;background:#22C55E;border-radius:3px 0 0 3px"></div></div>
+        <div class="bf-lbl" style="width:76px;font-size:8.5px">Zone C MEP</div>
+        <div class="bf-right"><div class="bf-bar" style="width:100%;background:#F59E0B;border-radius:0 3px 3px 0"></div></div>
+      </div>
+      <div class="bf-row">
+        <div class="bf-left"><div class="bf-bar" style="width:91.7%;background:#22C55E;border-radius:3px 0 0 3px"></div></div>
+        <div class="bf-lbl" style="width:76px;font-size:8.5px">Zone D External</div>
+        <div class="bf-right"><div class="bf-bar" style="width:37.5%;background:#F59E0B;border-radius:0 3px 3px 0"></div></div>
+      </div>
+      <div class="bf-row">
+        <div class="bf-left"><div class="bf-bar" style="width:54.2%;background:#22C55E;border-radius:3px 0 0 3px"></div></div>
+        <div class="bf-lbl" style="width:76px;font-size:8.5px">Zone E Roof</div>
+        <div class="bf-right"><div class="bf-bar" style="width:68.75%;background:#F59E0B;border-radius:0 3px 3px 0"></div></div>
+      </div>
+    </div>
+    <div class="chart-legend" style="margin-top:8px">
+      <div class="cl-item"><div class="cl-dot" style="background:#22C55E"></div>Good</div>
+      <div class="cl-item"><div class="cl-dot" style="background:#F59E0B"></div>Improvement</div>
+    </div>
+  </div>
+
+  <!-- W5b: Good vs Improvement by location — STACKED BAR -->
+  <div class="card">
+    <div class="ctitle">Good vs Improvement by location</div>
+    <div class="ctag">STACKED BAR</div>
+    <div style="display:flex;flex-direction:column;gap:7px">
+      <div><div style="font-size:9px;color:#64748B;margin-bottom:3px">Zone A Basement</div><div class="sbar"><div class="sbar-seg" style="flex:18;background:#22C55E">18</div><div class="sbar-seg" style="flex:12;background:#F59E0B">12</div></div></div>
+      <div><div style="font-size:9px;color:#64748B;margin-bottom:3px">Zone B Structure</div><div class="sbar"><div class="sbar-seg" style="flex:24;background:#22C55E">24</div><div class="sbar-seg" style="flex:8;background:#F59E0B">8</div></div></div>
+      <div><div style="font-size:9px;color:#64748B;margin-bottom:3px">Zone C MEP</div><div class="sbar"><div class="sbar-seg" style="flex:12;background:#22C55E">12</div><div class="sbar-seg" style="flex:16;background:#F59E0B">16</div></div></div>
+      <div><div style="font-size:9px;color:#64748B;margin-bottom:3px">Zone D External</div><div class="sbar"><div class="sbar-seg" style="flex:22;background:#22C55E">22</div><div class="sbar-seg" style="flex:6;background:#F59E0B">6</div></div></div>
+      <div><div style="font-size:9px;color:#64748B;margin-bottom:3px">Zone E Roof</div><div class="sbar"><div class="sbar-seg" style="flex:13;background:#22C55E">13</div><div class="sbar-seg" style="flex:11;background:#F59E0B">11</div></div></div>
+    </div>
+    <div class="chart-legend"><div class="cl-item"><div class="cl-dot" style="background:#22C55E"></div>Good</div><div class="cl-item"><div class="cl-dot" style="background:#F59E0B"></div>Improvement</div></div>
+  </div>
+
+  <!-- W6a: Root cause distribution — DONUT -->
+  <div class="card">
+    <div class="ctitle">Root cause distribution</div>
+    <div class="ctag">DONUT</div>
+    <!-- P:40%, Proc:25%, Plant:20%, Prem:10%, Env:5% -->
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="donut-wrap" style="width:80px;height:80px;flex-shrink:0">
+        <div class="donut-circle" style="width:80px;height:80px;background:conic-gradient(#3B82F6 0% 40%,#F59E0B 40% 65%,#94A3B8 65% 85%,#22C55E 85% 95%,#14B8A6 95% 100%)"></div>
+        <div class="donut-hole"><div class="donut-hole-inner" style="width:48px;height:48px;font-size:8px;font-weight:800;color:#1E293B">100</div></div>
+      </div>
+      <div class="pie-legend" style="flex:1;margin-top:0">
+        <div class="pie-row"><div class="pie-dot" style="background:#3B82F6"></div>People<div class="pie-val">40</div></div>
+        <div class="pie-row"><div class="pie-dot" style="background:#F59E0B"></div>Procedure<div class="pie-val">25</div></div>
+        <div class="pie-row"><div class="pie-dot" style="background:#94A3B8"></div>Plant/Equipment<div class="pie-val">20</div></div>
+        <div class="pie-row"><div class="pie-dot" style="background:#22C55E"></div>Premises<div class="pie-val">10</div></div>
+        <div class="pie-row"><div class="pie-dot" style="background:#14B8A6"></div>Environmental<div class="pie-val">5</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- W6b: Root cause distribution — WAFFLE -->
+  <div class="card">
+    <div class="ctitle">Root cause distribution</div>
+    <div class="ctag">WAFFLE</div>
+    <div id="waffle-obs-rc" class="waffle" style="grid-template-columns:repeat(10,1fr);gap:2px;margin-bottom:8px"></div>
+    <div class="chart-legend">
+      <div class="cl-item"><div class="cl-dot" style="background:#3B82F6"></div>People (40)</div>
+      <div class="cl-item"><div class="cl-dot" style="background:#F59E0B"></div>Procedure (25)</div>
+      <div class="cl-item"><div class="cl-dot" style="background:#94A3B8"></div>Plant (20)</div>
+      <div class="cl-item"><div class="cl-dot" style="background:#22C55E"></div>Premises (10)</div>
+      <div class="cl-item"><div class="cl-dot" style="background:#14B8A6"></div>Env (5)</div>
+    </div>
+  </div>
+
+  <!-- W7: Status distribution — STACKED BAR -->
+  <div class="card" style="margin-bottom:0">
+    <div class="ctitle">Status distribution</div>
+    <div class="ctag">STACKED BAR</div>
+    <!-- Open:28, Rectified:15, Closed:89, HSE Review:10 -->
+    <div class="sbar">
+      <div class="sbar-seg" style="flex:28;background:#3B82F6">28</div>
+      <div class="sbar-seg" style="flex:15;background:#F59E0B">15</div>
+      <div class="sbar-seg" style="flex:89;background:#22C55E">89</div>
+      <div class="sbar-seg" style="flex:10;background:#8B5CF6">10</div>
+    </div>
+    <div class="chart-legend">
+      <div class="cl-item"><div class="cl-dot" style="background:#3B82F6"></div>Open</div>
+      <div class="cl-item"><div class="cl-dot" style="background:#F59E0B"></div>Rectified</div>
+      <div class="cl-item"><div class="cl-dot" style="background:#22C55E"></div>Closed</div>
+      <div class="cl-item"><div class="cl-dot" style="background:#8B5CF6"></div>HSE Review</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ INCIDENTS ══════════ -->
+<div class="panel" id="panel-incidents">
+
+  <!-- LTI Banner -->
+  <div class="lti-banner" style="margin-top:4px">
+    <div>
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    </div>
+    <div class="lti-body">
+      <div class="lti-title">Days Without LTI</div>
+      <div class="lti-sub">Last LTI: 13 May 2026</div>
+    </div>
+    <div class="lti-num">47</div>
+  </div>
+
+  <!-- Summary -->
+  <div class="sum-row">
+    <div class="scard">
+      <div class="sval">5</div>
+      <div class="slbl">Total</div>
+      <div style="margin-top:5px;display:flex;justify-content:center">
+        <svg width="56" height="22"><polyline points="0,12.5 11.2,18 22.4,6.5 33.6,22 44.8,12.5 56,2" fill="none" stroke="#EF4444" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></svg>
+      </div>
+    </div>
+    <div class="scard"><div class="sval" style="color:#EF4444">1</div><div class="slbl">Recordable</div></div>
+    <div class="scard"><div class="sval" style="color:#94A3B8">2</div><div class="slbl">Near Miss</div></div>
+  </div>
+
+  <!-- W1a: Incident timeline — DOT STRIP -->
+  <div class="card">
+    <div class="ctitle">Incident timeline — June</div>
+    <div class="ctag">DOT STRIP</div>
+    <div class="dotstrip">
+      <div class="ds-axis">
+        <!-- Jun3=10%, Jun8=26.7%, Jun13=43.3%, Jun18=60%, Jun24=80% -->
+        <div class="ds-dot" style="left:10%;background:#94A3B8" title="Near Miss"></div>
+        <div class="ds-dot" style="left:26.7%;background:#F59E0B" title="First Aid"></div>
+        <div class="ds-dot" style="left:43.3%;background:#94A3B8" title="Near Miss"></div>
+        <div class="ds-dot" style="left:60%;background:#EF4444;width:14px;height:14px;top:-6px" title="LTI"></div>
+        <div class="ds-dot" style="left:80%;background:#F59E0B" title="First Aid"></div>
+      </div>
+      <div class="ds-lblrow"><span>Jun 1</span><span>Jun 8</span><span>Jun 15</span><span>Jun 22</span><span>Jun 30</span></div>
+    </div>
+    <div class="chart-legend" style="margin-top:6px">
+      <div class="cl-item"><div class="cl-dot" style="background:#94A3B8;border-radius:50%"></div>Near Miss</div>
+      <div class="cl-item"><div class="cl-dot" style="background:#F59E0B;border-radius:50%"></div>First Aid</div>
+      <div class="cl-item"><div class="cl-dot" style="background:#EF4444;border-radius:50%"></div>LTI</div>
+    </div>
+  </div>
+
+  <!-- W1b: Monthly incident trend — VERTICAL BAR -->
+  <div class="card">
+    <div class="ctitle">Monthly incident trend</div>
+    <div class="ctag">VERTICAL BAR</div>
+    <div id="inc-monthly-vbar" class="vbar-bars" style="height:64px;gap:6px"></div>
+    <div style="display:flex;justify-content:space-between;margin-top:3px;font-size:8px;color:#94A3B8;padding:0 2px">
+      <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span>
+    </div>
+  </div>
+
+  <!-- W2a: Incident type — HORIZONTAL BAR -->
+  <div class="card">
+    <div class="ctitle">Incident type</div>
+    <div class="ctag">BAR</div>
+    <div class="hbar">
+      <div class="hbar-row"><span class="hbar-lbl">Near Miss</span><div class="hbar-track"><div class="hbar-fill" style="width:40%;background:#94A3B8"></div></div><span class="hbar-val">2</span></div>
+      <div class="hbar-row"><span class="hbar-lbl">First Aid</span><div class="hbar-track"><div class="hbar-fill" style="width:40%;background:#F59E0B"></div></div><span class="hbar-val">2</span></div>
+      <div class="hbar-row"><span class="hbar-lbl">LTI</span><div class="hbar-track"><div class="hbar-fill" style="width:20%;background:#EF4444"></div></div><span class="hbar-val">1</span></div>
+    </div>
+  </div>
+
+  <!-- W2b: Incident type — PIE -->
+  <div class="card">
+    <div class="ctitle">Incident type</div>
+    <div class="ctag">PIE</div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <!-- NM:40% FA:40% LTI:20% -->
+      <div style="width:80px;height:80px;border-radius:50%;flex-shrink:0;background:conic-gradient(#94A3B8 0% 40%,#F59E0B 40% 80%,#EF4444 80% 100%)"></div>
+      <div class="pie-legend" style="flex:1;margin-top:0">
+        <div class="pie-row"><div class="pie-dot" style="background:#94A3B8"></div>Near Miss<div class="pie-val">2</div></div>
+        <div class="pie-row"><div class="pie-dot" style="background:#F59E0B"></div>First Aid<div class="pie-val">2</div></div>
+        <div class="pie-row"><div class="pie-dot" style="background:#EF4444"></div>LTI<div class="pie-val">1</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- W3a: Root cause breakdown — WAFFLE -->
+  <div class="card">
+    <div class="ctitle">Root cause breakdown</div>
+    <div class="ctag">WAFFLE</div>
+    <div id="waffle-inc-rc" class="waffle" style="grid-template-columns:repeat(10,1fr);gap:2px;margin-bottom:8px"></div>
+    <div class="chart-legend">
+      <div class="cl-item"><div class="cl-dot" style="background:#3B82F6"></div>People (40)</div>
+      <div class="cl-item"><div class="cl-dot" style="background:#F59E0B"></div>Procedure (25)</div>
+      <div class="cl-item"><div class="cl-dot" style="background:#94A3B8"></div>Plant (20)</div>
+      <div class="cl-item"><div class="cl-dot" style="background:#22C55E"></div>Premises (10)</div>
+      <div class="cl-item"><div class="cl-dot" style="background:#14B8A6"></div>Env (5)</div>
+    </div>
+  </div>
+
+  <!-- W3b: Root cause breakdown — DONUT -->
+  <div class="card">
+    <div class="ctitle">Root cause breakdown</div>
+    <div class="ctag">DONUT</div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="donut-wrap" style="width:80px;height:80px;flex-shrink:0">
+        <div class="donut-circle" style="width:80px;height:80px;background:conic-gradient(#3B82F6 0% 40%,#F59E0B 40% 65%,#94A3B8 65% 85%,#22C55E 85% 95%,#14B8A6 95% 100%)"></div>
+        <div class="donut-hole"><div class="donut-hole-inner" style="width:48px;height:48px;font-size:8px;font-weight:800;color:#1E293B">5</div></div>
+      </div>
+      <div class="pie-legend" style="flex:1;margin-top:0">
+        <div class="pie-row"><div class="pie-dot" style="background:#3B82F6"></div>People<div class="pie-val">40%</div></div>
+        <div class="pie-row"><div class="pie-dot" style="background:#F59E0B"></div>Procedure<div class="pie-val">25%</div></div>
+        <div class="pie-row"><div class="pie-dot" style="background:#94A3B8"></div>Plant<div class="pie-val">20%</div></div>
+        <div class="pie-row"><div class="pie-dot" style="background:#22C55E"></div>Premises<div class="pie-val">10%</div></div>
+        <div class="pie-row"><div class="pie-dot" style="background:#14B8A6"></div>Env.<div class="pie-val">5%</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- W4: Body part affected — LOLLIPOP -->
+  <div class="card">
+    <div class="ctitle">Body part affected</div>
+    <div class="ctag">LOLLIPOP</div>
+    <div id="inc-bodypart-lollipop" class="lollipop"></div>
+  </div>
+
+  <!-- W5: Incidents by location — LOLLIPOP -->
+  <div class="card">
+    <div class="ctitle">Incidents by location</div>
+    <div class="ctag">LOLLIPOP</div>
+    <div id="inc-location-lollipop" class="lollipop"></div>
+  </div>
+
+  <!-- W6: Severity distribution — STACKED BAR -->
+  <div class="card" style="margin-bottom:0">
+    <div class="ctitle">Severity distribution</div>
+    <div class="ctag">STACKED BAR</div>
+    <!-- Low:2, Med:1, High:1, Crit:1 total=5 -->
+    <div class="sbar">
+      <div class="sbar-seg" style="flex:2;background:#94A3B8">2</div>
+      <div class="sbar-seg" style="flex:1;background:#F59E0B">1</div>
+      <div class="sbar-seg" style="flex:1;background:#EF4444">1</div>
+      <div class="sbar-seg" style="flex:1;background:#991B1B">1</div>
+    </div>
+    <div class="chart-legend">
+      <div class="cl-item"><div class="cl-dot" style="background:#94A3B8"></div>Low</div>
+      <div class="cl-item"><div class="cl-dot" style="background:#F59E0B"></div>Medium</div>
+      <div class="cl-item"><div class="cl-dot" style="background:#EF4444"></div>High</div>
+      <div class="cl-item"><div class="cl-dot" style="background:#991B1B"></div>Critical</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ TRAINING ══════════ -->
+<div class="panel" id="panel-training">
+
+  <!-- Summary -->
+  <div class="sum-row" style="margin-top:4px">
+    <div class="scard">
+      <div class="sval">243</div>
+      <div class="slbl">Total Sessions</div>
+      <div style="margin-top:5px;display:flex;justify-content:center">
+        <svg width="56" height="22"><polyline points="0,20 11.2,15.5 22.4,11.2 33.6,7.1 44.8,5.5 56,2" fill="none" stroke="#22C55E" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></svg>
+      </div>
+    </div>
+    <div class="scard"><div class="sval" style="color:#F59E0B">87%</div><div class="slbl">Compliance</div></div>
+    <div class="scard"><div class="sval" style="color:#EF4444">8</div><div class="slbl">Overdue</div></div>
+  </div>
+
+  <!-- W1a: Training compliance — WAFFLE -->
+  <div class="card">
+    <div class="ctitle">Training compliance</div>
+    <div class="ctag">WAFFLE</div>
+    <div id="waffle-trn" class="waffle" style="grid-template-columns:repeat(10,1fr);gap:2px;margin-bottom:8px"></div>
+    <div class="chart-legend">
+      <div class="cl-item"><div class="cl-dot" style="background:#22C55E"></div>Compliant (87)</div>
+      <div class="cl-item"><div class="cl-dot" style="background:#F59E0B"></div>Partial (5)</div>
+      <div class="cl-item"><div class="cl-dot" style="background:#EF4444"></div>Overdue (8)</div>
+    </div>
+  </div>
+
+  <!-- W1b: Training compliance — DONUT -->
+  <div class="card">
+    <div class="ctitle">Training compliance</div>
+    <div class="ctag">DONUT</div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <!-- 87% green, 5% amber, 8% red -->
+      <div class="donut-wrap" style="width:80px;height:80px;flex-shrink:0">
+        <div class="donut-circle" style="width:80px;height:80px;background:conic-gradient(#22C55E 0% 87%,#F59E0B 87% 92%,#EF4444 92% 100%)"></div>
+        <div class="donut-hole"><div class="donut-hole-inner" style="width:48px;height:48px;font-size:14px;font-weight:800;color:#22C55E">87%</div></div>
+      </div>
+      <div class="pie-legend" style="flex:1;margin-top:0">
+        <div class="pie-row"><div class="pie-dot" style="background:#22C55E"></div>Compliant<div class="pie-val">87</div></div>
+        <div class="pie-row"><div class="pie-dot" style="background:#F59E0B"></div>Partial<div class="pie-val">5</div></div>
+        <div class="pie-row"><div class="pie-dot" style="background:#EF4444"></div>Overdue<div class="pie-val">8</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- W2a: Compliance by trade — BUTTERFLY -->
+  <div class="card">
+    <div class="ctitle">Compliance by trade</div>
+    <div class="ctag">BUTTERFLY</div>
+    <div style="display:flex;justify-content:space-between;font-size:8.5px;color:#94A3B8;font-weight:600;margin-bottom:6px"><span>Compliant</span><span></span><span>Gap</span></div>
+    <div class="butterfly">
+      <div class="bf-row"><div class="bf-left"><div class="bf-bar" style="width:94%;background:#22C55E;border-radius:3px 0 0 3px"></div></div><div class="bf-lbl" style="width:66px">Electrical</div><div class="bf-right"><div class="bf-bar" style="width:25%;background:#EF4444;border-radius:0 3px 3px 0"></div></div></div>
+      <div class="bf-row"><div class="bf-left"><div class="bf-bar" style="width:91%;background:#22C55E;border-radius:3px 0 0 3px"></div></div><div class="bf-lbl" style="width:66px">Civil</div><div class="bf-right"><div class="bf-bar" style="width:37.5%;background:#EF4444;border-radius:0 3px 3px 0"></div></div></div>
+      <div class="bf-row"><div class="bf-left"><div class="bf-bar" style="width:88%;background:#22C55E;border-radius:3px 0 0 3px"></div></div><div class="bf-lbl" style="width:66px">Structural</div><div class="bf-right"><div class="bf-bar" style="width:50%;background:#EF4444;border-radius:0 3px 3px 0"></div></div></div>
+      <div class="bf-row"><div class="bf-left"><div class="bf-bar" style="width:82%;background:#F59E0B;border-radius:3px 0 0 3px"></div></div><div class="bf-lbl" style="width:66px">MEP</div><div class="bf-right"><div class="bf-bar" style="width:75%;background:#EF4444;border-radius:0 3px 3px 0"></div></div></div>
+      <div class="bf-row"><div class="bf-left"><div class="bf-bar" style="width:76%;background:#EF4444;border-radius:3px 0 0 3px"></div></div><div class="bf-lbl" style="width:66px">Scaffolding</div><div class="bf-right"><div class="bf-bar" style="width:100%;background:#EF4444;border-radius:0 3px 3px 0"></div></div></div>
+    </div>
+  </div>
+
+  <!-- W2b: Compliance by trade — STACKED BAR -->
+  <div class="card">
+    <div class="ctitle">Compliance by trade</div>
+    <div class="ctag">STACKED BAR</div>
+    <div style="display:flex;flex-direction:column;gap:7px">
+      <div><div style="font-size:9px;color:#64748B;margin-bottom:3px">Electrical</div><div class="sbar"><div class="sbar-seg" style="flex:94;background:#22C55E">94%</div><div class="sbar-seg" style="flex:6;background:#EF4444">6%</div></div></div>
+      <div><div style="font-size:9px;color:#64748B;margin-bottom:3px">Civil</div><div class="sbar"><div class="sbar-seg" style="flex:91;background:#22C55E">91%</div><div class="sbar-seg" style="flex:9;background:#EF4444">9%</div></div></div>
+      <div><div style="font-size:9px;color:#64748B;margin-bottom:3px">Structural</div><div class="sbar"><div class="sbar-seg" style="flex:88;background:#22C55E">88%</div><div class="sbar-seg" style="flex:12;background:#EF4444">12%</div></div></div>
+      <div><div style="font-size:9px;color:#64748B;margin-bottom:3px">MEP</div><div class="sbar"><div class="sbar-seg" style="flex:82;background:#F59E0B">82%</div><div class="sbar-seg" style="flex:18;background:#EF4444">18%</div></div></div>
+      <div><div style="font-size:9px;color:#64748B;margin-bottom:3px">Scaffolding</div><div class="sbar"><div class="sbar-seg" style="flex:76;background:#EF4444">76%</div><div class="sbar-seg" style="flex:24;background:#991B1B">24%</div></div></div>
+    </div>
+    <div class="chart-legend"><div class="cl-item"><div class="cl-dot" style="background:#22C55E"></div>Compliant</div><div class="cl-item"><div class="cl-dot" style="background:#EF4444"></div>Gap</div></div>
+  </div>
+
+  <!-- W3a: Training type distribution — LOLLIPOP -->
+  <div class="card">
+    <div class="ctitle">Training type distribution</div>
+    <div class="ctag">LOLLIPOP</div>
+    <div id="trn-type-lollipop" class="lollipop"></div>
+  </div>
+
+  <!-- W3b: Training type distribution — PIE -->
+  <div class="card">
+    <div class="ctitle">Training type distribution</div>
+    <div class="ctag">PIE</div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <!-- TT:31.48% Ind:20.83%(52.31%) Comp:19.44%(71.76%) Ref:16.20%(87.96%) Emer:6.48%(94.44%) CS:5.56% -->
+      <div style="width:90px;height:90px;border-radius:50%;flex-shrink:0;background:conic-gradient(#3B82F6 0% 31.48%,#F59E0B 31.48% 52.31%,#22C55E 52.31% 71.76%,#8B5CF6 71.76% 87.96%,#EF4444 87.96% 94.44%,#14B8A6 94.44% 100%)"></div>
+      <div class="pie-legend" style="flex:1;margin-top:0">
+        <div class="pie-row"><div class="pie-dot" style="background:#3B82F6"></div>Toolbox Talk<div class="pie-val">68</div></div>
+        <div class="pie-row"><div class="pie-dot" style="background:#F59E0B"></div>Induction<div class="pie-val">45</div></div>
+        <div class="pie-row"><div class="pie-dot" style="background:#22C55E"></div>Competency<div class="pie-val">42</div></div>
+        <div class="pie-row"><div class="pie-dot" style="background:#8B5CF6"></div>Refresher<div class="pie-val">35</div></div>
+        <div class="pie-row"><div class="pie-dot" style="background:#EF4444"></div>Emergency<div class="pie-val">14</div></div>
+        <div class="pie-row"><div class="pie-dot" style="background:#14B8A6"></div>Confined Space<div class="pie-val">12</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- W4a: Top training topics — HORIZONTAL BAR -->
+  <div class="card">
+    <div class="ctitle">Top training topics</div>
+    <div class="ctag">BAR</div>
+    <div class="hbar">
+      <div class="hbar-row"><span class="hbar-lbl">Working at Height</span><div class="hbar-track"><div class="hbar-fill" style="width:100%;background:#3B82F6"></div></div><span class="hbar-val">38</span></div>
+      <div class="hbar-row"><span class="hbar-lbl">Fire Safety</span><div class="hbar-track"><div class="hbar-fill" style="width:84.2%;background:#3B82F6"></div></div><span class="hbar-val">32</span></div>
+      <div class="hbar-row"><span class="hbar-lbl">First Aid</span><div class="hbar-track"><div class="hbar-fill" style="width:73.7%;background:#8B5CF6"></div></div><span class="hbar-val">28</span></div>
+      <div class="hbar-row"><span class="hbar-lbl">Confined Space</span><div class="hbar-track"><div class="hbar-fill" style="width:57.9%;background:#F59E0B"></div></div><span class="hbar-val">22</span></div>
+      <div class="hbar-row"><span class="hbar-lbl">Electrical Safety</span><div class="hbar-track"><div class="hbar-fill" style="width:47.4%;background:#F59E0B"></div></div><span class="hbar-val">18</span></div>
+    </div>
+  </div>
+
+  <!-- W4b: Top training topics — LOLLIPOP -->
+  <div class="card">
+    <div class="ctitle">Top training topics</div>
+    <div class="ctag">LOLLIPOP</div>
+    <div id="trn-topics-lollipop" class="lollipop"></div>
+  </div>
+
+  <!-- W5: Monthly training volume — VERTICAL BAR -->
+  <div class="card" style="margin-bottom:0">
+    <div class="ctitle">Monthly training volume</div>
+    <div class="ctag">VERTICAL BAR</div>
+    <div id="trn-monthly-vbar" class="vbar-bars" style="height:64px;gap:6px"></div>
+    <div style="display:flex;justify-content:space-between;margin-top:3px;font-size:8px;color:#94A3B8;padding:0 2px">
+      <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ SITE WALKS ══════════ -->
+<div class="panel" id="panel-sitewalks">
+
+  <!-- Summary -->
+  <div class="sum-row" style="margin-top:4px">
+    <div class="scard">
+      <div class="sval">18</div>
+      <div class="slbl">Total Walks</div>
+      <div style="margin-top:5px;display:flex;justify-content:center">
+        <svg width="56" height="22"><polyline points="0,17.5 11.2,8.75 22.4,22 33.6,2 44.8,12.5 56,2" fill="none" stroke="#F59E0B" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></svg>
+      </div>
+    </div>
+    <div class="scard"><div class="sval" style="color:#3B82F6">34</div><div class="slbl">Findings</div></div>
+  </div>
+
+  <!-- W1: Walks per week — VERTICAL BAR -->
+  <div class="card">
+    <div class="ctitle">Walks per week</div>
+    <div class="ctag">VERTICAL BAR</div>
+    <div id="sw-weekly-vbar" class="vbar-bars" style="height:64px;gap:8px"></div>
+    <div style="display:flex;justify-content:space-between;margin-top:3px;font-size:8px;color:#94A3B8;padding:0 2px">
+      <span>W1</span><span>W2</span><span>W3</span><span>W4</span><span>W5</span>
+    </div>
+  </div>
+
+  <!-- W2a: Walks by role — LOLLIPOP -->
+  <div class="card">
+    <div class="ctitle">Walks by role</div>
+    <div class="ctag">LOLLIPOP</div>
+    <div id="sw-role-lollipop" class="lollipop"></div>
+  </div>
+
+  <!-- W2b: Walks by role — PIE -->
+  <div class="card">
+    <div class="ctitle">Walks by role</div>
+    <div class="ctag">PIE</div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <!-- HSE:44.44% Lead:33.33% Sup:22.22% -->
+      <div style="width:80px;height:80px;border-radius:50%;flex-shrink:0;background:conic-gradient(#3B82F6 0% 44.44%,#F59E0B 44.44% 77.78%,#22C55E 77.78% 100%)"></div>
+      <div class="pie-legend" style="flex:1;margin-top:0">
+        <div class="pie-row"><div class="pie-dot" style="background:#3B82F6"></div>HSE Officer<div class="pie-val">8</div></div>
+        <div class="pie-row"><div class="pie-dot" style="background:#F59E0B"></div>Leadership<div class="pie-val">6</div></div>
+        <div class="pie-row"><div class="pie-dot" style="background:#22C55E"></div>Supervisor<div class="pie-val">4</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- W3: Findings by category — LOLLIPOP -->
+  <div class="card">
+    <div class="ctitle">Findings by category</div>
+    <div class="ctag">LOLLIPOP</div>
+    <div id="sw-findings-lollipop" class="lollipop"></div>
+  </div>
+
+  <!-- W4a: Findings severity — WAFFLE (6x6) -->
+  <div class="card">
+    <div class="ctitle">Findings severity</div>
+    <div class="ctag">WAFFLE</div>
+    <div id="waffle-sw-sev" class="waffle" style="grid-template-columns:repeat(6,1fr);gap:3px;width:120px;margin-bottom:8px"></div>
+    <div class="chart-legend">
+      <div class="cl-item"><div class="cl-dot" style="background:#22C55E"></div>Low (18)</div>
+      <div class="cl-item"><div class="cl-dot" style="background:#F59E0B"></div>Medium (10)</div>
+      <div class="cl-item"><div class="cl-dot" style="background:#EF4444"></div>High (5)</div>
+      <div class="cl-item"><div class="cl-dot" style="background:#991B1B"></div>Critical (1)</div>
+    </div>
+  </div>
+
+  <!-- W4b: Findings severity — STACKED BAR -->
+  <div class="card">
+    <div class="ctitle">Findings severity</div>
+    <div class="ctag">STACKED BAR</div>
+    <!-- Low:18, Med:10, High:5, Crit:1 total=34 -->
+    <div class="sbar">
+      <div class="sbar-seg" style="flex:18;background:#22C55E">18</div>
+      <div class="sbar-seg" style="flex:10;background:#F59E0B">10</div>
+      <div class="sbar-seg" style="flex:5;background:#EF4444">5</div>
+      <div class="sbar-seg" style="flex:1;background:#991B1B">1</div>
+    </div>
+    <div class="chart-legend"><div class="cl-item"><div class="cl-dot" style="background:#22C55E"></div>Low</div><div class="cl-item"><div class="cl-dot" style="background:#F59E0B"></div>Medium</div><div class="cl-item"><div class="cl-dot" style="background:#EF4444"></div>High</div><div class="cl-item"><div class="cl-dot" style="background:#991B1B"></div>Critical</div></div>
+  </div>
+
+  <!-- W4c: Findings severity — DONUT -->
+  <div class="card" style="margin-bottom:0">
+    <div class="ctitle">Findings severity</div>
+    <div class="ctag">DONUT</div>
+    <!-- Low:52.94% Med:29.41%(82.35%) High:14.71%(97.06%) Crit:2.94% -->
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="donut-wrap" style="width:80px;height:80px;flex-shrink:0">
+        <div class="donut-circle" style="width:80px;height:80px;background:conic-gradient(#22C55E 0% 52.94%,#F59E0B 52.94% 82.35%,#EF4444 82.35% 97.06%,#991B1B 97.06% 100%)"></div>
+        <div class="donut-hole"><div class="donut-hole-inner" style="width:48px;height:48px;font-size:10px;font-weight:800;color:#1E293B">34</div></div>
+      </div>
+      <div class="pie-legend" style="flex:1;margin-top:0">
+        <div class="pie-row"><div class="pie-dot" style="background:#22C55E"></div>Low<div class="pie-val">18</div></div>
+        <div class="pie-row"><div class="pie-dot" style="background:#F59E0B"></div>Medium<div class="pie-val">10</div></div>
+        <div class="pie-row"><div class="pie-dot" style="background:#EF4444"></div>High<div class="pie-val">5</div></div>
+        <div class="pie-row"><div class="pie-dot" style="background:#991B1B"></div>Critical<div class="pie-val">1</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ INSPECTIONS ══════════ -->
+<div class="panel" id="panel-inspections">
+
+  <!-- Summary -->
+  <div class="sum-row" style="margin-top:4px">
+    <div class="scard"><div class="sval">24<span style="font-size:12px;font-weight:600;color:#94A3B8">/28</span></div><div class="slbl">Inspections</div></div>
+    <div class="scard"><div class="sval" style="color:#22C55E">83%</div><div class="slbl">Pass Rate</div></div>
+    <div class="scard"><div class="sval">3</div><div class="slbl">Audits done</div></div>
+  </div>
+
+  <!-- W1a: Planned vs completed — BUTTERFLY -->
+  <div class="card">
+    <div class="ctitle">Planned vs completed</div>
+    <div class="ctag">BUTTERFLY</div>
+    <div style="display:flex;justify-content:space-between;font-size:8.5px;color:#94A3B8;font-weight:600;margin-bottom:6px"><span>Completed</span><span></span><span>Missed</span></div>
+    <!-- max completed=8, max missed=1 -->
+    <div class="butterfly">
+      <div class="bf-row"><div class="bf-left"><div class="bf-bar" style="width:100%;background:#22C55E;border-radius:3px 0 0 3px"></div></div><div class="bf-lbl" style="width:70px">Scaffold</div><div class="bf-right"><div class="bf-bar" style="width:0%;background:#EF4444;border-radius:0 3px 3px 0"></div></div></div>
+      <div class="bf-row"><div class="bf-left"><div class="bf-bar" style="width:62.5%;background:#22C55E;border-radius:3px 0 0 3px"></div></div><div class="bf-lbl" style="width:70px">Electrical</div><div class="bf-right"><div class="bf-bar" style="width:100%;background:#EF4444;border-radius:0 3px 3px 0"></div></div></div>
+      <div class="bf-row"><div class="bf-left"><div class="bf-bar" style="width:50%;background:#22C55E;border-radius:3px 0 0 3px"></div></div><div class="bf-lbl" style="width:70px">Fire Safety</div><div class="bf-right"><div class="bf-bar" style="width:100%;background:#EF4444;border-radius:0 3px 3px 0"></div></div></div>
+      <div class="bf-row"><div class="bf-left"><div class="bf-bar" style="width:50%;background:#22C55E;border-radius:3px 0 0 3px"></div></div><div class="bf-lbl" style="width:70px">Excavation</div><div class="bf-right"><div class="bf-bar" style="width:0%;background:#EF4444;border-radius:0 3px 3px 0"></div></div></div>
+      <div class="bf-row"><div class="bf-left"><div class="bf-bar" style="width:25%;background:#F59E0B;border-radius:3px 0 0 3px"></div></div><div class="bf-lbl" style="width:70px">Crane/Lifting</div><div class="bf-right"><div class="bf-bar" style="width:100%;background:#EF4444;border-radius:0 3px 3px 0"></div></div></div>
+      <div class="bf-row"><div class="bf-left"><div class="bf-bar" style="width:12.5%;background:#EF4444;border-radius:3px 0 0 3px"></div></div><div class="bf-lbl" style="width:70px">General HSE</div><div class="bf-right"><div class="bf-bar" style="width:100%;background:#EF4444;border-radius:0 3px 3px 0"></div></div></div>
+    </div>
+    <div class="chart-legend" style="margin-top:8px"><div class="cl-item"><div class="cl-dot" style="background:#22C55E"></div>Completed</div><div class="cl-item"><div class="cl-dot" style="background:#EF4444"></div>Missed</div></div>
+  </div>
+
+  <!-- W1b: Planned vs completed — STACKED BAR -->
+  <div class="card">
+    <div class="ctitle">Planned vs completed</div>
+    <div class="ctag">STACKED BAR</div>
+    <div style="display:flex;flex-direction:column;gap:7px">
+      <div><div style="font-size:9px;color:#64748B;margin-bottom:3px">Scaffold (8 planned)</div><div class="sbar"><div class="sbar-seg" style="flex:8;background:#22C55E">8</div></div></div>
+      <div><div style="font-size:9px;color:#64748B;margin-bottom:3px">Electrical (6 planned)</div><div class="sbar"><div class="sbar-seg" style="flex:5;background:#22C55E">5</div><div class="sbar-seg" style="flex:1;background:#EF4444">1</div></div></div>
+      <div><div style="font-size:9px;color:#64748B;margin-bottom:3px">Fire Safety (5 planned)</div><div class="sbar"><div class="sbar-seg" style="flex:4;background:#22C55E">4</div><div class="sbar-seg" style="flex:1;background:#EF4444">1</div></div></div>
+      <div><div style="font-size:9px;color:#64748B;margin-bottom:3px">Excavation (4 planned)</div><div class="sbar"><div class="sbar-seg" style="flex:4;background:#22C55E">4</div></div></div>
+      <div><div style="font-size:9px;color:#64748B;margin-bottom:3px">Crane/Lifting (3 planned)</div><div class="sbar"><div class="sbar-seg" style="flex:2;background:#F59E0B">2</div><div class="sbar-seg" style="flex:1;background:#EF4444">1</div></div></div>
+      <div><div style="font-size:9px;color:#64748B;margin-bottom:3px">General HSE (2 planned)</div><div class="sbar"><div class="sbar-seg" style="flex:1;background:#EF4444">1</div><div class="sbar-seg" style="flex:1;background:#EF4444">1</div></div></div>
+    </div>
+    <div class="chart-legend"><div class="cl-item"><div class="cl-dot" style="background:#22C55E"></div>Completed</div><div class="cl-item"><div class="cl-dot" style="background:#EF4444"></div>Missed</div></div>
+  </div>
+
+  <!-- W2: Issues found — LOLLIPOP -->
+  <div class="card">
+    <div class="ctitle">Issues found</div>
+    <div class="ctag">LOLLIPOP</div>
+    <div id="insp-issues-lollipop" class="lollipop"></div>
+  </div>
+
+  <!-- W3a: Contractor pass rate — WAFFLE GRIDS -->
+  <div class="card">
+    <div class="ctitle">Contractor pass rate</div>
+    <div class="ctag">WAFFLE</div>
+    <div style="display:flex;gap:10px;align-items:flex-start">
+      <div style="flex:1;text-align:center">
+        <div id="waffle-abc" class="waffle" style="grid-template-columns:repeat(5,1fr);gap:2px;margin-bottom:4px"></div>
+        <div style="font-size:9px;font-weight:700;color:#22C55E">92%</div>
+        <div style="font-size:8px;color:#94A3B8">ABC Electrical</div>
+      </div>
+      <div style="flex:1;text-align:center">
+        <div id="waffle-xyz" class="waffle" style="grid-template-columns:repeat(5,1fr);gap:2px;margin-bottom:4px"></div>
+        <div style="font-size:9px;font-weight:700;color:#F59E0B">85%</div>
+        <div style="font-size:8px;color:#94A3B8">XYZ Structural</div>
+      </div>
+      <div style="flex:1;text-align:center">
+        <div id="waffle-def" class="waffle" style="grid-template-columns:repeat(5,1fr);gap:2px;margin-bottom:4px"></div>
+        <div style="font-size:9px;font-weight:700;color:#EF4444">78%</div>
+        <div style="font-size:8px;color:#94A3B8">DEF MEP</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- W3b: Contractor pass rate — HORIZONTAL BAR -->
+  <div class="card">
+    <div class="ctitle">Contractor pass rate</div>
+    <div class="ctag">BAR</div>
+    <div class="hbar">
+      <div class="hbar-row"><span class="hbar-lbl">ABC Electrical</span><div class="hbar-track"><div class="hbar-fill" style="width:92%;background:#22C55E"></div></div><span class="hbar-val">92%</span></div>
+      <div class="hbar-row"><span class="hbar-lbl">XYZ Structural</span><div class="hbar-track"><div class="hbar-fill" style="width:85%;background:#F59E0B"></div></div><span class="hbar-val">85%</span></div>
+      <div class="hbar-row"><span class="hbar-lbl">DEF MEP</span><div class="hbar-track"><div class="hbar-fill" style="width:78%;background:#EF4444"></div></div><span class="hbar-val">78%</span></div>
+    </div>
+  </div>
+
+  <!-- W4: Pass rate trend — VERTICAL BAR with target line -->
+  <div class="card">
+    <div class="ctitle">Pass rate trend</div>
+    <div class="ctag">VERTICAL BAR</div>
+    <div style="position:relative">
+      <div id="insp-trend-vbar" class="vbar-bars" style="height:64px;gap:6px"></div>
+      <!-- Target line at 85% → range 60-90=30, (85-60)/30*60=50px from bottom -->
+      <div id="insp-target-line" style="position:absolute;left:0;right:0;border-top:1.5px dashed #F59E0B;pointer-events:none"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;margin-top:3px;font-size:8px;color:#94A3B8;padding:0 2px">
+      <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span>
+    </div>
+    <div style="font-size:8.5px;color:#F59E0B;margin-top:4px">— Target: 85%</div>
+  </div>
+
+  <!-- W5: Audit status -->
+  <div class="card" style="margin-bottom:0">
+    <div class="ctitle">Audit status</div>
+    <div>
+      <div class="audit-row"><div class="audit-name">Electrical Systems Audit</div><span class="apill apill-g">Completed</span><div class="audit-date">12 Jun</div></div>
+      <div class="audit-row"><div class="audit-name">Fire Safety Audit</div><span class="apill apill-g">Completed</span><div class="audit-date">18 Jun</div></div>
+      <div class="audit-row"><div class="audit-name">Structural Integrity Audit</div><span class="apill apill-g">Completed</span><div class="audit-date">22 Jun</div></div>
+      <div class="audit-row"><div class="audit-name">MEP Services Audit</div><span class="apill apill-b">In Progress</span><div class="audit-date">25 Jun</div></div>
+      <div class="audit-row"><div class="audit-name">Environmental Compliance</div><span class="apill apill-gray">Scheduled</span><div class="audit-date">08 Jul</div></div>
+      <div class="audit-row"><div class="audit-name">Scaffolding Audit</div><span class="apill apill-gray">Scheduled</span><div class="audit-date">15 Jul</div></div>
+    </div>
+  </div>
+
+</div>
+<!-- end content -->
+</div>
+</div>
+
+<script>
+// ── Tab switching ──
+function switchTab(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-pill').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  btn.classList.add('active');
+  btn.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
+}
+
+// ── Month cycling ──
+const MONTHS = ['Jan 2026','Feb 2026','Mar 2026','Apr 2026','May 2026','June 2026','July 2026'];
+let mIdx = 5;
+function prevMonth() { if(mIdx>0){mIdx--;document.getElementById('mlabel').textContent=MONTHS[mIdx];} }
+function nextMonth() { if(mIdx<MONTHS.length-1){mIdx++;document.getElementById('mlabel').textContent=MONTHS[mIdx];} }
+
+// ── Waffle builder ──
+function buildWaffle(id, segments, cols) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  let html = '';
+  segments.forEach(seg => {
+    for (let i = 0; i < seg.count; i++) {
+      html += `<div class="wf-cell" style="background:${seg.color};width:100%"></div>`;
+    }
+  });
+  el.innerHTML = html;
+}
+
+// ── Lollipop builder ──
+function buildLollipop(id, rows, color) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const max = Math.max(...rows.map(r => r.val));
+  color = color || '#3B82F6';
+  el.innerHTML = rows.map(r => {
+    const pct = Math.round((r.val / max) * 100);
+    const c = r.color || color;
+    return `<div class="lpop-row">
+      <span class="lpop-lbl">${r.label}</span>
+      <div class="lpop-track">
+        <div style="position:absolute;left:0;top:0;height:2px;width:${pct}%;background:${c};border-radius:1px"></div>
+        <div style="position:absolute;top:-4px;left:${pct}%;width:10px;height:10px;border-radius:50%;background:${c};border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.1);transform:translateX(-50%)"></div>
+      </div>
+      <span class="lpop-val">${r.val}</span>
+    </div>`;
+  }).join('');
+}
+
+// ── V-bar builder ──
+function buildVBar(id, data, hlIdx, hlColor, baseColor, maxH, useTargetLine) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  maxH = maxH || 60;
+  baseColor = baseColor || '#CBD5E1';
+  hlColor = hlColor || '#3B82F6';
+  const max = Math.max(...data) || 1;
+  el.innerHTML = data.map((v, i) => {
+    const h = Math.max(2, Math.round((v / max) * maxH));
+    const c = (i === hlIdx) ? hlColor : baseColor;
+    return `<div class="vbar-col"><div class="vbar-b" style="height:${h}px;background:${c}"></div></div>`;
+  }).join('');
+}
+
+// ── V-bar with custom range (for pass rate trend) ──
+function buildVBarRange(id, data, min, max, hlIdx, hlColor, baseColor, maxH) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  maxH = maxH || 60;
+  baseColor = baseColor || '#CBD5E1';
+  hlColor = hlColor || '#3B82F6';
+  const range = max - min;
+  el.innerHTML = data.map((v, i) => {
+    const h = Math.max(2, Math.round(((v - min) / range) * maxH));
+    const c = (i === hlIdx) ? hlColor : baseColor;
+    return `<div class="vbar-col"><div class="vbar-b" style="height:${h}px;background:${c}"></div></div>`;
+  }).join('');
+}
+
+// ── 30-bar builder ──
+function buildVBar30(id, data) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const max = Math.max(...data) || 1;
+  const showAt = new Set([0,4,9,14,19,24,29]);
+  el.innerHTML = data.map((v, i) => {
+    const h = Math.max(2, Math.round((v / max) * 52));
+    return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:2px">
+      <div style="width:100%;height:${h}px;background:#3B82F6;border-radius:1px 1px 0 0;min-height:2px"></div>
+      <div style="font-size:6.5px;color:#94A3B8;height:10px;line-height:10px">${showAt.has(i) ? (i+1) : ''}</div>
+    </div>`;
+  }).join('');
+  el.style.height = 'auto';
+  el.style.alignItems = 'flex-end';
+}
+
+// ── Init ──
+// Observations 30-bar (June daily counts summing to 142)
+buildVBar30('obs-vbar30', [4,6,3,5,7,4,2,8,5,4,6,3,7,5,4,3,8,6,4,5,3,7,4,6,3,5,4,6,2,3]);
+
+// Obs hazard lollipop
+buildLollipop('obs-haz-lollipop', [
+  {label:'Housekeeping', val:34},
+  {label:'PPE Non-compliance', val:28},
+  {label:'Working at Height', val:22},
+  {label:'Electrical Safety', val:18},
+  {label:'Manual Handling', val:14},
+  {label:'Access/Egress', val:12}
+]);
+
+// Obs root cause waffle (10x10)
+buildWaffle('waffle-obs-rc', [
+  {count:40, color:'#3B82F6'},
+  {count:25, color:'#F59E0B'},
+  {count:20, color:'#94A3B8'},
+  {count:10, color:'#22C55E'},
+  {count:5, color:'#14B8A6'}
+], 10);
+
+// Incidents monthly vbar [3,2,4,1,3,5] max=5, Jun=highlight
+buildVBar('inc-monthly-vbar', [3,2,4,1,3,5], 5, '#3B82F6', '#CBD5E1', 60);
+
+// Incidents root cause waffle
+buildWaffle('waffle-inc-rc', [
+  {count:40, color:'#3B82F6'},
+  {count:25, color:'#F59E0B'},
+  {count:20, color:'#94A3B8'},
+  {count:10, color:'#22C55E'},
+  {count:5, color:'#14B8A6'}
+], 10);
+
+// Incidents body part lollipop
+buildLollipop('inc-bodypart-lollipop', [
+  {label:'Hand/Fingers', val:2},
+  {label:'Head/Face', val:1},
+  {label:'Back/Torso', val:1},
+  {label:'Lower Leg', val:1}
+], '#EF4444');
+
+// Incidents location lollipop
+buildLollipop('inc-location-lollipop', [
+  {label:'Zone A Basement', val:2},
+  {label:'Zone B Structure', val:1},
+  {label:'Zone C MEP', val:1},
+  {label:'Zone E Roof', val:1}
+]);
+
+// Training compliance waffle
+buildWaffle('waffle-trn', [
+  {count:87, color:'#22C55E'},
+  {count:5, color:'#F59E0B'},
+  {count:8, color:'#EF4444'}
+], 10);
+
+// Training type lollipop
+buildLollipop('trn-type-lollipop', [
+  {label:'Toolbox Talk', val:68},
+  {label:'Induction', val:45},
+  {label:'Competency', val:42},
+  {label:'Refresher', val:35},
+  {label:'Emergency Drill', val:14},
+  {label:'Confined Space', val:12}
+], '#22C55E');
+
+// Training topics lollipop
+buildLollipop('trn-topics-lollipop', [
+  {label:'Working at Height', val:38},
+  {label:'Fire Safety', val:32},
+  {label:'First Aid', val:28},
+  {label:'Confined Space', val:22},
+  {label:'Electrical Safety', val:18}
+]);
+
+// Training monthly vbar [180,195,210,225,230,243]
+buildVBar('trn-monthly-vbar', [180,195,210,225,230,243], 5, '#22C55E', '#CBD5E1', 60);
+
+// Site walks weekly vbar [5,0,6,4,3]
+buildVBar('sw-weekly-vbar', [5,0,6,4,3], -1, '#F59E0B', '#F59E0B', 60);
+
+// Site walks role lollipop
+buildLollipop('sw-role-lollipop', [
+  {label:'HSE Officer', val:8},
+  {label:'Leadership', val:6},
+  {label:'Supervisor', val:4}
+], '#F59E0B');
+
+// Site walks findings lollipop
+buildLollipop('sw-findings-lollipop', [
+  {label:'Housekeeping', val:12},
+  {label:'PPE Compliance', val:8},
+  {label:'Access/Egress', val:6},
+  {label:'Scaffolding', val:5},
+  {label:'Fire Prevention', val:3}
+]);
+
+// Site walks severity waffle (6x6=36, 34 filled + 2 empty)
+buildWaffle('waffle-sw-sev', [
+  {count:18, color:'#22C55E'},
+  {count:10, color:'#F59E0B'},
+  {count:5, color:'#EF4444'},
+  {count:1, color:'#991B1B'},
+  {count:2, color:'#F1F5F9'}
+], 6);
+
+// Inspections issues lollipop
+buildLollipop('insp-issues-lollipop', [
+  {label:'Missing docs', val:8},
+  {label:'Equipment defect', val:6},
+  {label:'Housekeeping', val:5},
+  {label:'Inadequate PPE', val:4},
+  {label:'Barrier/Edge prot.', val:3}
+]);
+
+// Inspections contractor waffles (5x5=25)
+buildWaffle('waffle-abc', [{count:23,color:'#22C55E'},{count:2,color:'#EF4444'}], 5);
+buildWaffle('waffle-xyz', [{count:21,color:'#22C55E'},{count:4,color:'#F59E0B'}], 5);
+buildWaffle('waffle-def', [{count:19,color:'#22C55E'},{count:6,color:'#EF4444'}], 5);
+
+// Inspections pass rate trend [78,82,80,85,81,83], range 60-90, Jun=highlight
+// Heights: (v-60)/30*60 → 36,44,40,50,42,46. Target at 85=(85-60)/30*60=50px
+buildVBarRange('insp-trend-vbar', [78,82,80,85,81,83], 60, 90, 5, '#3B82F6', '#CBD5E1', 60);
+// Position target line: 50px from bottom of 64px container = top:14px
+document.getElementById('insp-target-line').style.bottom = '50px';
+document.getElementById('insp-target-line').style.position = 'absolute';
+</script>
+</body>
+</html>
