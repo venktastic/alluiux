@@ -1806,7 +1806,6 @@ a{color:var(--md-primary);text-decoration:none}
         <button class="dsh-pill2" onclick="dshTab('observations',this)">Observations</button>
         <button class="dsh-pill2" onclick="dshTab('incidents',this)">Incidents</button>
         <button class="dsh-pill2" onclick="dshTab('training',this)">Training</button>
-        <button class="dsh-pill2" onclick="dshTab('sitewalks',this)">Site Walks</button>
         <button class="dsh-pill2" onclick="dshTab('inspections',this)">Inspections</button>
       </div>
 
@@ -1917,33 +1916,59 @@ a{color:var(--md-primary);text-decoration:none}
           </div>
 
           <div class="dsh-card">
-            <div class="dsh-ctitle">Observation closure timeline</div><div class="dsh-ctag">SWIM LANE</div>
-            <div class="dsh-swim">
-              <div class="dsh-swim-row"><div class="dsh-swim-id">OBS-1204</div><div class="dsh-swim-bar"><div style="flex:2;background:#3B82F6"></div><div style="flex:3;background:#F59E0B"></div><div style="flex:1;background:#22C55E"></div><div style="flex:8;background:#F1F5F9"></div></div></div>
-              <div class="dsh-swim-row"><div class="dsh-swim-id">OBS-1198</div><div class="dsh-swim-bar"><div style="flex:4;background:#3B82F6"></div><div style="flex:2;background:#F59E0B"></div><div style="flex:1;background:#22C55E"></div><div style="flex:7;background:#F1F5F9"></div></div></div>
-              <div class="dsh-swim-row"><div class="dsh-swim-id">OBS-1187</div><div class="dsh-swim-bar"><div style="flex:1;background:#3B82F6"></div><div style="flex:1;background:#F59E0B"></div><div style="flex:1;background:#22C55E"></div><div style="flex:11;background:#F1F5F9"></div></div></div>
-              <div class="dsh-swim-row"><div class="dsh-swim-id">OBS-1176</div><div class="dsh-swim-bar" style="border:1.5px dashed #EF4444;background:rgba(239,68,68,.04)"><div style="flex:12;background:rgba(239,68,68,.2)"></div><div style="flex:2;background:transparent"></div></div></div>
-              <div class="dsh-swim-row"><div class="dsh-swim-id">OBS-1171</div><div class="dsh-swim-bar"><div style="flex:8;background:#3B82F6"></div><div style="flex:5;background:#F59E0B"></div><div style="flex:1;background:#F1F5F9"></div></div></div>
+            <div class="dsh-ctitle">Observation closure time</div><div class="dsh-ctag">STACKED BAR</div>
+            <!-- Vertical stacked bars: x=closure bucket, stacks=severity -->
+            <div style="display:flex;align-items:flex-end;gap:8px;height:90px;margin-bottom:6px">
+              <!-- Same Day: total 38 -->
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;height:100%">
+                <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;width:100%">
+                  <div style="background:#22C55E;height:42%;border-radius:0"></div>
+                  <div style="background:#F59E0B;height:28%;"></div>
+                  <div style="background:#EF4444;height:18%;"></div>
+                  <div style="background:#FBBF24;height:12%;border-radius:3px 3px 0 0"></div>
+                </div>
+              </div>
+              <!-- 1 Day: total 28 -->
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;height:100%">
+                <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;width:100%">
+                  <div style="background:#22C55E;height:36%;border-radius:0"></div>
+                  <div style="background:#F59E0B;height:32%;"></div>
+                  <div style="background:#EF4444;height:20%;"></div>
+                  <div style="background:#FBBF24;height:12%;border-radius:3px 3px 0 0"></div>
+                </div>
+              </div>
+              <!-- 3 Days: total 22 -->
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;height:100%">
+                <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;width:100%">
+                  <div style="background:#22C55E;height:27%;border-radius:0"></div>
+                  <div style="background:#F59E0B;height:36%;"></div>
+                  <div style="background:#EF4444;height:27%;"></div>
+                  <div style="background:#FBBF24;height:10%;border-radius:3px 3px 0 0"></div>
+                </div>
+              </div>
+              <!-- 7 Days: total 18 -->
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;height:100%">
+                <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;width:100%">
+                  <div style="background:#22C55E;height:22%;border-radius:0"></div>
+                  <div style="background:#F59E0B;height:33%;"></div>
+                  <div style="background:#EF4444;height:33%;"></div>
+                  <div style="background:#FBBF24;height:12%;border-radius:3px 3px 0 0"></div>
+                </div>
+              </div>
+              <!-- 7+ Days: total 36 -->
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;height:100%">
+                <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;width:100%">
+                  <div style="background:#22C55E;height:14%;border-radius:0"></div>
+                  <div style="background:#F59E0B;height:28%;"></div>
+                  <div style="background:#EF4444;height:42%;"></div>
+                  <div style="background:#FBBF24;height:16%;border-radius:3px 3px 0 0"></div>
+                </div>
+              </div>
             </div>
-            <div class="dsh-legend"><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#3B82F6"></div>Open</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#F59E0B"></div>Rectified</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#22C55E"></div>Closed</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#EF4444;opacity:.6"></div>Stuck</div></div>
-          </div>
-
-          <div class="dsh-card">
-            <div class="dsh-ctitle">Good vs Improvement by location</div><div class="dsh-ctag">BUTTERFLY</div>
-            <div style="display:flex;justify-content:space-between;font-size:8px;color:#94A3B8;font-weight:600;margin-bottom:5px"><span>Good</span><span>Improvement</span></div>
-            <div class="dsh-butterfly">
-              <div class="dsh-bf-row"><div class="dsh-bf-left"><div class="dsh-bf-bar" style="width:75%;background:#22C55E;border-radius:3px 0 0 3px"></div></div><div class="dsh-bf-lbl" style="width:72px">Zone A</div><div class="dsh-bf-right"><div class="dsh-bf-bar" style="width:75%;background:#F59E0B;border-radius:0 3px 3px 0"></div></div></div>
-              <div class="dsh-bf-row"><div class="dsh-bf-left"><div class="dsh-bf-bar" style="width:100%;background:#22C55E;border-radius:3px 0 0 3px"></div></div><div class="dsh-bf-lbl" style="width:72px">Zone B</div><div class="dsh-bf-right"><div class="dsh-bf-bar" style="width:50%;background:#F59E0B;border-radius:0 3px 3px 0"></div></div></div>
-              <div class="dsh-bf-row"><div class="dsh-bf-left"><div class="dsh-bf-bar" style="width:50%;background:#22C55E;border-radius:3px 0 0 3px"></div></div><div class="dsh-bf-lbl" style="width:72px">Zone C</div><div class="dsh-bf-right"><div class="dsh-bf-bar" style="width:100%;background:#F59E0B;border-radius:0 3px 3px 0"></div></div></div>
-              <div class="dsh-bf-row"><div class="dsh-bf-left"><div class="dsh-bf-bar" style="width:91.7%;background:#22C55E;border-radius:3px 0 0 3px"></div></div><div class="dsh-bf-lbl" style="width:72px">Zone D</div><div class="dsh-bf-right"><div class="dsh-bf-bar" style="width:37.5%;background:#F59E0B;border-radius:0 3px 3px 0"></div></div></div>
-              <div class="dsh-bf-row"><div class="dsh-bf-left"><div class="dsh-bf-bar" style="width:54.2%;background:#22C55E;border-radius:3px 0 0 3px"></div></div><div class="dsh-bf-lbl" style="width:72px">Zone E</div><div class="dsh-bf-right"><div class="dsh-bf-bar" style="width:68.75%;background:#F59E0B;border-radius:0 3px 3px 0"></div></div></div>
+            <div style="display:flex;justify-content:space-around;font-size:7px;color:#64748B;font-weight:500;margin-bottom:8px">
+              <span>Same Day</span><span>1 Day</span><span>3 Days</span><span>7 Days</span><span>7+ Days</span>
             </div>
-          </div>
-
-          <div class="dsh-card">
-            <div class="dsh-ctitle">Root cause distribution</div><div class="dsh-ctag">WAFFLE</div>
-            <div id="dsh-waffle-obs-rc" class="dsh-waffle" style="grid-template-columns:repeat(10,1fr);gap:2px;margin-bottom:8px"></div>
-            <div class="dsh-legend"><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#3B82F6"></div>People (40)</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#F59E0B"></div>Procedure (25)</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#94A3B8"></div>Plant (20)</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#22C55E"></div>Premises (10)</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#14B8A6"></div>Env (5)</div></div>
+            <div class="dsh-legend"><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#FBBF24"></div>Low</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#F59E0B"></div>Amber</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#EF4444"></div>Red</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#22C55E"></div>Green</div></div>
           </div>
 
           <div class="dsh-card">
@@ -1954,37 +1979,10 @@ a{color:var(--md-primary);text-decoration:none}
             </div>
           </div>
 
-          <div class="dsh-card">
-            <div class="dsh-ctitle">Status distribution</div><div class="dsh-ctag">STACKED BAR</div>
-            <div class="dsh-sbar"><div class="dsh-sbar-seg" style="flex:28;background:#3B82F6">28</div><div class="dsh-sbar-seg" style="flex:15;background:#F59E0B">15</div><div class="dsh-sbar-seg" style="flex:89;background:#22C55E">89</div><div class="dsh-sbar-seg" style="flex:10;background:#8B5CF6">10</div></div>
-            <div class="dsh-legend"><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#3B82F6"></div>Open</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#F59E0B"></div>Rectified</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#22C55E"></div>Closed</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#8B5CF6"></div>HSE Review</div></div>
-          </div>
-
-          <div class="dsh-card">
-            <div class="dsh-ctitle">Incident timeline — June</div><div class="dsh-ctag">DOT STRIP</div>
-            <div class="dsh-dotstrip">
-              <div class="dsh-ds-axis">
-                <div class="dsh-ds-dot" style="left:10%;background:#94A3B8"></div>
-                <div class="dsh-ds-dot" style="left:26.7%;background:#F59E0B"></div>
-                <div class="dsh-ds-dot" style="left:43.3%;background:#94A3B8"></div>
-                <div class="dsh-ds-dot" style="left:60%;background:#EF4444;width:13px;height:13px;top:-5px"></div>
-                <div class="dsh-ds-dot" style="left:80%;background:#F59E0B"></div>
-              </div>
-              <div class="dsh-ds-lblrow"><span>Jun 1</span><span>Jun 8</span><span>Jun 15</span><span>Jun 22</span><span>Jun 30</span></div>
-            </div>
-            <div class="dsh-legend"><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#94A3B8"></div>Near Miss</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#F59E0B"></div>First Aid</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#EF4444"></div>LTI</div></div>
-          </div>
-
         </div>
 
         <!-- ── INCIDENTS ── -->
         <div class="dsh-panel" id="dsh-tab-incidents">
-
-          <div class="dsh-lti">
-            <div><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-            <div style="flex:1"><div style="font-size:13px;font-weight:700;color:#fff">Days Without LTI</div><div style="font-size:9px;color:#94A3B8;margin-top:2px">Last LTI: 13 May 2026</div></div>
-            <div style="font-size:38px;font-weight:800;color:#22C55E;line-height:1">47</div>
-          </div>
 
           <div class="dsh-sum-row">
             <div class="dsh-scard"><div class="dsh-sval">5</div><div class="dsh-slbl">Total</div></div>
@@ -1999,26 +1997,12 @@ a{color:var(--md-primary);text-decoration:none}
           </div>
 
           <div class="dsh-card">
-            <div class="dsh-ctitle">Incident type</div><div class="dsh-ctag">PIE</div>
-            <div style="display:flex;gap:12px;align-items:center">
-              <div style="width:80px;height:80px;border-radius:50%;flex-shrink:0;background:conic-gradient(#94A3B8 0% 40%,#F59E0B 40% 80%,#EF4444 80% 100%)"></div>
-              <div style="flex:1"><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#94A3B8"></div>Near Miss<div class="dsh-pie-val">2</div></div><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#F59E0B"></div>First Aid<div class="dsh-pie-val">2</div></div><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#EF4444"></div>LTI<div class="dsh-pie-val">1</div></div></div>
-            </div>
-          </div>
-
-          <div class="dsh-card">
             <div class="dsh-ctitle">Incident type</div><div class="dsh-ctag">BAR</div>
             <div class="dsh-hbar">
               <div class="dsh-hbar-row"><span class="dsh-hbar-lbl">Near Miss</span><div class="dsh-hbar-track"><div class="dsh-hbar-fill" style="width:40%;background:#94A3B8"></div></div><span class="dsh-hbar-val">2</span></div>
               <div class="dsh-hbar-row"><span class="dsh-hbar-lbl">First Aid</span><div class="dsh-hbar-track"><div class="dsh-hbar-fill" style="width:40%;background:#F59E0B"></div></div><span class="dsh-hbar-val">2</span></div>
               <div class="dsh-hbar-row"><span class="dsh-hbar-lbl">LTI</span><div class="dsh-hbar-track"><div class="dsh-hbar-fill" style="width:20%;background:#EF4444"></div></div><span class="dsh-hbar-val">1</span></div>
             </div>
-          </div>
-
-          <div class="dsh-card">
-            <div class="dsh-ctitle">Root cause breakdown</div><div class="dsh-ctag">WAFFLE</div>
-            <div id="dsh-waffle-inc-rc" class="dsh-waffle" style="grid-template-columns:repeat(10,1fr);gap:2px;margin-bottom:8px"></div>
-            <div class="dsh-legend"><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#3B82F6"></div>People (40)</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#F59E0B"></div>Procedure (25)</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#94A3B8"></div>Plant (20)</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#22C55E"></div>Premises (10)</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#14B8A6"></div>Env (5)</div></div>
           </div>
 
           <div class="dsh-card">
@@ -2037,6 +2021,14 @@ a{color:var(--md-primary);text-decoration:none}
             <div class="dsh-legend"><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#94A3B8"></div>Low</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#F59E0B"></div>Medium</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#EF4444"></div>High</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#991B1B"></div>Critical</div></div>
           </div>
 
+          <div class="dsh-card">
+            <div class="dsh-ctitle">Root cause breakdown</div><div class="dsh-ctag">DONUT</div>
+            <div style="display:flex;gap:12px;align-items:center">
+              <div class="dsh-donut" style="width:72px;height:72px;flex-shrink:0"><div class="dsh-donut-circle" style="width:72px;height:72px;background:conic-gradient(#3B82F6 0% 40%,#F59E0B 40% 65%,#94A3B8 65% 85%,#22C55E 85% 95%,#14B8A6 95% 100%)"></div><div class="dsh-donut-hole"><div class="dsh-donut-hole-inner" style="width:44px;height:44px;font-size:11px;font-weight:800;color:#1E293B">5</div></div></div>
+              <div style="flex:1"><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#3B82F6"></div>People<div class="dsh-pie-val">40%</div></div><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#F59E0B"></div>Procedure<div class="dsh-pie-val">25%</div></div><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#94A3B8"></div>Plant<div class="dsh-pie-val">20%</div></div><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#22C55E"></div>Premises<div class="dsh-pie-val">10%</div></div><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#14B8A6"></div>Env.<div class="dsh-pie-val">5%</div></div></div>
+            </div>
+          </div>
+
         </div>
 
         <!-- ── TRAINING ── -->
@@ -2052,24 +2044,6 @@ a{color:var(--md-primary);text-decoration:none}
             <div style="display:flex;gap:12px;align-items:center">
               <div class="dsh-donut" style="width:80px;height:80px;flex-shrink:0"><div class="dsh-donut-circle" style="width:80px;height:80px;background:conic-gradient(#22C55E 0% 87%,#F59E0B 87% 92%,#EF4444 92% 100%)"></div><div class="dsh-donut-hole"><div class="dsh-donut-hole-inner" style="width:50px;height:50px;font-size:14px;font-weight:800;color:#22C55E">87%</div></div></div>
               <div style="flex:1"><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#22C55E"></div>Compliant<div class="dsh-pie-val">87</div></div><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#F59E0B"></div>Partial<div class="dsh-pie-val">5</div></div><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#EF4444"></div>Overdue<div class="dsh-pie-val">8</div></div></div>
-            </div>
-          </div>
-
-          <div class="dsh-card">
-            <div class="dsh-ctitle">Training compliance</div><div class="dsh-ctag">WAFFLE</div>
-            <div id="dsh-waffle-trn" class="dsh-waffle" style="grid-template-columns:repeat(10,1fr);gap:2px;margin-bottom:8px"></div>
-            <div class="dsh-legend"><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#22C55E"></div>Compliant (87)</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#F59E0B"></div>Partial (5)</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#EF4444"></div>Overdue (8)</div></div>
-          </div>
-
-          <div class="dsh-card">
-            <div class="dsh-ctitle">Compliance by trade</div><div class="dsh-ctag">BUTTERFLY</div>
-            <div style="display:flex;justify-content:space-between;font-size:8px;color:#94A3B8;font-weight:600;margin-bottom:5px"><span>Compliant</span><span>Gap</span></div>
-            <div class="dsh-butterfly">
-              <div class="dsh-bf-row"><div class="dsh-bf-left"><div class="dsh-bf-bar" style="width:94%;background:#22C55E;border-radius:3px 0 0 3px"></div></div><div class="dsh-bf-lbl" style="width:64px">Electrical</div><div class="dsh-bf-right"><div class="dsh-bf-bar" style="width:25%;background:#EF4444;border-radius:0 3px 3px 0"></div></div></div>
-              <div class="dsh-bf-row"><div class="dsh-bf-left"><div class="dsh-bf-bar" style="width:91%;background:#22C55E;border-radius:3px 0 0 3px"></div></div><div class="dsh-bf-lbl" style="width:64px">Civil</div><div class="dsh-bf-right"><div class="dsh-bf-bar" style="width:37.5%;background:#EF4444;border-radius:0 3px 3px 0"></div></div></div>
-              <div class="dsh-bf-row"><div class="dsh-bf-left"><div class="dsh-bf-bar" style="width:88%;background:#22C55E;border-radius:3px 0 0 3px"></div></div><div class="dsh-bf-lbl" style="width:64px">Structural</div><div class="dsh-bf-right"><div class="dsh-bf-bar" style="width:50%;background:#EF4444;border-radius:0 3px 3px 0"></div></div></div>
-              <div class="dsh-bf-row"><div class="dsh-bf-left"><div class="dsh-bf-bar" style="width:82%;background:#F59E0B;border-radius:3px 0 0 3px"></div></div><div class="dsh-bf-lbl" style="width:64px">MEP</div><div class="dsh-bf-right"><div class="dsh-bf-bar" style="width:75%;background:#EF4444;border-radius:0 3px 3px 0"></div></div></div>
-              <div class="dsh-bf-row"><div class="dsh-bf-left"><div class="dsh-bf-bar" style="width:76%;background:#EF4444;border-radius:3px 0 0 3px"></div></div><div class="dsh-bf-lbl" style="width:64px">Scaffolding</div><div class="dsh-bf-right"><div class="dsh-bf-bar" style="width:100%;background:#EF4444;border-radius:0 3px 3px 0"></div></div></div>
             </div>
           </div>
 
@@ -2093,53 +2067,6 @@ a{color:var(--md-primary);text-decoration:none}
             <div class="dsh-ctitle">Monthly training volume</div><div class="dsh-ctag">VERTICAL BAR</div>
             <div id="dsh-trn-vbar" class="dsh-vbars" style="height:56px;gap:6px"></div>
             <div style="display:flex;justify-content:space-between;margin-top:3px;font-size:7px;color:#94A3B8;padding:0 2px"><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span></div>
-          </div>
-
-        </div>
-
-        <!-- ── SITE WALKS ── -->
-        <div class="dsh-panel" id="dsh-tab-sitewalks">
-          <div class="dsh-sum-row">
-            <div class="dsh-scard"><div class="dsh-sval">18</div><div class="dsh-slbl">Total Walks</div></div>
-            <div class="dsh-scard"><div class="dsh-sval" style="color:#3B82F6">34</div><div class="dsh-slbl">Findings</div></div>
-          </div>
-
-          <div class="dsh-card">
-            <div class="dsh-ctitle">Walks per week</div><div class="dsh-ctag">VERTICAL BAR</div>
-            <div id="dsh-sw-vbar" class="dsh-vbars" style="height:56px;gap:8px"></div>
-            <div style="display:flex;justify-content:space-between;margin-top:3px;font-size:7px;color:#94A3B8;padding:0 2px"><span>W1</span><span>W2</span><span>W3</span><span>W4</span><span>W5</span></div>
-          </div>
-
-          <div class="dsh-card">
-            <div class="dsh-ctitle">Walks by role</div><div class="dsh-ctag">PIE</div>
-            <div style="display:flex;gap:12px;align-items:center">
-              <div style="width:80px;height:80px;border-radius:50%;flex-shrink:0;background:conic-gradient(#3B82F6 0% 44.44%,#F59E0B 44.44% 77.78%,#22C55E 77.78% 100%)"></div>
-              <div style="flex:1"><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#3B82F6"></div>HSE Officer<div class="dsh-pie-val">8</div></div><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#F59E0B"></div>Leadership<div class="dsh-pie-val">6</div></div><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#22C55E"></div>Supervisor<div class="dsh-pie-val">4</div></div></div>
-            </div>
-          </div>
-
-          <div class="dsh-card">
-            <div class="dsh-ctitle">Walks by role</div><div class="dsh-ctag">LOLLIPOP</div>
-            <div id="dsh-sw-role-lp" class="dsh-lollipop"></div>
-          </div>
-
-          <div class="dsh-card">
-            <div class="dsh-ctitle">Findings by category</div><div class="dsh-ctag">LOLLIPOP</div>
-            <div id="dsh-sw-findings-lp" class="dsh-lollipop"></div>
-          </div>
-
-          <div class="dsh-card">
-            <div class="dsh-ctitle">Findings severity</div><div class="dsh-ctag">WAFFLE</div>
-            <div id="dsh-waffle-sw" class="dsh-waffle" style="grid-template-columns:repeat(6,1fr);gap:3px;margin-bottom:8px"></div>
-            <div class="dsh-legend"><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#22C55E"></div>Low (18)</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#F59E0B"></div>Medium (10)</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#EF4444"></div>High (5)</div><div class="dsh-legend-item"><div class="dsh-legend-dot" style="background:#991B1B"></div>Critical (1)</div></div>
-          </div>
-
-          <div class="dsh-card">
-            <div class="dsh-ctitle">Findings severity</div><div class="dsh-ctag">DONUT</div>
-            <div style="display:flex;gap:12px;align-items:center">
-              <div class="dsh-donut" style="width:72px;height:72px;flex-shrink:0"><div class="dsh-donut-circle" style="width:72px;height:72px;background:conic-gradient(#22C55E 0% 52.94%,#F59E0B 52.94% 82.35%,#EF4444 82.35% 97.06%,#991B1B 97.06% 100%)"></div><div class="dsh-donut-hole"><div class="dsh-donut-hole-inner" style="width:44px;height:44px;font-size:11px;font-weight:800;color:#1E293B">34</div></div></div>
-              <div style="flex:1"><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#22C55E"></div>Low<div class="dsh-pie-val">18</div></div><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#F59E0B"></div>Medium<div class="dsh-pie-val">10</div></div><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#EF4444"></div>High<div class="dsh-pie-val">5</div></div><div class="dsh-pie-row"><div class="dsh-pie-dot" style="background:#991B1B"></div>Critical<div class="dsh-pie-val">1</div></div></div>
-            </div>
           </div>
 
         </div>
